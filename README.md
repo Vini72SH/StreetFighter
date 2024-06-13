@@ -1,4 +1,4 @@
-# StreetFighter
+# Street Fighter
 
 ![Logo do Projeto](./images/logo.bmp)
 
