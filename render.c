@@ -34,7 +34,7 @@ void fade_in(ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *next_bitmap, float speed)
 Screen_Render *startGame() {
     Screen_Render *newScreen;
     const char *filenames[IMAGES] = {
-        "./images/start.bmp",
+        "./images/intro.png",
         "./images/teste.bmp"
     };
     
@@ -104,9 +104,11 @@ Figure *createFigure(int dx, int dy, int max_op, const char *filename) {
 
 void gameRender(Screen_Render *render) {
     bool game = true;
-    Figure *arrow = createFigure(505, 450, 2, "./figures/attackArrow.bmp");
+    Figure *arrow = createFigure(505, HEIGHT - 210, 2, "./figures/attackArrow.bmp");
     bool redraw = true;
     ALLEGRO_EVENT event;
+    ALLEGRO_COLOR red = al_map_rgb(255, 25, 35);
+    ALLEGRO_COLOR white = al_map_rgb(255, 255, 255);
 
     al_start_timer(render->timer);
     while (game) {
@@ -156,6 +158,22 @@ void gameRender(Screen_Render *render) {
                                           0, 0, al_get_bitmap_width(render->background[0]),
                                           al_get_bitmap_height(render->background[0]),
                                           0, 0, WIDTH, HEIGHT, 0);
+
+                    if (arrow->op == 0) 
+                        al_draw_text(render->font, white, WIDTH/2 -13 * 6, HEIGHT - 200, 0, "SINGLEPLAYER");
+                    else
+                        al_draw_text(render->font, red, WIDTH/2 -13 * 6, HEIGHT - 200, 0, "SINGLEPLAYER");
+
+                    if (arrow->op == 1) 
+                        al_draw_text(render->font, white, WIDTH/2 -12 * 6, HEIGHT - 150, 0, "MULTIPLAYER");
+                    else
+                        al_draw_text(render->font, red, WIDTH/2 -12 * 6, HEIGHT - 150, 0, "MULTIPLAYER");
+
+                    if (arrow->op == 2) 
+                        al_draw_text(render->font, white, WIDTH/2 -8 * 6, HEIGHT - 100, 0, "OPTIONS");
+                    else
+                        al_draw_text(render->font, red, WIDTH/2 -8 * 6, HEIGHT - 100, 0, "OPTIONS");
+
                     al_draw_scaled_bitmap(arrow->image, 0, 0,
                                           arrow->w, arrow->h, 
                                           arrow->dx, arrow->dy, 
