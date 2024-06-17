@@ -8,14 +8,15 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
 
-#define IMAGES 1
+#define IMAGES 2
 #define WIDTH 1320
 #define HEIGHT 680
 #define FRAMERATE 30
 
-#define MENU 0
-#define SELECTION 1
-#define GAME 2
+#define START 0
+#define MENU 1
+#define SELECTION 2
+#define GAME 3
 
 typedef struct Figure{
     int dx, dy;
