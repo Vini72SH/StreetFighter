@@ -8,7 +8,7 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
 
-#define IMAGES 2
+#define IMAGES 3
 #define WIDTH 1320
 #define HEIGHT 680
 #define FRAMERATE 30

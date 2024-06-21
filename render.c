@@ -35,7 +35,8 @@ Screen_Render *startGame() {
     Screen_Render *newScreen;
     const char *filenames[IMAGES] = {
         "./images/intro.png",
-        "./images/teste.bmp"
+        "./images/ScreenCOM.bmp",
+        "./images/ScreenCOOP.bmp"
     };
     
     init(al_install_keyboard(), "keyboard");
@@ -103,6 +104,7 @@ Figure *createFigure(int dx, int dy, int max_op, const char *filename) {
 };
 
 void gameRender(Screen_Render *render) {
+    int i = 0;
     bool game = true;
     Figure *arrow = createFigure(505, HEIGHT - 210, 2, "./figures/attackArrow.bmp");
     bool redraw = true;
@@ -137,14 +139,35 @@ void gameRender(Screen_Render *render) {
 
                     if (event.keyboard.keycode == ALLEGRO_KEY_C) {
                         render->gameMode = SELECTION;
-                        fade_out(render->display, render->background[0],
-                                 0.02);
-                        fade_in(render->display, render->background[1], 
-                                 0.02);
+                        if (arrow->op == 0) {
+                            fade_out(render->display, render->background[0],
+                                    0.02);
+                            fade_in(render->display, render->background[1], 
+                                    0.02);    
+                            i = 1;
+                        } else if (arrow->op == 1) {
+                            fade_out(render->display, render->background[0],
+                                    0.02);
+                            fade_in(render->display, render->background[2], 
+                                    0.02);
+                            i = 2;
+                        }
                     }
 
+                    if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
+                        game = false;
                     break;
-
+                    
+                case SELECTION:
+                    if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+                        render->gameMode = START;
+                            fade_out(render->display, render->background[i],
+                                    0.02);
+                            fade_in(render->display, render->background[0], 
+                                    0.02);
+                        i = 0;
+                    }
+                    break;
                 default:
                     break;
             }
@@ -154,9 +177,9 @@ void gameRender(Screen_Render *render) {
             al_clear_to_color(al_map_rgb(0, 0, 0));
             switch (render->gameMode){
                 case START:
-                    al_draw_scaled_bitmap(render->background[0],
-                                          0, 0, al_get_bitmap_width(render->background[0]),
-                                          al_get_bitmap_height(render->background[0]),
+                    al_draw_scaled_bitmap(render->background[i],
+                                          0, 0, al_get_bitmap_width(render->background[i]),
+                                          al_get_bitmap_height(render->background[i]),
                                           0, 0, WIDTH, HEIGHT, 0);
 
                     if (arrow->op == 0) 
@@ -186,9 +209,9 @@ void gameRender(Screen_Render *render) {
                     break;
 
                 case SELECTION:
-                    al_draw_scaled_bitmap(render->background[1],
-                                          0, 0, al_get_bitmap_width(render->background[1]),
-                                          al_get_bitmap_height(render->background[1]),
+                    al_draw_scaled_bitmap(render->background[i],
+                                          0, 0, al_get_bitmap_width(render->background[i]),
+                                          al_get_bitmap_height(render->background[i]),
                                           0, 0, WIDTH, HEIGHT, 0);
                 default:
                     break;
