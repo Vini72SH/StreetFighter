@@ -33,7 +33,8 @@ typedef struct Screen_Render{
     int gameMode;
     ALLEGRO_TIMER *timer;
     ALLEGRO_EVENT_QUEUE *queue;
-    ALLEGRO_FONT *font;
+    ALLEGRO_FONT *font1;
+    ALLEGRO_FONT *font2;
     ALLEGRO_DISPLAY *display;
     ALLEGRO_BITMAP *background[IMAGES];
 }Screen_Render;
