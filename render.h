@@ -40,7 +40,7 @@ typedef struct Screen_Render{
 }Screen_Render;
 
 Screen_Render *startGame();
-Figure *createFigure(int dx, int dy, int max_op, const char *filename);
+Figure *createFigure(int dx, int dy, int op, int max_op, const char *filename);
 void gameRender(Screen_Render *screen);
 void deleteFigure(Figure *figure);
 void endGame(Screen_Render *screen);

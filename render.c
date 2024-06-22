@@ -82,10 +82,9 @@ Screen_Render *startGame() {
     }
 
     return newScreen;
-
 };
 
-Figure *createFigure(int dx, int dy, int max_op, const char *filename) {
+Figure *createFigure(int dx, int dy, int op, int max_op, const char *filename) {
     Figure *newFigure;
 
     newFigure = malloc(sizeof(Figure));
@@ -98,7 +97,7 @@ Figure *createFigure(int dx, int dy, int max_op, const char *filename) {
     newFigure->dy = dy;
     newFigure->w = al_get_bitmap_width(newFigure->image);
     newFigure->h = al_get_bitmap_height(newFigure->image);
-    newFigure->op = 0;
+    newFigure->op = op;
     newFigure->max_op = max_op;
     newFigure->move = 0;
 
@@ -185,17 +184,60 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, int *i) {
                                 0, 0, al_get_bitmap_width(render->background[2]),
                                 al_get_bitmap_height(render->background[2]),
                                 0, 0, WIDTH, HEIGHT, 0);
-        al_draw_scaled_bitmap(s1->image, 0, 0, s1->w, s1->h, s1->dx, s1->dy, 200, 200, 0);
         al_draw_scaled_bitmap(s2->image, 0, 0, s2->w, s2->h, s2->dx, s2->dy, 200, 200, 0);
+        al_draw_scaled_bitmap(s1->image, 0, 0, s1->w, s1->h, s1->dx, s1->dy, 200, 200, 0);
+    }
+};
+
+void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, ALLEGRO_EVENT event, int *i) {
+    if (render->currentBackground == 1) {
+        if (event.keyboard.keycode == ALLEGRO_KEY_D) {
+            if (s1->op < s1->max_op) { 
+                s1->dx += 281;
+                s1->op++;
+            }
+        }
+        if (event.keyboard.keycode == ALLEGRO_KEY_A) {
+            if (s1->op > 0) {
+                s1->dx -= 281;
+                s1->op--;
+            }
+        }
+    } else if (render->currentBackground == 2) {
+        if (event.keyboard.keycode == ALLEGRO_KEY_D) {
+            if (s1->op < s1->max_op) { 
+                s1->dx += 281;
+                s1->op++;
+            }
+        }
+        if (event.keyboard.keycode == ALLEGRO_KEY_A) {
+            if (s1->op > 0) {
+                s1->dx -= 281;
+                s1->op--;
+            }
+        }
+        if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
+            if (s2->op < s2->max_op) { 
+                s2->dx += 281;
+                s2->op++;
+            }
+        }
+        if (event.keyboard.keycode == ALLEGRO_KEY_LEFT) {
+            if (s2->op > 0) {
+                s2->dx -= 281;
+                s2->op--;
+            }
+        }
     }
 };
 
 void gameRender(Screen_Render *render) {
     int i = 0;
     bool game = true;
-    Figure *arrow = createFigure(505, HEIGHT - 210, 2, "./figures/attackArrow.bmp");
-    Figure *selectionP1 = createFigure(143, HEIGHT - 232, 4, "./figures/selection.bmp");
-    Figure *selectionP2 = createFigure(986, HEIGHT - 232, 4, "./figures/selectionRed.bmp");
+    Figure *arrow = createFigure(505, HEIGHT - 210, 0,2, "./figures/attackArrow.bmp");
+    // CONST 281
+    Figure *selectionP1 = createFigure(143, HEIGHT - 232, 0, 3, "./figures/selection.bmp");
+    Figure *selectionP2 = createFigure(986, HEIGHT - 232, 3, 3, "./figures/selectionRed.bmp");
     bool redraw = true;
     ALLEGRO_EVENT event;
 
@@ -218,6 +260,7 @@ void gameRender(Screen_Render *render) {
                     break;
 
                 case SELECTION:
+                    selectionScreen(render, selectionP1, selectionP2, event, &i);
                     if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
                         render->gameMode = START;
                             fade_out(render->display, render->background[i],
