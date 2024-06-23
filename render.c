@@ -38,6 +38,13 @@ Screen_Render *startGame() {
         "./images/ScreenCOM.bmp",
         "./images/ScreenCOOP.bmp"
     };
+
+    const char *names[CHARACTERS] = {
+        "./characters/RyuFace.bmp",
+        "./characters/KenFace.bmp",
+        "./characters/SagatFace.bmp",
+        "./characters/ChunLiFace.bmp"
+    };
     
     init(al_install_keyboard(), "keyboard");
     init(al_init_image_addon(), "image addon");
@@ -81,6 +88,11 @@ Screen_Render *startGame() {
         init(newScreen->background[i], filenames[i]);
     }
 
+    for (int i = 0; i < CHARACTERS; ++i) {
+        newScreen->chars[i] = al_load_bitmap(names[i]);
+        init(newScreen->chars[i], names[i]);
+    }
+
     return newScreen;
 };
 
@@ -99,6 +111,7 @@ Figure *createFigure(int dx, int dy, int op, int max_op, const char *filename) {
     newFigure->h = al_get_bitmap_height(newFigure->image);
     newFigure->op = op;
     newFigure->max_op = max_op;
+    newFigure->itOk = false;
     newFigure->move = 0;
 
     return newFigure;
@@ -113,8 +126,8 @@ void drawStart(Screen_Render *render, Figure *arrow) {
                             al_get_bitmap_height(render->background[0]),
                             0, 0, WIDTH, HEIGHT, 0);
 
-    al_draw_text(render->font2, white, 0, HEIGHT - 50, 0, "PRESS ENTER TO SELECT");
-    al_draw_text(render->font2, white, 0, HEIGHT - 100, 0, "PRESS ESC TO EXIT");
+    al_draw_text(render->font2, white, 0, HEIGHT - 100, 0, "PRESS Z TO SELECT");
+    al_draw_text(render->font2, white, 0, HEIGHT - 50, 0, "PRESS ESC TO EXIT");
     if (arrow->op == 0) 
         al_draw_text(render->font1, white, WIDTH/2 -13 * 6, HEIGHT - 200, 0, "SINGLEPLAYER");
     else
@@ -141,19 +154,19 @@ void drawStart(Screen_Render *render, Figure *arrow) {
 };
 
 void startScreen(Screen_Render *render, Figure *arrow, ALLEGRO_EVENT event, int *i) {
-    if (event.keyboard.keycode == ALLEGRO_KEY_UP) 
+    if (event.keyboard.keycode == ALLEGRO_KEY_W) 
         if (arrow->op > 0) {
                 arrow->op--;
                 arrow->dy -= 50;
             }
 
-    if (event.keyboard.keycode == ALLEGRO_KEY_DOWN)
+    if (event.keyboard.keycode == ALLEGRO_KEY_S)
         if (arrow->op < arrow->max_op) {
                 arrow->op++;
                 arrow->dy += 50;
             }
 
-    if (event.keyboard.keycode == ALLEGRO_KEY_ENTER) {
+    if (event.keyboard.keycode == ALLEGRO_KEY_Z) {
         render->gameMode = SELECTION;
         if (arrow->op == 0) {
             fade_out(render->display, render->background[0],
@@ -173,12 +186,27 @@ void startScreen(Screen_Render *render, Figure *arrow, ALLEGRO_EVENT event, int 
 };
 
 void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, int *i) {
+    ALLEGRO_COLOR white = al_map_rgb(255, 255, 255);
     if (render->currentBackground == 1) {
         al_draw_scaled_bitmap(render->background[1],
                                 0, 0, al_get_bitmap_width(render->background[1]),
                                 al_get_bitmap_height(render->background[1]),
                                 0, 0, WIDTH, HEIGHT, 0);
         al_draw_scaled_bitmap(s1->image, 0, 0, s1->w, s1->h, s1->dx, s1->dy, 200, 200, 0);
+        al_draw_scaled_bitmap(render->chars[s1->op], 0, 0,
+                        al_get_bitmap_width(render->chars[s1->op]), 
+                        al_get_bitmap_height(render->chars[s1->op]),
+                        WIDTH - 1250, HEIGHT - 541, 380, 250, 0);
+
+        if (s1->op == 0) 
+            al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Ryu");
+        else if (s1->op == 1)
+            al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Ken");
+        else if (s1->op == 2)
+            al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Sagat");
+        else if (s1->op == 3)
+            al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Chun Li");
+
     } else if (render->currentBackground == 2) {
         al_draw_scaled_bitmap(render->background[2],
                                 0, 0, al_get_bitmap_width(render->background[2]),
@@ -186,117 +214,77 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, int *i) {
                                 0, 0, WIDTH, HEIGHT, 0);
         al_draw_scaled_bitmap(s2->image, 0, 0, s2->w, s2->h, s2->dx, s2->dy, 200, 200, 0);
         al_draw_scaled_bitmap(s1->image, 0, 0, s1->w, s1->h, s1->dx, s1->dy, 200, 200, 0);
+
+        al_draw_scaled_bitmap(render->chars[s1->op], 0, 0,
+                al_get_bitmap_width(render->chars[s1->op]), 
+                al_get_bitmap_height(render->chars[s1->op]),
+                WIDTH - 1250, HEIGHT - 541, 380, 250, 0);
+
+        al_draw_scaled_bitmap(render->chars[s2->op], 0, 0,
+                al_get_bitmap_width(render->chars[s2->op]), 
+                al_get_bitmap_height(render->chars[s2->op]),
+                WIDTH - 460, HEIGHT - 541, 380, 250, ALLEGRO_ALIGN_CENTER);
+
+        if (s1->op == 0) 
+            al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Ryu");
+        else if (s1->op == 1)
+            al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Ken");
+        else if (s1->op == 2)
+            al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Sagat");
+        else if (s1->op == 3)
+            al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Chun Li");
+
+        if (s2->op == 0) 
+            al_draw_text(render->font2, white, WIDTH - 130, HEIGHT - 550, 0, "Ryu");
+        else if (s2->op == 1)
+            al_draw_text(render->font2, white, WIDTH - 130, HEIGHT - 550, 0, "Ken");
+        else if (s2->op == 2)
+            al_draw_text(render->font2, white, WIDTH - 130, HEIGHT - 550, 0, "Sagat");
+        else if (s2->op == 3)
+            al_draw_text(render->font2, white, WIDTH - 130, HEIGHT - 550, 0, "Chun Li");
     }
 };
 
 void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, ALLEGRO_EVENT event, int *i) {
     if (render->currentBackground == 1) {
         if (event.keyboard.keycode == ALLEGRO_KEY_D) {
-            if (s1->op < s1->max_op) { 
+            if ((s1->op < s1->max_op) && (!(s1->itOk))) { 
                 s1->dx += 281;
                 s1->op++;
             }
         }
         if (event.keyboard.keycode == ALLEGRO_KEY_A) {
-            if (s1->op > 0) {
+            if ((s1->op > 0) && (!(s1->itOk))) {
                 s1->dx -= 281;
                 s1->op--;
             }
         }
     } else if (render->currentBackground == 2) {
         if (event.keyboard.keycode == ALLEGRO_KEY_D) {
-            if (s1->op < s1->max_op) { 
+            if ((s1->op < s1->max_op) && (!(s1->itOk))) { 
                 s1->dx += 281;
                 s1->op++;
             }
         }
         if (event.keyboard.keycode == ALLEGRO_KEY_A) {
-            if (s1->op > 0) {
+            if ((s1->op > 0) && (!(s1->itOk))) {
                 s1->dx -= 281;
                 s1->op--;
             }
         }
         if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
-            if (s2->op < s2->max_op) { 
+            if ((s2->op < s2->max_op) && (!(s2->itOk))) { 
                 s2->dx += 281;
                 s2->op++;
             }
         }
         if (event.keyboard.keycode == ALLEGRO_KEY_LEFT) {
-            if (s2->op > 0) {
+            if ((s2->op > 0) && (!(s2->itOk))) {
                 s2->dx -= 281;
                 s2->op--;
             }
         }
     }
-};
-
-void gameRender(Screen_Render *render) {
-    int i = 0;
-    bool game = true;
-    Figure *arrow = createFigure(505, HEIGHT - 210, 0,2, "./figures/attackArrow.bmp");
-    // CONST 281
-    Figure *selectionP1 = createFigure(143, HEIGHT - 232, 0, 3, "./figures/selection.bmp");
-    Figure *selectionP2 = createFigure(986, HEIGHT - 232, 3, 3, "./figures/selectionRed.bmp");
-    bool redraw = true;
-    ALLEGRO_EVENT event;
-
-    al_start_timer(render->timer);
-    while (game) {
-        al_wait_for_event(render->queue, &event);
-
-        if (event.type == ALLEGRO_EVENT_TIMER)
-            redraw = true;
-
-        if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-            break;
-
-        if (event.type == ALLEGRO_EVENT_KEY_DOWN) {
-            switch (render->gameMode) {
-                case START:
-                    startScreen(render, arrow, event, &i);
-                    if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
-                        game = false;
-                    break;
-
-                case SELECTION:
-                    selectionScreen(render, selectionP1, selectionP2, event, &i);
-                    if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-                        render->gameMode = START;
-                            fade_out(render->display, render->background[i],
-                                    0.02);
-                            fade_in(render->display, render->background[0], 
-                                    0.02);
-                        i = 0;
-                        render->currentBackground = i;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        if ((redraw) && (al_is_event_queue_empty(render->queue))) {
-            al_clear_to_color(al_map_rgb(0, 0, 0));
-            switch (render->gameMode){
-                case START:
-                    drawStart(render, arrow);
-                    break;
-
-                case SELECTION:
-                    drawSelection(render, selectionP1, selectionP2, &i);
-                    break;
-                default:
-                    break;
-            }
-            redraw = false;
-            al_flip_display();
-        }
-    }
-
-    deleteFigure(arrow);
-    deleteFigure(selectionP1);
-    deleteFigure(selectionP2);
 };
 
 void deleteFigure(Figure *figure) {
@@ -310,6 +298,10 @@ void endGame(Screen_Render *screen) {
 
     for (int i = 0; i < IMAGES; ++i) {
         al_destroy_bitmap(screen->background[i]);
+    }
+
+    for (int i = 0; i < CHARACTERS; ++i) {
+        al_destroy_bitmap(screen->chars[i]);
     }
 
     al_destroy_display(screen->display);
