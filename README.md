@@ -11,11 +11,11 @@ Using the Allegro library in C and developed for the "Programming 2" subject, I 
 -> WS / Z
 
 * Selection
-* -> Player 1: AS / ZX
+* -> Player 1: AS /
    Z - Confirm
    X - Cancel
 
-* -> Player 2: ↑↓ / NUMPAD 1 NUMPAD 2
+* -> Player 2: ↑↓ /
    NUMPAD 1 - Confirm
    NUMPAD 2 - Cancel
 
