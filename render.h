@@ -9,7 +9,7 @@
 #include <allegro5/allegro_primitives.h>
 
 #define CHARACTERS 4
-#define IMAGES 3
+#define IMAGES 4
 #define WIDTH 1320
 #define HEIGHT 680
 #define FRAMERATE 30

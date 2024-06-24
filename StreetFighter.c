@@ -18,7 +18,6 @@ int main () {
     int i = 0;
     bool game = true;
     Figure *arrow = createFigure(505, HEIGHT - 210, 0,2, "./figures/attackArrow.bmp");
-    // CONST 281
     Figure *selectionP1 = createFigure(143, HEIGHT - 232, 0, 3, "./figures/selection.bmp");
     Figure *selectionP2 = createFigure(986, HEIGHT - 232, 3, 3, "./figures/selectionRed.bmp");
     bool redraw = true;
@@ -54,22 +53,6 @@ int main () {
                         selectionP1->itOk = false;
                         selectionP2->itOk = false;
                         render->currentBackground = i;    
-                    }
-
-                    if (render->currentBackground == 1) {
-                        if (event.keyboard.keycode == ALLEGRO_KEY_Z)
-                            selectionP1->itOk = true;
-                        if (event.keyboard.keycode == ALLEGRO_KEY_X)
-                            selectionP1->itOk = false;
-                    } else if (render->currentBackground == 2) {
-                        if (event.keyboard.keycode == ALLEGRO_KEY_Z)
-                            selectionP1->itOk = true;
-                        if (event.keyboard.keycode == ALLEGRO_KEY_X)
-                            selectionP1->itOk = false;
-                        if (event.keyboard.keycode == ALLEGRO_KEY_PAD_1)
-                            selectionP2->itOk = true;
-                        if (event.keyboard.keycode == ALLEGRO_KEY_PAD_2)
-                            selectionP2->itOk = false;
                     }                    
                     break;
                 default:

@@ -1,5 +1,6 @@
 #include "render.h"
 
+/* Init Function */
 void init(bool test, const char *description) {
     if(test) return;
 
@@ -7,6 +8,7 @@ void init(bool test, const char *description) {
     exit(1);
 };
 
+/* Fade Out Effect */
 void fade_out(ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *current_bitmap, float speed) {
     for (float alpha = 1.0; alpha >= 0.0; alpha -= speed) {
         al_draw_scaled_bitmap(current_bitmap, 0, 0,
@@ -19,6 +21,7 @@ void fade_out(ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *current_bitmap, float sp
     }
 };
 
+/* Fade In Effect */
 void fade_in(ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *next_bitmap, float speed) {
     for (float alpha = 0.0; alpha <= 1.0; alpha += speed) {
         al_draw_scaled_bitmap(next_bitmap, 0, 0, 
@@ -33,12 +36,16 @@ void fade_in(ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *next_bitmap, float speed)
 
 Screen_Render *startGame() {
     Screen_Render *newScreen;
+
+    /* Load backgrounds */
     const char *filenames[IMAGES] = {
         "./images/intro.png",
         "./images/ScreenCOM.bmp",
-        "./images/ScreenCOOP.bmp"
+        "./images/ScreenCOOP.bmp",
+        "./images/JapanStage.bmp"
     };
 
+    /* Load selection screen images */
     const char *names[CHARACTERS] = {
         "./characters/RyuFace.bmp",
         "./characters/KenFace.bmp",
@@ -46,6 +53,7 @@ Screen_Render *startGame() {
         "./characters/ChunLiFace.bmp"
     };
     
+    /* Init all addons */
     init(al_install_keyboard(), "keyboard");
     init(al_init_image_addon(), "image addon");
     init(al_init_primitives_addon(), "primitives");
@@ -121,13 +129,15 @@ void drawStart(Screen_Render *render, Figure *arrow) {
     ALLEGRO_COLOR red = al_map_rgb(255, 25, 35);
     ALLEGRO_COLOR white = al_map_rgb(255, 255, 255);
 
+    /* Draw intro screen */
     al_draw_scaled_bitmap(render->background[0],
                             0, 0, al_get_bitmap_width(render->background[0]),
                             al_get_bitmap_height(render->background[0]),
                             0, 0, WIDTH, HEIGHT, 0);
-
     al_draw_text(render->font2, white, 0, HEIGHT - 100, 0, "PRESS Z TO SELECT");
     al_draw_text(render->font2, white, 0, HEIGHT - 50, 0, "PRESS ESC TO EXIT");
+    
+    /* Update text according to selection */
     if (arrow->op == 0) 
         al_draw_text(render->font1, white, WIDTH/2 -13 * 6, HEIGHT - 200, 0, "SINGLEPLAYER");
     else
@@ -143,6 +153,7 @@ void drawStart(Screen_Render *render, Figure *arrow) {
     else
         al_draw_text(render->font1, red, WIDTH/2 -8 * 6, HEIGHT - 100, 0, "OPTIONS");
 
+    /* Draw the selection arrow */
     al_draw_scaled_bitmap(arrow->image, 0, 0,
                             arrow->w, arrow->h, 
                             arrow->dx, arrow->dy, 
@@ -154,6 +165,7 @@ void drawStart(Screen_Render *render, Figure *arrow) {
 };
 
 void startScreen(Screen_Render *render, Figure *arrow, ALLEGRO_EVENT event, int *i) {
+    /* Arrow Controls */
     if (event.keyboard.keycode == ALLEGRO_KEY_W) 
         if (arrow->op > 0) {
                 arrow->op--;
@@ -166,6 +178,7 @@ void startScreen(Screen_Render *render, Figure *arrow, ALLEGRO_EVENT event, int 
                 arrow->dy += 50;
             }
 
+    /* Update the screen */
     if (event.keyboard.keycode == ALLEGRO_KEY_Z) {
         render->gameMode = SELECTION;
         if (arrow->op == 0) {
@@ -186,9 +199,11 @@ void startScreen(Screen_Render *render, Figure *arrow, ALLEGRO_EVENT event, int 
 };
 
 void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, int *i) {
+    /* Color Definition */
     ALLEGRO_COLOR white = al_map_rgb(255, 255, 255);
     ALLEGRO_COLOR red = al_map_rgb(255, 0, 0);
     if (render->currentBackground == 1) {
+        /* Draw the selection screen for vs COM Mode */
         al_draw_scaled_bitmap(render->background[1],
                                 0, 0, al_get_bitmap_width(render->background[1]),
                                 al_get_bitmap_height(render->background[1]),
@@ -199,6 +214,7 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, int *i) {
                         al_get_bitmap_height(render->chars[s1->op]),
                         WIDTH - 1250, HEIGHT - 541, 380, 250, 0);
 
+        /* Shows the name of the respective character */
         if (s1->op == 0) 
             al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Ryu");
         else if (s1->op == 1)
@@ -207,11 +223,15 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, int *i) {
             al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Sagat");
         else if (s1->op == 3)
             al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Chun Li");
-
-        if (s1->itOk)
+        
+        /* Check to continue */
+        if (s1->itOk) {
             al_draw_text(render->font2, red, WIDTH - 1200, HEIGHT - 450, 0, "PLAYER 1 SELECTED");
+            al_draw_text(render->font1, white, WIDTH/2 - 17*8, HEIGHT - 320, 0, "PRESS Z TO START");
+        }
 
     } else if (render->currentBackground == 2) {
+        /* Draw the selection screen for Multiplayer Mode */
         al_draw_scaled_bitmap(render->background[2],
                                 0, 0, al_get_bitmap_width(render->background[2]),
                                 al_get_bitmap_height(render->background[2]),
@@ -229,6 +249,7 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, int *i) {
                 al_get_bitmap_height(render->chars[s2->op]),
                 WIDTH - 460, HEIGHT - 541, 380, 250, ALLEGRO_ALIGN_CENTER);
 
+        /* Shows the name of the respective character */
         if (s1->op == 0) 
             al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Ryu");
         else if (s1->op == 1)
@@ -252,11 +273,33 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, int *i) {
 
         if (s2->itOk)
             al_draw_text(render->font2, red, WIDTH - 380, HEIGHT - 450, 0, "PLAYER 2 SELECTED");
+
+        /* Check to continue */
+        if ((s1->itOk) && (s2->itOk))
+            al_draw_text(render->font1, white, WIDTH/2 - 17*8, HEIGHT - 320, 0, "PRESS Z TO START");
+        
+    } else if (render->currentBackground == 3) {
+        al_draw_scaled_bitmap(render->background[3],
+                                0, 0, al_get_bitmap_width(render->background[3]),
+                                al_get_bitmap_height(render->background[3]),
+                                0, 0, WIDTH, HEIGHT, 0);
     }
 };
 
 void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, ALLEGRO_EVENT event, int *i) {
     if (render->currentBackground == 1) {
+        /* Update the Screen */
+        if (s1->itOk) {
+            if (event.keyboard.keycode == ALLEGRO_KEY_Z) {
+                fade_out(render->display, render->background[1], 0.02);
+                fade_in(render->display, render->background[3], 0.02);
+                *i = 3;
+                render->currentBackground = 3;
+
+                return; 
+            }
+        }
+        /* Update the Selector */
         if (event.keyboard.keycode == ALLEGRO_KEY_D) {
             if ((s1->op < s1->max_op) && (!(s1->itOk))) { 
                 s1->dx += 281;
@@ -269,7 +312,25 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, ALLEGRO_EVEN
                 s1->op--;
             }
         }
+        if (event.keyboard.keycode == ALLEGRO_KEY_Z)
+            s1->itOk = true;
+        if (event.keyboard.keycode == ALLEGRO_KEY_X)
+            s1->itOk = false;
+
     } else if (render->currentBackground == 2) {
+        /* Update the Screen */
+        if ((s1->itOk) && (s2->itOk)) {
+            if (event.keyboard.keycode == ALLEGRO_KEY_Z) {
+                fade_out(render->display, render->background[2], 0.02);
+                fade_in(render->display, render->background[3], 0.02);
+                *i = 3;
+                render->currentBackground = 3;
+                
+                return;                
+            }
+        }
+
+        /* Update the Selectors */
         if (event.keyboard.keycode == ALLEGRO_KEY_D) {
             if ((s1->op < s1->max_op) && (!(s1->itOk))) { 
                 s1->dx += 281;
@@ -294,6 +355,14 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, ALLEGRO_EVEN
                 s2->op--;
             }
         }
+        if (event.keyboard.keycode == ALLEGRO_KEY_Z)
+            s1->itOk = true;
+        if (event.keyboard.keycode == ALLEGRO_KEY_X)
+            s1->itOk = false;
+        if (event.keyboard.keycode == ALLEGRO_KEY_PAD_1)
+            s2->itOk = true;
+        if (event.keyboard.keycode == ALLEGRO_KEY_PAD_2)
+            s2->itOk = false;
     }
 };
 
