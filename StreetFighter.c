@@ -51,8 +51,26 @@ int main () {
                             fade_in(render->display, render->background[0], 
                                     0.02);
                         i = 0;
-                        render->currentBackground = i;
+                        selectionP1->itOk = false;
+                        selectionP2->itOk = false;
+                        render->currentBackground = i;    
                     }
+
+                    if (render->currentBackground == 1) {
+                        if (event.keyboard.keycode == ALLEGRO_KEY_Z)
+                            selectionP1->itOk = true;
+                        if (event.keyboard.keycode == ALLEGRO_KEY_X)
+                            selectionP1->itOk = false;
+                    } else if (render->currentBackground == 2) {
+                        if (event.keyboard.keycode == ALLEGRO_KEY_Z)
+                            selectionP1->itOk = true;
+                        if (event.keyboard.keycode == ALLEGRO_KEY_X)
+                            selectionP1->itOk = false;
+                        if (event.keyboard.keycode == ALLEGRO_KEY_PAD_1)
+                            selectionP2->itOk = true;
+                        if (event.keyboard.keycode == ALLEGRO_KEY_PAD_2)
+                            selectionP2->itOk = false;
+                    }                    
                     break;
                 default:
                     break;

@@ -15,7 +15,7 @@ void fade_out(ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *current_bitmap, float sp
                               0, 0, WIDTH, HEIGHT, 0);
         al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba_f(0, 0, 0, 1 - alpha));
         al_flip_display();
-        al_rest(0.01); 
+        al_rest(0.001); 
     }
 };
 
@@ -27,7 +27,7 @@ void fade_in(ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *next_bitmap, float speed)
                               0, 0, WIDTH, HEIGHT, 0);
         al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba_f(0, 0, 0, 1 - alpha));
         al_flip_display();
-        al_rest(0.01); 
+        al_rest(0.001); 
     }
 };
 
@@ -187,6 +187,7 @@ void startScreen(Screen_Render *render, Figure *arrow, ALLEGRO_EVENT event, int 
 
 void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, int *i) {
     ALLEGRO_COLOR white = al_map_rgb(255, 255, 255);
+    ALLEGRO_COLOR red = al_map_rgb(255, 0, 0);
     if (render->currentBackground == 1) {
         al_draw_scaled_bitmap(render->background[1],
                                 0, 0, al_get_bitmap_width(render->background[1]),
@@ -206,6 +207,9 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, int *i) {
             al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Sagat");
         else if (s1->op == 3)
             al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Chun Li");
+
+        if (s1->itOk)
+            al_draw_text(render->font2, red, WIDTH - 1200, HEIGHT - 450, 0, "PLAYER 1 SELECTED");
 
     } else if (render->currentBackground == 2) {
         al_draw_scaled_bitmap(render->background[2],
@@ -242,6 +246,12 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, int *i) {
             al_draw_text(render->font2, white, WIDTH - 130, HEIGHT - 550, 0, "Sagat");
         else if (s2->op == 3)
             al_draw_text(render->font2, white, WIDTH - 130, HEIGHT - 550, 0, "Chun Li");
+
+        if (s1->itOk)
+            al_draw_text(render->font2, red, WIDTH - 1200, HEIGHT - 450, 0, "PLAYER 1 SELECTED");
+
+        if (s2->itOk)
+            al_draw_text(render->font2, red, WIDTH - 380, HEIGHT - 450, 0, "PLAYER 2 SELECTED");
     }
 };
 
