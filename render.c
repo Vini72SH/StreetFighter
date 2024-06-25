@@ -42,7 +42,7 @@ Screen_Render *startGame() {
         "./images/intro.png",
         "./images/ScreenCOM.bmp",
         "./images/ScreenCOOP.bmp",
-        "./images/JapanStage.bmp"
+        "./images/MapSelection.bmp"
     };
 
     /* Load selection screen images */
@@ -283,6 +283,7 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, int *i) {
                                 0, 0, al_get_bitmap_width(render->background[3]),
                                 al_get_bitmap_height(render->background[3]),
                                 0, 0, WIDTH, HEIGHT, 0);
+        al_draw_text(render->font2, white, 0, HEIGHT - 35, 0, "PRESS R TO CHOOSE A RANDOM MAP");
     }
 };
 
