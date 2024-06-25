@@ -9,7 +9,7 @@
 #include <allegro5/allegro_primitives.h>
 
 #define CHARACTERS 4
-#define IMAGES 4
+#define IMAGES 14
 #define WIDTH 1320
 #define HEIGHT 680
 #define FRAMERATE 30
@@ -48,8 +48,8 @@ void fade_out(ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *current_bitmap, float sp
 void fade_in(ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *next_bitmap, float speed);
 void drawStart(Screen_Render *render, Figure *arrow);
 void startScreen(Screen_Render *render, Figure *arrow, ALLEGRO_EVENT event, int *i);
-void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, int *i);
-void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, ALLEGRO_EVENT event, int *i);
+void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, int *i);
+void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, ALLEGRO_EVENT event, int *i);
 void deleteFigure(Figure *figure);
 void endGame(Screen_Render *screen);
 

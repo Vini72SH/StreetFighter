@@ -20,6 +20,7 @@ int main () {
     Figure *arrow = createFigure(505, HEIGHT - 210, 0,2, "./figures/attackArrow.bmp");
     Figure *selectionP1 = createFigure(143, HEIGHT - 232, 0, 3, "./figures/selection.bmp");
     Figure *selectionP2 = createFigure(986, HEIGHT - 232, 3, 3, "./figures/selectionRed.bmp");
+    Figure *selectionM = createFigure(362, 405, 0, 9, "./figures/selectionMap.bmp");
     bool redraw = true;
     ALLEGRO_EVENT event;
 
@@ -42,7 +43,7 @@ int main () {
                     break;
 
                 case SELECTION:
-                    selectionScreen(render, selectionP1, selectionP2, event, &i);
+                    selectionScreen(render, selectionP1, selectionP2, selectionM, event, &i);
                     if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
                         render->gameMode = START;
                             fade_out(render->display, render->background[i],
@@ -68,7 +69,7 @@ int main () {
                     break;
 
                 case SELECTION:
-                    drawSelection(render, selectionP1, selectionP2, &i);
+                    drawSelection(render, selectionP1, selectionP2, selectionM, &i);
                     break;
                 default:
                     break;
@@ -81,6 +82,7 @@ int main () {
     deleteFigure(arrow);
     deleteFigure(selectionP1);
     deleteFigure(selectionP2);
+    deleteFigure(selectionM);
 
     endGame(render);
 

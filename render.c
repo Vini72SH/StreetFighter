@@ -42,7 +42,17 @@ Screen_Render *startGame() {
         "./images/intro.png",
         "./images/ScreenCOM.bmp",
         "./images/ScreenCOOP.bmp",
-        "./images/MapSelection.bmp"
+        "./images/MapSelection.bmp",
+        "./images/BrazilStage.bmp",
+        "./images/CassinoStage.bmp",
+        "./images/DojoStage.bmp",
+        "./images/HarborStage.bmp",
+        "./images/IndiaStage.bmp",
+        "./images/JapanStage.bmp",
+        "./images/SewageStage.bmp",
+        "./images/StreetStage.bmp",
+        "./images/TempleStage.bmp",
+        "./images/Tournament.bmp"
     };
 
     /* Load selection screen images */
@@ -198,7 +208,7 @@ void startScreen(Screen_Render *render, Figure *arrow, ALLEGRO_EVENT event, int 
     }
 };
 
-void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, int *i) {
+void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, int *i) {
     /* Color Definition */
     ALLEGRO_COLOR white = al_map_rgb(255, 255, 255);
     ALLEGRO_COLOR red = al_map_rgb(255, 0, 0);
@@ -283,11 +293,17 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, int *i) {
                                 0, 0, al_get_bitmap_width(render->background[3]),
                                 al_get_bitmap_height(render->background[3]),
                                 0, 0, WIDTH, HEIGHT, 0);
+        al_draw_scaled_bitmap(s3->image, 0, 0, s3->w, s3->h, s3->dx, s3->dy, 105, 105, 0);
         al_draw_text(render->font2, white, 0, HEIGHT - 35, 0, "PRESS R TO CHOOSE A RANDOM MAP");
+        al_draw_textf(render->font2, white, WIDTH/2, HEIGHT/2, 0, "%d", s3->op);
+        al_draw_scaled_bitmap(render->background[s3->op + 4], 0, 0,
+                              al_get_bitmap_width(render->background[s3->op + 4]), 
+                              al_get_bitmap_height(render->background[s3->op + 4]), 382, 63,
+                              557, 252, 0);
     }
 };
 
-void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, ALLEGRO_EVENT event, int *i) {
+void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, ALLEGRO_EVENT event, int *i) {
     if (render->currentBackground == 1) {
         /* Update the Screen */
         if (s1->itOk) {
@@ -364,6 +380,32 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, ALLEGRO_EVEN
             s2->itOk = true;
         if (event.keyboard.keycode == ALLEGRO_KEY_PAD_2)
             s2->itOk = false;
+
+    } else if (render->currentBackground == 3) {
+        if (event.keyboard.keycode == ALLEGRO_KEY_D) {
+            if ((s3->op != 4) && (s3->op < s3->max_op)) { 
+                s3->dx += 122;
+                s3->op++;
+            }
+        }
+        if (event.keyboard.keycode == ALLEGRO_KEY_A) {
+            if ((s3->op > 0) && (s3->op != 5)) {
+                s3->dx -= 122;
+                s3->op--;
+            }
+        }
+        if (event.keyboard.keycode == ALLEGRO_KEY_W) {
+            if ((s3->op - 5 >=  0)) { 
+                s3->dy -= 122;
+                s3->op -= 5;
+            }
+        }
+        if (event.keyboard.keycode == ALLEGRO_KEY_S) {
+            if (s3->op + 5 <= s3->max_op) {
+                s3->dy += 122;
+                s3->op += 5;
+            }
+        }
     }
 };
 
