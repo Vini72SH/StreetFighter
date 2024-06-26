@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "render.h"
+#include "character.h"
 
 void must_init(bool test, const char *description) {
     if(test) return;
@@ -21,6 +22,8 @@ int main () {
     Figure *selectionP1 = createFigure(143, HEIGHT - 232, 0, 3, "./figures/selection.bmp");
     Figure *selectionP2 = createFigure(986, HEIGHT - 232, 3, 3, "./figures/selectionRed.bmp");
     Figure *selectionM = createFigure(362, 405, 0, 9, "./figures/selectionMap.bmp");
+    character *block1 = createCharacter(10, 50, 150, HEIGHT/2, WIDTH, HEIGHT - 50);
+    character *block2 = createCharacter(10, 50, WIDTH - 150, HEIGHT/2, WIDTH, HEIGHT - 50);
     bool redraw = true;
     ALLEGRO_EVENT event;
 
@@ -59,6 +62,7 @@ int main () {
                     break;
                 
                 case GAME:
+                    gameScreen(event, block1, block2);
                     if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
                         render->gameMode = SELECTION;
                             fade_out(render->display, render->background[i],
@@ -92,7 +96,7 @@ int main () {
                     break;
                 
                 case GAME:
-                    drawGame(render, &i);
+                    drawGame(render, block1, block2, &i);
                     break;
                 default:
                     break;
@@ -106,6 +110,8 @@ int main () {
     deleteFigure(selectionP1);
     deleteFigure(selectionP2);
     deleteFigure(selectionM);
+    destroyCharacter(block1);
+    destroyCharacter(block2);
 
     endGame(render);
 

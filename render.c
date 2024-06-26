@@ -449,11 +449,36 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, 
     }
 };
 
-void drawGame(Screen_Render *render, int *i){
+void drawGame(Screen_Render *render, character *p1, character *p2, int *i){
+    ALLEGRO_COLOR blue = al_map_rgb(0, 0, 255);
+    ALLEGRO_COLOR red = al_map_rgb(255, 0, 0);
     al_draw_scaled_bitmap(render->background[*i],
                             0, 0, al_get_bitmap_width(render->background[*i]),
                             al_get_bitmap_height(render->background[*i]),
                             0, 0, WIDTH, HEIGHT, 0);
+    al_draw_filled_rectangle(p1->x - p1->side/2, p1->y - p1->side/2, p1->x + p1->side/2, p1->y + p1->side/2, blue);
+    al_draw_filled_rectangle(p2->x - p2->side/2, p2->y - p2->side/2, p2->x + p2->side/2, p2->y + p2->side/2, red);
+
+};
+
+void gameScreen(ALLEGRO_EVENT event, character *char1, character *char2) {
+    if (event.keyboard.keycode == ALLEGRO_KEY_A)
+        characterMove(char1, 5, 1, WIDTH, HEIGHT - 50);
+    if (event.keyboard.keycode == ALLEGRO_KEY_D)
+        characterMove(char1, 5, 2, WIDTH, HEIGHT - 50);
+    if (event.keyboard.keycode == ALLEGRO_KEY_W)
+        characterMove(char1, 5, 3, WIDTH, HEIGHT - 50);
+    if (event.keyboard.keycode == ALLEGRO_KEY_S)
+        characterMove(char1, 5, 4, WIDTH, HEIGHT - 50);
+
+    if (event.keyboard.keycode == ALLEGRO_KEY_LEFT)
+        characterMove(char2, 5, 1, WIDTH, HEIGHT - 50);
+    if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT)
+        characterMove(char2, 5, 2, WIDTH, HEIGHT - 50);
+    if (event.keyboard.keycode == ALLEGRO_KEY_UP)
+        characterMove(char2, 5, 3, WIDTH, HEIGHT - 50);
+    if (event.keyboard.keycode == ALLEGRO_KEY_DOWN)
+        characterMove(char2, 5, 4, WIDTH, HEIGHT - 50);
 };
 
 void deleteFigure(Figure *figure) {
