@@ -2,6 +2,8 @@
 #define RENDER_H
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
@@ -50,6 +52,7 @@ void drawStart(Screen_Render *render, Figure *arrow);
 void startScreen(Screen_Render *render, Figure *arrow, ALLEGRO_EVENT event, int *i);
 void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, int *i);
 void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, ALLEGRO_EVENT event, int *i);
+void drawGame(Screen_Render *render, int *i);
 void deleteFigure(Figure *figure);
 void endGame(Screen_Render *screen);
 

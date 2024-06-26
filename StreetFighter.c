@@ -53,8 +53,27 @@ int main () {
                         i = 0;
                         selectionP1->itOk = false;
                         selectionP2->itOk = false;
+                        selectionM->itOk = false;
                         render->currentBackground = i;    
                     }                    
+                    break;
+                
+                case GAME:
+                    if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+                        render->gameMode = SELECTION;
+                            fade_out(render->display, render->background[i],
+                                    0.02);
+                            fade_in(render->display, render->background[3],
+                                    0.02);
+                        i = 3;
+                        selectionP1->itOk = false;
+                        selectionP2->itOk = false;
+                        selectionM->itOk = false;
+                        selectionM->dx = 362;
+                        selectionM->dy = 405;
+                        selectionM->op = 0;
+                        render->currentBackground = i;
+                    }
                     break;
                 default:
                     break;
@@ -70,6 +89,10 @@ int main () {
 
                 case SELECTION:
                     drawSelection(render, selectionP1, selectionP2, selectionM, &i);
+                    break;
+                
+                case GAME:
+                    drawGame(render, &i);
                     break;
                 default:
                     break;

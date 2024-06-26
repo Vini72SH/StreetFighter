@@ -195,7 +195,7 @@ void startScreen(Screen_Render *render, Figure *arrow, ALLEGRO_EVENT event, int 
             fade_out(render->display, render->background[0],
                     0.02);
             fade_in(render->display, render->background[1], 
-                    0.02);    
+                    0.02);   
             *i = 1;
         } else if (arrow->op == 1) {
             fade_out(render->display, render->background[0],
@@ -295,15 +295,36 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, in
                                 0, 0, WIDTH, HEIGHT, 0);
         al_draw_scaled_bitmap(s3->image, 0, 0, s3->w, s3->h, s3->dx, s3->dy, 105, 105, 0);
         al_draw_text(render->font2, white, 0, HEIGHT - 35, 0, "PRESS R TO CHOOSE A RANDOM MAP");
-        al_draw_textf(render->font2, white, WIDTH/2, HEIGHT/2, 0, "%d", s3->op);
         al_draw_scaled_bitmap(render->background[s3->op + 4], 0, 0,
                               al_get_bitmap_width(render->background[s3->op + 4]), 
                               al_get_bitmap_height(render->background[s3->op + 4]), 382, 63,
                               557, 252, 0);
+
+        if (s3->op == 0)
+            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Brazil Stage");
+        if (s3->op == 1)
+            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Cassino Stage");
+        if (s3->op == 2)
+            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Dojo Stage");
+        if (s3->op == 3)
+            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Harbor Stage");
+        if (s3->op == 4)
+            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "India Stage");
+        if (s3->op == 5)
+            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Japan Stage");
+        if (s3->op == 6)
+            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Sewage Stage");
+        if (s3->op == 7)
+            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Street Stage");
+        if (s3->op == 8)
+            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Temple Stage");
+        if (s3->op == 9)
+            al_draw_text(render->font1, white, WIDTH/2 - 14 * 10, HEIGHT/2, 0, "Tenkaichi Budokai Stage");
     }
 };
 
 void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, ALLEGRO_EVENT event, int *i) {
+    srand(time(0));
     if (render->currentBackground == 1) {
         /* Update the Screen */
         if (s1->itOk) {
@@ -406,7 +427,33 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, 
                 s3->op += 5;
             }
         }
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_Z) {
+            s3->itOk = true;
+            render->gameMode = GAME;
+            *i = s3->op + 4;
+            fade_out(render->display, render->background[3], 0.02);
+            fade_in(render->display, render->background[*i], 0.02);
+            render->currentBackground = *i;
+        }
+
+        if (event.keyboard.keycode == ALLEGRO_KEY_R) {
+            s3->itOk = true;
+            render->gameMode = GAME;
+            s3->op = rand() % 10;
+            *i = s3->op + 4;
+            fade_out(render->display, render->background[3], 0.02);
+            fade_in(render->display, render->background[*i], 0.02);
+            render->currentBackground = *i;
+        }
     }
+};
+
+void drawGame(Screen_Render *render, int *i){
+    al_draw_scaled_bitmap(render->background[*i],
+                            0, 0, al_get_bitmap_width(render->background[*i]),
+                            al_get_bitmap_height(render->background[*i]),
+                            0, 0, WIDTH, HEIGHT, 0);
 };
 
 void deleteFigure(Figure *figure) {
