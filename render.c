@@ -90,9 +90,13 @@ Screen_Render *startGame() {
     newScreen->display = al_create_display(WIDTH, HEIGHT);
     init(newScreen->display, "display");
 
+    newScreen->icon = al_load_bitmap("./images/logo.png");
+    init(newScreen->icon, "icon");
+
     al_set_window_title(newScreen->display, "Street Fighter");
     al_set_window_position(newScreen->display, 20, 0);
     al_hide_mouse_cursor(newScreen->display);
+    al_set_display_icon(newScreen->display, newScreen->icon);
 
     al_register_event_source(newScreen->queue, al_get_keyboard_event_source());
     al_register_event_source(newScreen->queue, al_get_display_event_source(newScreen->display));
@@ -462,23 +466,7 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i){
 };
 
 void gameScreen(ALLEGRO_EVENT event, character *char1, character *char2) {
-    if (event.keyboard.keycode == ALLEGRO_KEY_A)
-        characterMove(char1, 5, 1, WIDTH, HEIGHT - 50);
-    if (event.keyboard.keycode == ALLEGRO_KEY_D)
-        characterMove(char1, 5, 2, WIDTH, HEIGHT - 50);
-    if (event.keyboard.keycode == ALLEGRO_KEY_W)
-        characterMove(char1, 5, 3, WIDTH, HEIGHT - 50);
-    if (event.keyboard.keycode == ALLEGRO_KEY_S)
-        characterMove(char1, 5, 4, WIDTH, HEIGHT - 50);
 
-    if (event.keyboard.keycode == ALLEGRO_KEY_LEFT)
-        characterMove(char2, 5, 1, WIDTH, HEIGHT - 50);
-    if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT)
-        characterMove(char2, 5, 2, WIDTH, HEIGHT - 50);
-    if (event.keyboard.keycode == ALLEGRO_KEY_UP)
-        characterMove(char2, 5, 3, WIDTH, HEIGHT - 50);
-    if (event.keyboard.keycode == ALLEGRO_KEY_DOWN)
-        characterMove(char2, 5, 4, WIDTH, HEIGHT - 50);
 };
 
 void deleteFigure(Figure *figure) {
@@ -498,6 +486,7 @@ void endGame(Screen_Render *screen) {
         al_destroy_bitmap(screen->chars[i]);
     }
 
+    al_destroy_bitmap(screen->icon);
     al_destroy_display(screen->display);
     al_destroy_font(screen->font1);
     al_destroy_event_queue(screen->queue);

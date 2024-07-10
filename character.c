@@ -12,28 +12,30 @@ character *createCharacter(uint hp, ushort side, ushort x, ushort y, ushort max_
     newCharacter->side = side;
     newCharacter->x = x;
     newCharacter->y = y;
+    newCharacter->control = createJoy();
 
     return newCharacter;
 };
 
-void characterMove(character *chara, ushort steps, ushort trajectory, ushort max_x, ushort max_y) {
-    if (trajectory == 1) {
+void characterMove(character *chara, short steps, ushort trajectory, ushort max_x, ushort max_y) {
+    if (trajectory == LEFT) {
         if ((chara->x - steps*SPEED) - chara->side/2 >= 0) chara->x = chara->x - steps * SPEED;
     }
 
-    if (trajectory == 2) {
+    if (trajectory == RIGHT) {
         if ((chara->x + steps*SPEED) + chara->side/2 <= max_x) chara->x = chara->x + steps * SPEED;
     }
 
-    if (trajectory == 3) {
+    if (trajectory == UP) {
         if ((chara->y - steps*SPEED) - chara->side/2 >= 0) chara->y = chara->y - steps * SPEED;
     }
 
-    if (trajectory == 4) {
+    if (trajectory == DOWN) {
         if ((chara->y + steps*SPEED) + chara->side/2 <= max_y) chara->y = chara->y + steps * SPEED;
     }
 };
 
 void destroyCharacter(character *chara) {
+    destroyJoy(chara->control);
     free(chara);
 };

@@ -41,6 +41,7 @@ typedef struct Screen_Render{
     ALLEGRO_FONT *font1;
     ALLEGRO_FONT *font2;
     ALLEGRO_DISPLAY *display;
+    ALLEGRO_BITMAP *icon;
     ALLEGRO_BITMAP *background[IMAGES];
     ALLEGRO_BITMAP *chars[CHARACTERS];
 }Screen_Render;
