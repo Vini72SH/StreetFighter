@@ -7,6 +7,11 @@
 #include "joystick.h"
 
 #define SPEED 20
+#define JUMP_SPEED 10
+#define IDLE 0
+#define WALK 1
+#define DOWN 2
+#define AIR 3
 
 typedef unsigned int uint;
 typedef unsigned short ushort;
@@ -14,8 +19,10 @@ typedef unsigned short ushort;
 typedef struct character{
     uint hp;
     ushort side;
-    ushort x;
-    ushort y;
+    float x;
+    float y;
+    float air_speed;
+    int state;
     joystick *control;
 }character;
 

@@ -12,6 +12,8 @@ character *createCharacter(uint hp, ushort side, ushort x, ushort y, ushort max_
     newCharacter->side = side;
     newCharacter->x = x;
     newCharacter->y = y;
+    newCharacter->air_speed = 0;
+    newCharacter->state = IDLE;
     newCharacter->control = createJoy();
 
     return newCharacter;

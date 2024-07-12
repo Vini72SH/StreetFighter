@@ -23,8 +23,8 @@ int main () {
     Figure *selectionP1 = createFigure(143, HEIGHT - 232, 0, 3, "./figures/selection.bmp");
     Figure *selectionP2 = createFigure(986, HEIGHT - 232, 3, 3, "./figures/selectionRed.bmp");
     Figure *selectionM = createFigure(362, 405, 0, 9, "./figures/selectionMap.bmp");
-    character *block1 = createCharacter(10, 50, 150, HEIGHT - 80, WIDTH, HEIGHT);
-    character *block2 = createCharacter(10, 50, WIDTH - 150, HEIGHT - 80, WIDTH, HEIGHT);
+    character *block1 = createCharacter(10, 75, 150, HEIGHT - 90, WIDTH, HEIGHT);
+    character *block2 = createCharacter(10, 75, WIDTH - 150, HEIGHT - 90, WIDTH, HEIGHT);
     bool redraw = true;
     ALLEGRO_EVENT event;
 
@@ -59,7 +59,7 @@ int main () {
                         selectionP2->itOk = false;
                         selectionM->itOk = false;
                         render->currentBackground = i;    
-                    }                    
+                    }
                     break;
                 
                 case GAME:
@@ -80,6 +80,8 @@ int main () {
                         block2->x = WIDTH - 150;
                         block1->y = HEIGHT - 80;
                         block2->y = HEIGHT - 80;
+                        block1->state = IDLE;
+                        block2->state = IDLE;
                         selectionM->op = 0;
                         render->currentBackground = i;
                     }
@@ -108,6 +110,7 @@ int main () {
                     break;
                 
                 case GAME:
+                    printf("P1 State: %d\n", block1->state);
                     update_position(block1, block2);
                     drawGame(render, block1, block2, &i);
                     break;
