@@ -460,8 +460,8 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i){
                             0, 0, al_get_bitmap_width(render->background[*i]),
                             al_get_bitmap_height(render->background[*i]),
                             0, 0, WIDTH, HEIGHT, 0);
-    al_draw_filled_rectangle(p1->x - p1->side/2, p1->y - p1->side/2, p1->x + p1->side/2, p1->y + p1->side/2, blue);
-    al_draw_filled_rectangle(p2->x - p2->side/2, p2->y - p2->side/2, p2->x + p2->side/2, p2->y + p2->side/2, red);
+    al_draw_filled_rectangle(p1->x - p1->hurtbox->width/2, p1->y - p1->hurtbox->height/2, p1->x + p1->hurtbox->width/2, p1->y + p1->hurtbox->height/2, blue);
+    al_draw_filled_rectangle(p2->x - p2->hurtbox->width/2, p2->y - p2->hurtbox->height/2, p2->x + p2->hurtbox->width/2, p2->y + p2->hurtbox->height/2, red);
 
 };
 
