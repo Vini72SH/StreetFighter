@@ -25,6 +25,7 @@ void update_position(character *player1, character *player2) {
         if (check_collision(player1, player2)) {
             player1->air_speed += GRAVITY;
             characterMove(player1, -1, UP, WIDTH, MAX_Y);
+            characterFlush(player1, player2, WIDTH, MAX_Y);
         }
         if (player1->y + player1->hurtbox->height/2 > MAX_Y) {
             player1->state = IDLE;
@@ -33,6 +34,12 @@ void update_position(character *player1, character *player2) {
 
     if (player1->control->down) {
         if (check_collision(player1, player2)) characterMove(player1, -1, DOWN, WIDTH, MAX_Y);
+    } else {
+        characterUp(player1);
+        if (check_collision(player1, player2) && (player2->state == AIR)) {
+            characterDown(player1);
+            player1->state = DOWN;
+        }
     }
     if ((player1->control->left) && (player1->state != DOWN)) {
         characterMove(player1, 1, LEFT, WIDTH, MAX_Y);
@@ -47,13 +54,14 @@ void update_position(character *player1, character *player2) {
                                      (player2->control->left) || (player2->control->right))) {
         player2->state = IDLE;
     }
-
     if (player2->state == AIR){
         characterMove(player2, 1, UP, WIDTH, MAX_Y);
         player2->air_speed -= GRAVITY;
         if (check_collision(player2, player1)) {
             player2->air_speed += GRAVITY;
             characterMove(player2, -1, UP, WIDTH, MAX_Y);
+            characterFlush(player2, player1, WIDTH, MAX_Y);
+
         }
         if (player2->y + player2->hurtbox->height/2 > MAX_Y) {
             player2->state = IDLE;
@@ -62,6 +70,12 @@ void update_position(character *player1, character *player2) {
 
     if (player2->control->down) {
         if (check_collision(player2, player1)) characterMove(player2, -1, DOWN, WIDTH, MAX_Y);
+    }else{
+        characterUp(player2);
+        if (check_collision(player2, player1) && (player1->state == AIR)) {
+            characterDown(player2);
+            player2->state = DOWN;
+        }
     }
     if ((player2->control->left) && (player2->state != DOWN)) {
         characterMove(player2, 1, LEFT, WIDTH, MAX_Y);
@@ -98,6 +112,7 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
         joystick_down(player1->control);
         if (player1->state != AIR) {
             player1->state = DOWN;
+            characterDown(player1);
         }
     }
 
@@ -124,6 +139,7 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
         joystick_down(player2->control);
         if (player2->state != AIR) {
             player2->state = DOWN;
+            characterDown(player2);
         }
     }
 };

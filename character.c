@@ -36,20 +36,28 @@ character *createCharacter(uint hp, ushort x, ushort y, ushort max_x, ushort max
 void characterUp(character *chara) {
     if (!(chara)) return;
 
-    if (chara->state == DOWN) {
-        chara->hurtbox->width = CHAR_WIDTH;
-        chara->hurtbox->height = CHAR_HEIGHT;
+    if (chara->hurtbox->height != CHAR_HEIGHT) {
+        chara->y = chara->y - (CHAR_HEIGHT/2 - CHAR_DOWN_HEIGHT/2);
+        chara->hurtbox->y = chara->y;
     }
+
+    chara->hurtbox->width = CHAR_WIDTH;
+    chara->hurtbox->height = CHAR_HEIGHT;
 };
 
 void characterDown(character *chara) {
     if (!(chara)) return;
 
+    if (chara->hurtbox->height != CHAR_DOWN_HEIGHT) {
+        chara->y = chara->y + (CHAR_HEIGHT/2 - CHAR_DOWN_HEIGHT/2);
+        chara->hurtbox->y = chara->y;
+    }
+
     chara->hurtbox->width = CHAR_DOWN_WIDTH;
     chara->hurtbox->height = CHAR_DOWN_HEIGHT;
 };
 
-void characterMove(character *chara, short steps, ushort trajectory, ushort max_x, ushort max_y) {
+void characterMove(character *chara, float steps, ushort trajectory, ushort max_x, ushort max_y) {
     if (trajectory == LEFT) {
         if ((chara->x - steps*SPEED) - chara->hurtbox->width/2 >= 0) {
             chara->x = chara->x - steps * SPEED;
@@ -76,6 +84,15 @@ void characterMove(character *chara, short steps, ushort trajectory, ushort max_
             chara->y = chara->y + steps * SPEED;
             chara->hurtbox->y = chara->y;
         }
+    }
+};
+
+void characterFlush(character *p1, character *p2, ushort max_x, ushort max_y) {
+    
+    if (p1->x <= p2->x) {
+        characterMove(p1, 0.7, LEFT, max_x, max_y);
+    } else {
+        characterMove(p1, 0.7, RIGHT, max_x, max_y);
     }
 };
 

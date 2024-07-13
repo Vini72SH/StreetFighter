@@ -43,7 +43,8 @@ rectangle *createRectangle(float x, float y, ushort width, ushort height);
 character *createCharacter(uint hp, ushort x, ushort y, ushort max_x, ushort max_y);
 void characterUp(character *chara);
 void characterDown(character *chara);
-void characterMove(character *chara, short steps, ushort trajectory, ushort max_x, ushort max_y);
+void characterMove(character *chara, float steps, ushort trajectory, ushort max_x, ushort max_y);
+void characterFlush (character *p1, character *p2, ushort max_x, ushort max_y);
 void destroyRectangle(rectangle *rect);
 void destroyCharacter(character *chara);
 
