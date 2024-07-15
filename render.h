@@ -53,9 +53,8 @@ void fade_in(ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *next_bitmap, float speed)
 void drawStart(Screen_Render *render, Figure *arrow);
 void startScreen(Screen_Render *render, Figure *arrow, ALLEGRO_EVENT event, int *i);
 void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, int *i);
-void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, ALLEGRO_EVENT event, int *i);
+void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, ALLEGRO_EVENT event, int *i, bool *load);
 void drawGame(Screen_Render *render, character *p1, character *p2, int *i);
-void gameScreen(ALLEGRO_EVENT event, character *char1, character *char2);
 void deleteFigure(Figure *figure);
 void endGame(Screen_Render *screen);
 

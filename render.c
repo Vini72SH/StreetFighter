@@ -327,7 +327,7 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, in
     }
 };
 
-void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, ALLEGRO_EVENT event, int *i) {
+void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, ALLEGRO_EVENT event, int *i, bool *load) {
     srand(time(0));
     if (render->currentBackground == 1) {
         /* Update the Screen */
@@ -439,6 +439,7 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, 
             fade_out(render->display, render->background[3], 0.02);
             fade_in(render->display, render->background[*i], 0.02);
             render->currentBackground = *i;
+            *load = true;
         }
 
         if (event.keyboard.keycode == ALLEGRO_KEY_R) {
@@ -449,24 +450,32 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, 
             fade_out(render->display, render->background[3], 0.02);
             fade_in(render->display, render->background[*i], 0.02);
             render->currentBackground = *i;
+            *load = true;
         }
     }
 };
 
 void drawGame(Screen_Render *render, character *p1, character *p2, int *i){
-    ALLEGRO_COLOR blue = al_map_rgb(0, 0, 255);
-    ALLEGRO_COLOR red = al_map_rgb(255, 0, 0);
+    short x1, y1;
+    short x2, y2;
+    x1 = p1->x - p1->hurtbox->width/2;
+    y1 = p1->y - p1->hurtbox->height/2;
+    x2 = p2->x - p2->hurtbox->width/2;
+    y2 = p2->y - p2->hurtbox->height/2;
     al_draw_scaled_bitmap(render->background[*i],
                             0, 0, al_get_bitmap_width(render->background[*i]),
                             al_get_bitmap_height(render->background[*i]),
                             0, 0, WIDTH, HEIGHT, 0);
-    al_draw_filled_rectangle(p1->x - p1->hurtbox->width/2, p1->y - p1->hurtbox->height/2, p1->x + p1->hurtbox->width/2, p1->y + p1->hurtbox->height/2, blue);
-    al_draw_filled_rectangle(p2->x - p2->hurtbox->width/2, p2->y - p2->hurtbox->height/2, p2->x + p2->hurtbox->width/2, p2->y + p2->hurtbox->height/2, red);
-
-};
-
-void gameScreen(ALLEGRO_EVENT event, character *char1, character *char2) {
-
+    //al_draw_filled_rectangle(p1->x - p1->hurtbox->width/2, p1->y - p1->hurtbox->height/2, p1->x + p1->hurtbox->width/2, p1->y + p1->hurtbox->height/2, p1->color);
+    al_draw_scaled_bitmap(p1->sprites[p1->current_frame], 0, 0, 
+                          al_get_bitmap_width(p1->sprites[p1->current_frame]), 
+                          al_get_bitmap_height(p1->sprites[p1->current_frame]), x1, y1, 
+                          p1->hurtbox->width, p1->hurtbox->height, p1->dir);
+    al_draw_scaled_bitmap(p2->sprites[p2->current_frame], 0, 0, 
+                          al_get_bitmap_width(p2->sprites[p2->current_frame]), 
+                          al_get_bitmap_height(p2->sprites[p2->current_frame]), x2, y2, 
+                          p2->hurtbox->width, p2->hurtbox->height, p2->dir);
+    //al_draw_filled_rectangle(p2->x - p2->hurtbox->width/2, p2->y - p2->hurtbox->height/2, p2->x + p2->hurtbox->width/2, p2->y + p2->hurtbox->height/2, p2->color);
 };
 
 void deleteFigure(Figure *figure) {

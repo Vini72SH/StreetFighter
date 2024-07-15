@@ -15,10 +15,12 @@ uchar check_collision (character *p1, character *p2) {
 
 void update_position(character *player1, character *player2) {
     if ((player1->state != AIR) && !((player1->control->up) || (player1->control->down) ||
-                                     (player1->control->left) || (player1->control->right))) {
+        (player1->control->left) || (player1->control->right)) && (player1->state != IDLE)) {
+        
         player1->state = IDLE;
+        player1->current_frame = IDLE0;
+        
     }
-
     if (player1->state == AIR){
         characterMove(player1, 1, UP, WIDTH, MAX_Y);
         player1->air_speed -= GRAVITY;
@@ -27,8 +29,9 @@ void update_position(character *player1, character *player2) {
             characterMove(player1, -1, UP, WIDTH, MAX_Y);
             characterFlush(player1, player2, WIDTH, MAX_Y);
         }
-        if (player1->y + player1->hurtbox->height/2 > MAX_Y) {
+        if ((player1->y + player1->hurtbox->height/2 > MAX_Y) && (player1->state != IDLE)) {
             player1->state = IDLE;
+            player1->current_frame = IDLE0;
         }
     }
 
@@ -39,6 +42,7 @@ void update_position(character *player1, character *player2) {
         if (check_collision(player1, player2) && (player2->state == AIR)) {
             characterDown(player1);
             player1->state = DOWN;
+            player1->current_frame = DOWN0;
         }
     }
     if ((player1->control->left) && (player1->state != DOWN)) {
@@ -51,8 +55,9 @@ void update_position(character *player1, character *player2) {
     }
 
     if ((player2->state != AIR) && !((player2->control->up) || (player2->control->down) ||
-                                     (player2->control->left) || (player2->control->right))) {
+        (player2->control->left) || (player2->control->right)) && (player2->state != IDLE)) {
         player2->state = IDLE;
+        player2->current_frame = IDLE0;
     }
     if (player2->state == AIR){
         characterMove(player2, 1, UP, WIDTH, MAX_Y);
@@ -65,6 +70,7 @@ void update_position(character *player1, character *player2) {
         }
         if (player2->y + player2->hurtbox->height/2 > MAX_Y) {
             player2->state = IDLE;
+            player2->current_frame = IDLE0;
         }
     }
 
@@ -75,6 +81,7 @@ void update_position(character *player1, character *player2) {
         if (check_collision(player2, player1) && (player1->state == AIR)) {
             characterDown(player2);
             player2->state = DOWN;
+            player2->current_frame = DOWN0;
         }
     }
     if ((player2->control->left) && (player2->state != DOWN)) {
@@ -86,6 +93,8 @@ void update_position(character *player1, character *player2) {
         if (check_collision(player2, player1)) characterMove(player2, -1, RIGHT, WIDTH, MAX_Y);
     }
 
+    invertDirections(player1, player2);
+    invertDirections(player2, player1);
 };
 
 void charactersMovement (ALLEGRO_EVENT event, character *player1, character *player2) {
@@ -94,6 +103,7 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
         if ((event.type == ALLEGRO_EVENT_KEY_DOWN) && (player1->state != DOWN) && (player1->state != AIR)) {
             player1->state = AIR;
             player1->air_speed = JUMP_SPEED;
+            player1->current_frame = JUMP0;
         }
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_A) {
@@ -112,6 +122,7 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
         joystick_down(player1->control);
         if (player1->state != AIR) {
             player1->state = DOWN;
+            player1->current_frame = DOWN0;
             characterDown(player1);
         }
     }
@@ -121,6 +132,7 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
         if ((event.type == ALLEGRO_EVENT_KEY_DOWN) && (player2->state != DOWN) && (player2->state != AIR)) {
             player2->state = AIR;
             player2->air_speed = JUMP_SPEED;
+            player2->current_frame = JUMP0;
         }
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_LEFT) {
@@ -139,6 +151,7 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
         joystick_down(player2->control);
         if (player2->state != AIR) {
             player2->state = DOWN;
+            player2->current_frame = DOWN0;
             characterDown(player2);
         }
     }
