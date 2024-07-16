@@ -9,6 +9,7 @@
 
 #define NUM_SPRITES 17
 #define ID_RYU 0
+#define ID_KEN 1
 #define CHAR_WIDTH 180
 #define CHAR_HEIGHT 300
 #define CHAR_DOWN_WIDTH 180

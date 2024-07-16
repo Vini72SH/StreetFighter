@@ -30,6 +30,23 @@ ALLEGRO_BITMAP **loadSprites(short id){
         return sprites;
     }
 
+    if (id == ID_KEN) {
+        for (int i = 0; i < NUM_SPRITES; ++i) {
+            char filename[50];
+            sprintf(filename, "./characters/KenSprites/KenSprite%d.bmp", i + 1);
+            sprites[i] = al_load_bitmap(filename);
+            if (!sprites[i]) {
+                fprintf(stderr, "Falha ao carregar a imagem: %s\n", filename);
+                for (int j = 0; j < i; ++j) {
+                    al_destroy_bitmap(sprites[j]);
+                }
+                free(sprites);
+                return NULL;
+            }
+        }
+        return sprites;
+    }
+
     free(sprites);
 
     return NULL;
