@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "game.h"
+#include "character.h"
 
 uchar check_collision (character *p1, character *p2) {
 
@@ -19,7 +20,7 @@ void update_position(character *player1, character *player2) {
         
         player1->state = IDLE;
         player1->current_frame = IDLE0;
-        
+        player1->frame_delay = FRAME_DELAY;
     }
     if (player1->state == AIR){
         characterMove(player1, 1, UP, WIDTH, MAX_Y);
@@ -32,6 +33,7 @@ void update_position(character *player1, character *player2) {
         if ((player1->y + player1->hurtbox->height/2 > MAX_Y) && (player1->state != IDLE)) {
             player1->state = IDLE;
             player1->current_frame = IDLE0;
+            player1->frame_delay = FRAME_DELAY;
         }
     }
 
@@ -58,6 +60,7 @@ void update_position(character *player1, character *player2) {
         (player2->control->left) || (player2->control->right)) && (player2->state != IDLE)) {
         player2->state = IDLE;
         player2->current_frame = IDLE0;
+        player2->frame_delay = FRAME_DELAY;
     }
     if (player2->state == AIR){
         characterMove(player2, 1, UP, WIDTH, MAX_Y);
@@ -71,6 +74,7 @@ void update_position(character *player1, character *player2) {
         if (player2->y + player2->hurtbox->height/2 > MAX_Y) {
             player2->state = IDLE;
             player2->current_frame = IDLE0;
+            player2->frame_delay = FRAME_DELAY;
         }
     }
 
@@ -104,6 +108,7 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
             player1->state = AIR;
             player1->air_speed = JUMP_SPEED;
             player1->current_frame = JUMP0;
+            player1->frame_delay = AIR_DELAY;
         }
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_A) {
@@ -133,6 +138,7 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
             player2->state = AIR;
             player2->air_speed = JUMP_SPEED;
             player2->current_frame = JUMP0;
+            player2->frame_delay = AIR_DELAY;
         }
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_LEFT) {

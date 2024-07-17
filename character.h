@@ -16,7 +16,8 @@
 #define CHAR_DOWN_WIDTH 180
 #define CHAR_DOWN_HEIGHT 200
 #define HP 100
-#define FRAME_DELAY 10
+#define FRAME_DELAY 5
+#define AIR_DELAY 9
 #define SPEED 15
 #define JUMP_CONST 1.6
 #define JUMP_SPEED 20
