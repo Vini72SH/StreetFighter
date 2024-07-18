@@ -195,8 +195,10 @@ void characterMove(character *chara, float steps, ushort trajectory, ushort max_
 void characterFlush(character *p1, character *p2, ushort max_x, ushort max_y) {
     if (p1->x <= p2->x) {
         characterMove(p1, 1.5, LEFT, max_x, max_y);
+        characterMove(p2, 1.5, RIGHT, max_x, max_y);
     } else {
         characterMove(p1, 1.5, RIGHT, max_x, max_y);
+        characterMove(p2, 1.5, LEFT, max_x, max_y);
     }
 };
 
