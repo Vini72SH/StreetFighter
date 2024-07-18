@@ -115,12 +115,14 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
         joystick_left(player1->control);
         if ((player1->state != DOWN) && (player1->state != AIR)) {
             player1->state = WALK;
+            player1->frame_delay = WALK_DELAY;
         }  
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_D) {
         joystick_right(player1->control);
         if ((player1->state != DOWN) && (player1->state != AIR)) {
             player1->state = WALK;
+            player1->frame_delay = WALK_DELAY;
         }
     } 
     if (event.keyboard.keycode == ALLEGRO_KEY_S) {
@@ -145,12 +147,14 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
         joystick_left(player2->control);
         if ((player2->state != DOWN) && (player2->state != AIR)) {
             player2->state = WALK;
+            player2->frame_delay = WALK_DELAY;
         }
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
         joystick_right(player2->control);
         if ((player2->state != DOWN) && (player2->state != AIR)) {
             player2->state = WALK;
+            player2->frame_delay = WALK_DELAY;
         }
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_DOWN) {

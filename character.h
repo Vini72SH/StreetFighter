@@ -19,8 +19,9 @@
 #define HP 100
 #define FRAME_DELAY 5
 #define AIR_DELAY 9
+#define WALK_DELAY 2
 #define SPEED 15
-#define JUMP_CONST 1.6
+#define JUMP_CONST 1.8
 #define JUMP_SPEED 20
 #define RIGHT_DIR 0
 #define LEFT_DIR 1

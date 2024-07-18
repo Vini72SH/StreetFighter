@@ -179,10 +179,9 @@ void characterMove(character *chara, float steps, ushort trajectory, ushort max_
     }
 
     if (trajectory == UP) {
-        if ((chara->y - steps * chara->air_speed * JUMP_CONST) - chara->hurtbox->height/2 >= 0) {
-            chara->y = chara->y - steps * chara->air_speed * JUMP_CONST;
-            chara->hurtbox->y = chara->y;
-        }
+        chara->y = chara->y - steps * chara->air_speed * JUMP_CONST;
+        chara->hurtbox->y = chara->y;
+  
     }
 
     if (trajectory == DOWN) {
