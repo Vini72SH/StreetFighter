@@ -470,11 +470,11 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i){
     al_draw_scaled_bitmap(p1->sprites[p1->current_frame], 0, 0, 
                           al_get_bitmap_width(p1->sprites[p1->current_frame]), 
                           al_get_bitmap_height(p1->sprites[p1->current_frame]), x1, y1, 
-                          p1->hurtbox->width, p1->hurtbox->height, p1->dir);
+                          p1->char_render->width, p1->char_render->height, p1->dir);
     al_draw_scaled_bitmap(p2->sprites[p2->current_frame], 0, 0, 
                           al_get_bitmap_width(p2->sprites[p2->current_frame]), 
                           al_get_bitmap_height(p2->sprites[p2->current_frame]), x2, y2, 
-                          p2->hurtbox->width, p2->hurtbox->height, p2->dir);
+                          p2->char_render->width, p2->char_render->height, p2->dir);
     //al_draw_filled_rectangle(p2->x - p2->hurtbox->width/2, p2->y - p2->hurtbox->height/2, p2->x + p2->hurtbox->width/2, p2->y + p2->hurtbox->height/2, p2->color);
 };
 

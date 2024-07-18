@@ -71,6 +71,7 @@ typedef struct character{
     int frame_counter;
     joystick *control;
     rectangle *hurtbox;
+    rectangle *char_render;
     CharacterFrame current_frame;
     ALLEGRO_COLOR color;
     ALLEGRO_BITMAP **sprites;

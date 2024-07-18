@@ -128,6 +128,7 @@ character *createCharacter(ushort x, ushort y, ushort max_x, ushort max_y, short
     newCharacter->frame_delay = FRAME_DELAY;
     newCharacter->frame_counter = 0;
     newCharacter->hurtbox = createRectangle(x, y, CHAR_WIDTH, CHAR_HEIGHT);
+    newCharacter->char_render = createRectangle(x, y, CHAR_WIDTH, CHAR_DOWN_HEIGHT);
     newCharacter->control = createJoy();
     newCharacter->color = color;
     newCharacter->sprites = loadSprites(op);
@@ -141,6 +142,7 @@ void characterUp(character *chara) {
     if (chara->hurtbox->height != CHAR_HEIGHT) {
         chara->y = chara->y - (CHAR_HEIGHT/2 - CHAR_DOWN_HEIGHT/2);
         chara->hurtbox->y = chara->y;
+        chara->char_render->y = chara->y;
     }
 
     if (chara->state == DOWN) {
@@ -149,6 +151,8 @@ void characterUp(character *chara) {
     }
     chara->hurtbox->width = CHAR_WIDTH;
     chara->hurtbox->height = CHAR_HEIGHT;
+    chara->char_render->width = CHAR_WIDTH;
+    chara->char_render->height = CHAR_HEIGHT;
 };
 
 void characterDown(character *chara) {
@@ -157,10 +161,13 @@ void characterDown(character *chara) {
     if (chara->hurtbox->height != CHAR_DOWN_HEIGHT) {
         chara->y = chara->y + (CHAR_HEIGHT/2 - CHAR_DOWN_HEIGHT/2);
         chara->hurtbox->y = chara->y;
+        chara->char_render->y = chara->y;
     }
     
     chara->hurtbox->width = CHAR_DOWN_WIDTH;
     chara->hurtbox->height = CHAR_DOWN_HEIGHT;
+    chara->char_render->width = CHAR_DOWN_WIDTH;
+    chara->char_render->height = CHAR_DOWN_HEIGHT;
 };
 
 void characterMove(character *chara, float steps, ushort trajectory, ushort max_x, ushort max_y) {
@@ -168,6 +175,7 @@ void characterMove(character *chara, float steps, ushort trajectory, ushort max_
         if ((chara->x - steps*SPEED) - chara->hurtbox->width/2 >= 0) {
             chara->x = chara->x - steps * SPEED;
             chara->hurtbox->x = chara->x;
+            chara->char_render->x = chara->x;
         }
     }
 
@@ -175,19 +183,21 @@ void characterMove(character *chara, float steps, ushort trajectory, ushort max_
         if ((chara->x + steps*SPEED) + chara->hurtbox->width/2 <= max_x) { 
             chara->x = chara->x + steps * SPEED;
             chara->hurtbox->x = chara->x;
+            chara->char_render->x = chara->x;
         }
     }
 
     if (trajectory == UP) {
         chara->y = chara->y - steps * chara->air_speed * JUMP_CONST;
         chara->hurtbox->y = chara->y;
-  
+        chara->char_render->y = chara->y;
     }
 
     if (trajectory == DOWN) {
         if ((chara->y + steps*SPEED) + chara->hurtbox->height/2 <= max_y) {
             chara->y = chara->y + steps * SPEED;
             chara->hurtbox->y = chara->y;
+            chara->char_render->y = chara->y;
         }
     }
 };
@@ -311,6 +321,7 @@ void destroyRectangle(rectangle *rect) {
 
 void destroyCharacter(character *chara) {
     deleteSprites(chara);
+    destroyRectangle(chara->char_render);
     destroyRectangle(chara->hurtbox);
     destroyJoy(chara->control);
     free(chara);
