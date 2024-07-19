@@ -61,6 +61,7 @@ typedef struct rectangle{
 }rectangle;
 
 typedef struct character{
+    ushort id;
     uint hp;
     float x;
     float y;
@@ -73,7 +74,6 @@ typedef struct character{
     rectangle *hurtbox;
     rectangle *char_render;
     CharacterFrame current_frame;
-    ALLEGRO_COLOR color;
     ALLEGRO_BITMAP **sprites;
 }character;
 

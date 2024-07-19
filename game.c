@@ -4,10 +4,10 @@
 
 uchar check_collision (character *p1, character *p2) {
 
-    if ((((p1->y + p1->hurtbox->height/2 >= p2->y - p2->hurtbox->height/2) && (p2->y - p2->hurtbox->height/2 >= p1->y - p1->hurtbox->height/2)) ||
-		 ((p2->y + p2->hurtbox->height/2 >= p1->y - p1->hurtbox->height/2) && (p1->y - p1->hurtbox->height/2 >= p2->y - p2->hurtbox->height/2))) &&
-		(((p1->x + p1->hurtbox->width/2 >= p2->x - p2->hurtbox->width/2) && (p2->x - p2->hurtbox->width/2 >= p1->x - p1->hurtbox->width/2)) || 	
-		 ((p2->x + p2->hurtbox->width/2 >= p1->x - p1->hurtbox->width/2) && (p1->x - p1->hurtbox->width/2 >= p2->x - p2->hurtbox->width/2)))) {
+    if ((((p1->y + p1->hurtbox->height/2 - 20 >= p2->y - p2->hurtbox->height/2 + 20) && (p2->y - p2->hurtbox->height/2 + 20 >= p1->y - p1->hurtbox->height/2 + 20)) ||
+		 ((p2->y + p2->hurtbox->height/2 - 20 >= p1->y - p1->hurtbox->height/2 + 20) && (p1->y - p1->hurtbox->height/2 + 20 >= p2->y - p2->hurtbox->height/2 + 20))) &&
+		(((p1->x + p1->hurtbox->width/2 - 15 >= p2->x - p2->hurtbox->width/2 + 15) && (p2->x - p2->hurtbox->width/2 + 15 >= p1->x - p1->hurtbox->width/2 + 15)) || 	
+		 ((p2->x + p2->hurtbox->width/2 - 15 >= p1->x - p1->hurtbox->width/2 + 15) && (p1->x - p1->hurtbox->width/2 + 15 >= p2->x - p2->hurtbox->width/2 + 15)))) {
         return 1;
     }
 
@@ -47,13 +47,20 @@ void update_position(character *player1, character *player2) {
             player1->current_frame = DOWN0;
         }
     }
-    if ((player1->control->left) && (player1->state != DOWN)) {
-        characterMove(player1, 1, LEFT, WIDTH, MAX_Y);
-        if (check_collision(player1, player2)) characterMove(player1, -1, LEFT, WIDTH, MAX_Y);
-    }
-    if ((player1->control->right) && (player1->state != DOWN)) {
-        characterMove(player1, 1, RIGHT, WIDTH, MAX_Y);
-        if (check_collision(player1, player2)) characterMove(player1, -1, RIGHT, WIDTH, MAX_Y);
+
+    if (player1->state != DOWN) {
+        if (player1->control->left) {
+            characterMove(player1, 1, LEFT, WIDTH, MAX_Y);
+            if (check_collision(player1, player2)) characterMove(player1, -1, LEFT, WIDTH, MAX_Y);
+        }
+        if (player1->control->right) {
+            characterMove(player1, 1, RIGHT, WIDTH, MAX_Y);
+            if (check_collision(player1, player2)) characterMove(player1, -1, RIGHT, WIDTH, MAX_Y);
+        }
+        if ((player1->control->right) && (player1->control->left)) {
+            characterMove(player1, 1, RIGHT, WIDTH, MAX_Y);
+            if (check_collision(player1, player2)) characterMove(player1, -1, RIGHT, WIDTH, MAX_Y);
+        }
     }
 
     if ((player2->state != AIR) && !((player2->control->up) || (player2->control->down) ||
@@ -71,7 +78,7 @@ void update_position(character *player1, character *player2) {
             characterFlush(player2, player1, WIDTH, MAX_Y);
 
         }
-        if (player2->y + player2->hurtbox->height/2 > MAX_Y) {
+        if ((player2->y + player2->hurtbox->height/2 > MAX_Y) && (player2->state != IDLE)) {
             player2->state = IDLE;
             player2->current_frame = IDLE0;
             player2->frame_delay = FRAME_DELAY;
@@ -88,13 +95,19 @@ void update_position(character *player1, character *player2) {
             player2->current_frame = DOWN0;
         }
     }
-    if ((player2->control->left) && (player2->state != DOWN)) {
-        characterMove(player2, 1, LEFT, WIDTH, MAX_Y);
-        if (check_collision(player2, player1)) characterMove(player2, -1, LEFT, WIDTH, MAX_Y);
-    }
-    if ((player2->control->right) && (player2->state != DOWN)) {
-        characterMove(player2, 1, RIGHT, WIDTH, HEIGHT - 50);
-        if (check_collision(player2, player1)) characterMove(player2, -1, RIGHT, WIDTH, MAX_Y);
+    if (player2->state != DOWN) {
+        if (player2->control->left) {
+            characterMove(player2, 1, LEFT, WIDTH, MAX_Y);
+            if (check_collision(player2, player1)) characterMove(player2, -1, LEFT, WIDTH, MAX_Y);
+        }
+        if (player2->control->right) {
+            characterMove(player2, 1, RIGHT, WIDTH, MAX_Y);
+            if (check_collision(player2, player1)) characterMove(player2, -1, RIGHT, WIDTH, MAX_Y);
+        }
+        if ((player2->control->right) && (player2->control->left)) {
+            characterMove(player2, 1, LEFT, WIDTH, MAX_Y);
+            if (check_collision(player2, player1)) characterMove(player2, -1, LEFT, WIDTH, MAX_Y);
+        }
     }
 
     invertDirections(player1, player2);

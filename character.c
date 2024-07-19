@@ -102,22 +102,13 @@ rectangle *createRectangle(float x, float y, ushort width, ushort height) {
 
 character *createCharacter(ushort x, ushort y, ushort max_x, ushort max_y, short op, short dir) {
     character *newCharacter;
-    ALLEGRO_COLOR color;
-    ALLEGRO_COLOR blue = al_map_rgb(0, 0, 255);
-    ALLEGRO_COLOR red = al_map_rgb(255, 0, 0);
-    ALLEGRO_COLOR black = al_map_rgb(0, 0, 0);
-    ALLEGRO_COLOR white = al_map_rgb(255, 255, 255);
-
-    if (op == 0) color = blue;
-    if (op == 1) color = red;
-    if (op == 2) color = black;
-    if (op == 3) color = white;
     
     if ((x - CHAR_WIDTH/2 < 0) || (x + CHAR_WIDTH/2 > max_x) || (y - CHAR_HEIGHT/2 < 0) || (y + CHAR_HEIGHT/2 > max_y)) return NULL;
 
     newCharacter = malloc(sizeof(character));
     if (!(newCharacter)) return NULL;
 
+    newCharacter->id = op;
     newCharacter->hp = HP;
     newCharacter->x = x;
     newCharacter->y = y;
@@ -130,7 +121,6 @@ character *createCharacter(ushort x, ushort y, ushort max_x, ushort max_y, short
     newCharacter->hurtbox = createRectangle(x, y, CHAR_WIDTH, CHAR_HEIGHT);
     newCharacter->char_render = createRectangle(x, y, CHAR_WIDTH, CHAR_DOWN_HEIGHT);
     newCharacter->control = createJoy();
-    newCharacter->color = color;
     newCharacter->sprites = loadSprites(op);
 
     return newCharacter;
