@@ -17,7 +17,6 @@ uchar check_collision (character *p1, character *p2) {
 void update_position(character *player1, character *player2) {
     if ((player1->state != AIR) && !((player1->control->up) || (player1->control->down) ||
         (player1->control->left) || (player1->control->right)) && (player1->state != IDLE)) {
-        
         player1->state = IDLE;
         player1->current_frame = IDLE0;
         player1->frame_delay = FRAME_DELAY;
@@ -29,6 +28,7 @@ void update_position(character *player1, character *player2) {
             player1->air_speed += GRAVITY;
             characterMove(player1, -1, UP, WIDTH, MAX_Y);
             characterFlush(player1, player2, WIDTH, MAX_Y);
+
         }
         if ((player1->y + player1->hurtbox->height/2 > MAX_Y) && (player1->state != IDLE)) {
             player1->state = IDLE;
@@ -39,7 +39,7 @@ void update_position(character *player1, character *player2) {
 
     if (player1->control->down) {
         if (check_collision(player1, player2)) characterMove(player1, -1, DOWN, WIDTH, MAX_Y);
-    } else {
+    }else{
         characterUp(player1);
         if (check_collision(player1, player2) && (player2->state == AIR)) {
             characterDown(player1);
@@ -47,8 +47,7 @@ void update_position(character *player1, character *player2) {
             player1->current_frame = DOWN0;
         }
     }
-
-    if (player1->state != DOWN) {
+    if ((player1->state != DOWN) && !(player1->attacking)) {
         if (player1->control->left) {
             characterMove(player1, 1, LEFT, WIDTH, MAX_Y);
             if (check_collision(player1, player2)) characterMove(player1, -1, LEFT, WIDTH, MAX_Y);
@@ -62,7 +61,7 @@ void update_position(character *player1, character *player2) {
             if (check_collision(player1, player2)) characterMove(player1, -1, RIGHT, WIDTH, MAX_Y);
         }
     }
-
+    
     if ((player2->state != AIR) && !((player2->control->up) || (player2->control->down) ||
         (player2->control->left) || (player2->control->right)) && (player2->state != IDLE)) {
         player2->state = IDLE;
@@ -95,7 +94,7 @@ void update_position(character *player1, character *player2) {
             player2->current_frame = DOWN0;
         }
     }
-    if (player2->state != DOWN) {
+    if ((player2->state != DOWN) && !(player2->attacking)) {
         if (player2->control->left) {
             characterMove(player2, 1, LEFT, WIDTH, MAX_Y);
             if (check_collision(player2, player1)) characterMove(player2, -1, LEFT, WIDTH, MAX_Y);
@@ -117,7 +116,7 @@ void update_position(character *player1, character *player2) {
 void charactersMovement (ALLEGRO_EVENT event, character *player1, character *player2) {
     if (event.keyboard.keycode == ALLEGRO_KEY_W) {
         joystick_up(player1->control);
-        if ((event.type == ALLEGRO_EVENT_KEY_DOWN) && (player1->state != DOWN) && (player1->state != AIR)) {
+        if ((event.type == ALLEGRO_EVENT_KEY_DOWN) && (player1->state != DOWN) && (player1->state != AIR) && !(player1->attacking)) {
             player1->state = AIR;
             player1->air_speed = JUMP_SPEED;
             player1->current_frame = JUMP0;
@@ -129,7 +128,7 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
         if ((player1->state != DOWN) && (player1->state != AIR)) {
             player1->state = WALK;
             player1->frame_delay = WALK_DELAY;
-        }  
+        }
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_D) {
         joystick_right(player1->control);
@@ -137,10 +136,10 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
             player1->state = WALK;
             player1->frame_delay = WALK_DELAY;
         }
-    } 
+    }
     if (event.keyboard.keycode == ALLEGRO_KEY_S) {
         joystick_down(player1->control);
-        if (player1->state != AIR) {
+        if ((player1->state != AIR) && !(player1->attacking)) {
             player1->state = DOWN;
             player1->current_frame = DOWN0;
             characterDown(player1);
@@ -149,7 +148,7 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
 
     if (event.keyboard.keycode == ALLEGRO_KEY_UP) {
         joystick_up(player2->control);
-        if ((event.type == ALLEGRO_EVENT_KEY_DOWN) && (player2->state != DOWN) && (player2->state != AIR)) {
+        if ((event.type == ALLEGRO_EVENT_KEY_DOWN) && (player2->state != DOWN) && (player2->state != AIR) && !(player2->attacking)) {
             player2->state = AIR;
             player2->air_speed = JUMP_SPEED;
             player2->current_frame = JUMP0;
@@ -172,10 +171,45 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_DOWN) {
         joystick_down(player2->control);
-        if (player2->state != AIR) {
+        if ((player2->state != AIR) && !(player2->attacking)) {
             player2->state = DOWN;
             player2->current_frame = DOWN0;
             characterDown(player2);
+        }
+    }
+};
+
+void charactersAttack(ALLEGRO_EVENT event, character *player1, character *player2) {
+    if (event.keyboard.keycode == ALLEGRO_KEY_Y) {
+        if (player1->state == IDLE) {
+            if (!(player1->attacking)) {
+                player1->attacking = true;
+            } else {
+                player1->attacking = false;
+            }
+        }
+    }
+    if (event.keyboard.keycode == ALLEGRO_KEY_U) {
+        if (player1->state == IDLE) {
+            if (!(player1->attacking)) {
+                player1->attacking = true;
+            }
+        }
+    }
+    if (event.keyboard.keycode == ALLEGRO_KEY_PAD_4) {
+        if (player2->state == IDLE) {
+            if (!(player2->attacking)) {
+                player2->attacking = true;
+            } else {
+                player2->attacking = false;
+            }
+        }
+    }
+    if (event.keyboard.keycode == ALLEGRO_KEY_PAD_5) {
+        if (player2->state == IDLE) {
+            if (!(player2->attacking)) {
+                player2->attacking = true;
+            }
         }
     }
 };

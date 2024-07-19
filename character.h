@@ -16,6 +16,7 @@
 #define CHAR_HEIGHT 300
 #define CHAR_DOWN_WIDTH 180
 #define CHAR_DOWN_HEIGHT 200
+#define START_HITBOX 10
 #define HP 100
 #define FRAME_DELAY 5
 #define AIR_DELAY 9
@@ -70,7 +71,9 @@ typedef struct character{
     int state;
     int frame_delay;
     int frame_counter;
+    bool attacking;
     joystick *control;
+    rectangle *hitbox;
     rectangle *hurtbox;
     rectangle *char_render;
     CharacterFrame current_frame;

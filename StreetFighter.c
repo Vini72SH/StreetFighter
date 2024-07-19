@@ -89,6 +89,7 @@ int main () {
                         render->currentBackground = i;
                     }
                     charactersMovement(event, player1, player2);
+                    charactersAttack(event, player1, player2);
                     break;
                 default:
                     break;

@@ -118,6 +118,8 @@ character *createCharacter(ushort x, ushort y, ushort max_x, ushort max_y, short
     newCharacter->current_frame = IDLE0;
     newCharacter->frame_delay = FRAME_DELAY;
     newCharacter->frame_counter = 0;
+    newCharacter->attacking = false;
+    newCharacter->hitbox = createRectangle(x, y, START_HITBOX, START_HITBOX);
     newCharacter->hurtbox = createRectangle(x, y, CHAR_WIDTH, CHAR_HEIGHT);
     newCharacter->char_render = createRectangle(x, y, CHAR_WIDTH, CHAR_DOWN_HEIGHT);
     newCharacter->control = createJoy();
@@ -131,6 +133,7 @@ void characterUp(character *chara) {
 
     if (chara->hurtbox->height != CHAR_HEIGHT) {
         chara->y = chara->y - (CHAR_HEIGHT/2 - CHAR_DOWN_HEIGHT/2);
+        chara->hitbox->y = chara->y;
         chara->hurtbox->y = chara->y;
         chara->char_render->y = chara->y;
     }
@@ -150,6 +153,7 @@ void characterDown(character *chara) {
 
     if (chara->hurtbox->height != CHAR_DOWN_HEIGHT) {
         chara->y = chara->y + (CHAR_HEIGHT/2 - CHAR_DOWN_HEIGHT/2);
+        chara->hitbox->y = chara->y;
         chara->hurtbox->y = chara->y;
         chara->char_render->y = chara->y;
     }
@@ -164,6 +168,7 @@ void characterMove(character *chara, float steps, ushort trajectory, ushort max_
     if (trajectory == LEFT) {
         if ((chara->x - steps*SPEED) - chara->hurtbox->width/2 >= 0) {
             chara->x = chara->x - steps * SPEED;
+            chara->hitbox->y = chara->x;
             chara->hurtbox->x = chara->x;
             chara->char_render->x = chara->x;
         }
@@ -172,6 +177,7 @@ void characterMove(character *chara, float steps, ushort trajectory, ushort max_
     if (trajectory == RIGHT) {
         if ((chara->x + steps*SPEED) + chara->hurtbox->width/2 <= max_x) { 
             chara->x = chara->x + steps * SPEED;
+            chara->hitbox->x = chara->x;
             chara->hurtbox->x = chara->x;
             chara->char_render->x = chara->x;
         }
@@ -179,6 +185,7 @@ void characterMove(character *chara, float steps, ushort trajectory, ushort max_
 
     if (trajectory == UP) {
         chara->y = chara->y - steps * chara->air_speed * JUMP_CONST;
+        chara->hitbox->y = chara->y;
         chara->hurtbox->y = chara->y;
         chara->char_render->y = chara->y;
     }
@@ -186,6 +193,7 @@ void characterMove(character *chara, float steps, ushort trajectory, ushort max_
     if (trajectory == DOWN) {
         if ((chara->y + steps*SPEED) + chara->hurtbox->height/2 <= max_y) {
             chara->y = chara->y + steps * SPEED;
+            chara->hitbox->y = chara->y;
             chara->hurtbox->y = chara->y;
             chara->char_render->y = chara->y;
         }
@@ -313,6 +321,7 @@ void destroyCharacter(character *chara) {
     deleteSprites(chara);
     destroyRectangle(chara->char_render);
     destroyRectangle(chara->hurtbox);
+    destroyRectangle(chara->hitbox);
     destroyJoy(chara->control);
     free(chara);
 };
