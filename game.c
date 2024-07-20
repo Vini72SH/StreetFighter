@@ -202,6 +202,18 @@ void charactersAttack(ALLEGRO_EVENT event, character *player1, character *player
                     player1->char_render->width += 90;
                     player1->char_render->x -= player1->dir * 90;
                 }
+                if (player1->id == ID_KEN) {
+                    player1->char_render->width += 90;
+                    player1->char_render->x -= player1->dir * 90;
+                }
+                if (player1->id == ID_SAGAT) {
+                    player1->char_render->width += 120;
+                    player1->char_render->x -= player1->dir * 120;
+                }
+                if (player1->id == ID_CHUNLI) {
+                    player1->char_render->width += 90;
+                    player1->char_render->x -= player1->dir * 90;
+                }
             }
         }
     }
@@ -212,6 +224,18 @@ void charactersAttack(ALLEGRO_EVENT event, character *player1, character *player
                 player2->attacking = true;
                 player2->current_frame = LIGHT0;
                 if (player2->id == ID_RYU) {
+                    player2->char_render->width += 90;
+                    player2->char_render->x -= player2->dir * 90;
+                }
+                if (player2->id == ID_KEN) {
+                    player2->char_render->width += 90;
+                    player2->char_render->x -= player2->dir * 90;
+                }
+                if (player2->id == ID_SAGAT) {
+                    player2->char_render->width += 120;
+                    player2->char_render->x -= player2->dir * 120;
+                }
+                if (player2->id == ID_CHUNLI) {
                     player2->char_render->width += 90;
                     player2->char_render->x -= player2->dir * 90;
                 }
