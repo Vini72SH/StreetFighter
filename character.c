@@ -119,9 +119,10 @@ character *createCharacter(ushort x, ushort y, ushort max_x, ushort max_y, short
     newCharacter->frame_delay = FRAME_DELAY;
     newCharacter->frame_counter = 0;
     newCharacter->attacking = false;
+    newCharacter->hit = false;
     newCharacter->hitbox = createRectangle(x, y, START_HITBOX, START_HITBOX);
     newCharacter->hurtbox = createRectangle(x, y, CHAR_WIDTH, CHAR_HEIGHT);
-    newCharacter->char_render = createRectangle(x, y, CHAR_WIDTH, CHAR_DOWN_HEIGHT);
+    newCharacter->char_render = createRectangle(x, y, CHAR_WIDTH, CHAR_HEIGHT);
     newCharacter->control = createJoy();
     newCharacter->sprites = loadSprites(op);
 
@@ -131,7 +132,7 @@ character *createCharacter(ushort x, ushort y, ushort max_x, ushort max_y, short
 void characterUp(character *chara) {
     if (!(chara)) return;
 
-    if (chara->hurtbox->height != CHAR_HEIGHT) {
+    if (chara->char_render->height != CHAR_HEIGHT) {
         chara->y = chara->y - (CHAR_HEIGHT/2 - CHAR_DOWN_HEIGHT/2);
         chara->hitbox->y = chara->y;
         chara->hurtbox->y = chara->y;
@@ -156,7 +157,7 @@ void characterUp(character *chara) {
 void characterDown(character *chara) {
     if (!(chara)) return;
 
-    if (chara->hurtbox->height != CHAR_DOWN_HEIGHT) {
+    if (chara->char_render->height != CHAR_DOWN_HEIGHT) {
         chara->y = chara->y + (CHAR_HEIGHT/2 - CHAR_DOWN_HEIGHT/2);
         chara->hitbox->y = chara->y;
         chara->hurtbox->y = chara->y;
@@ -171,20 +172,20 @@ void characterDown(character *chara) {
 
 void characterMove(character *chara, float steps, ushort trajectory, ushort max_x, ushort max_y) {
     if (trajectory == LEFT) {
-        if ((chara->x - steps*SPEED) - chara->hurtbox->width/2 >= 0) {
+        if ((chara->x - steps*SPEED) - chara->char_render->width/2 >= 0) {
             chara->x = chara->x - steps * SPEED;
-            chara->hitbox->x = chara->x;
+            chara->hitbox->x = chara->hitbox->x - steps * SPEED;
             chara->hurtbox->x = chara->x;
-            chara->char_render->x = chara->x;
+            chara->char_render->x = chara->char_render->x - steps * SPEED;
         }
     }
 
     if (trajectory == RIGHT) {
-        if ((chara->x + steps*SPEED) + chara->hurtbox->width/2 <= max_x) { 
+        if ((chara->x + steps*SPEED) + chara->char_render->width/2 <= max_x) { 
             chara->x = chara->x + steps * SPEED;
-            chara->hitbox->x = chara->x;
+            chara->hitbox->x = chara->hitbox->x + steps * SPEED;
             chara->hurtbox->x = chara->x;
-            chara->char_render->x = chara->x;
+            chara->char_render->x = chara->char_render->x + steps * SPEED;
         }
     }
 
@@ -196,7 +197,7 @@ void characterMove(character *chara, float steps, ushort trajectory, ushort max_
     }
 
     if (trajectory == DOWN) {
-        if ((chara->y + steps*SPEED) + chara->hurtbox->height/2 <= max_y) {
+        if ((chara->y + steps*SPEED) + chara->char_render->height/2 <= max_y) {
             chara->y = chara->y + steps * SPEED;
             chara->hitbox->y = chara->y;
             chara->hurtbox->y = chara->y;
@@ -243,15 +244,19 @@ void updateAnimation(character *chara) {
                     break;
                 case LIGHT0:
                     chara->current_frame = LIGHT1;
+                    changeHitbox(chara, LIGHT1);
                     break;
                 case LIGHT1:
                     chara->current_frame = LIGHT2;
+                    changeHitbox(chara, LIGHT2);
                     break;
                 case LIGHT2:
                     chara->current_frame = LIGHT3;
+                    changeHitbox(chara, LIGHT3);
                     break;
                 case LIGHT3:
                     chara->current_frame = LIGHT4;
+                    changeHitbox(chara, LIGHT4);
                     break;
                 case LIGHT4:
                     chara->current_frame = LIGHT5;
@@ -266,6 +271,7 @@ void updateAnimation(character *chara) {
                         }
                     }
                     chara->frame_delay = FRAME_DELAY;
+                    changeHitbox(chara, IDLE0);
                     break;
                 default:
                     chara->current_frame = IDLE0;
@@ -330,6 +336,31 @@ void invertDirections(character *p1, character *p2) {
         p1->dir = LEFT_DIR;
     }else{
         p1->dir = RIGHT_DIR;
+    }
+};
+
+void changeHitbox(character *chara, int frame) {
+    int op = (chara->dir == RIGHT_DIR)? 1 : -1;
+    if (chara->id == ID_RYU) {
+        if (frame == IDLE0) {
+            chara->hitbox->width = START_HITBOX;
+            chara->hitbox->height = START_HITBOX;
+            chara->hitbox->x = chara->x;
+            chara->hitbox->y = chara->y;
+            chara->hit = false;
+        }
+        if ((frame == LIGHT1) || (frame == LIGHT4)) {
+            chara->hitbox->width = START_HITBOX;
+            chara->hitbox->height = START_HITBOX;
+            chara->hitbox->x = chara->x;
+            chara->hitbox->y = chara->y - 85;
+            chara->hit = false;     
+        }
+        if ((frame == LIGHT2) || (frame == LIGHT3)) {
+            chara->hitbox->width = START_HITBOX + 15;
+            chara->hitbox->height = START_HITBOX + 15;
+            chara->hitbox->x += op * 75;
+        }
     }
 };
 

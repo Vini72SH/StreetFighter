@@ -16,6 +16,8 @@
 #define CHAR_HEIGHT 300
 #define CHAR_DOWN_WIDTH 180
 #define CHAR_DOWN_HEIGHT 200
+#define CONST_WHURT 15
+#define CONST_HHURT 20
 #define START_HITBOX 10
 #define HP 100
 #define FRAME_DELAY 5
@@ -79,6 +81,7 @@ typedef struct character{
     int frame_delay;
     int frame_counter;
     bool attacking;
+    bool hit;
     joystick *control;
     rectangle *hitbox;
     rectangle *hurtbox;
@@ -97,6 +100,7 @@ void characterMove(character *chara, float steps, ushort trajectory, ushort max_
 void characterFlush (character *p1, character *p2, ushort max_x, ushort max_y);
 void updateAnimation(character *chara);
 void invertDirections(character *p1, character *p2);
+void changeHitbox(character *chara, int frame);
 void deleteSprites(character *chara);
 void destroyRectangle(rectangle *rect);
 void destroyCharacter(character *chara);

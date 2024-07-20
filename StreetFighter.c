@@ -88,8 +88,8 @@ int main () {
                         selectionM->op = 0;
                         render->currentBackground = i;
                     }
-                    charactersAttack(event, player1, player2);
                     charactersMovement(event, player1, player2);
+                    charactersAttack(event, player1, player2);
                     break;
                 default:
                     break;
@@ -117,6 +117,7 @@ int main () {
                     updateAnimation(player1);
                     updateAnimation(player2);
                     update_position(player1, player2);
+                    update_attack(player1, player2);
                     drawGame(render, player1, player2, &i);
                     break;
                 default:

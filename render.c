@@ -153,9 +153,9 @@ void drawStart(Screen_Render *render, Figure *arrow) {
     
     /* Update text according to selection */
     if (arrow->op == 0) 
-        al_draw_text(render->font1, white, WIDTH/2 -13 * 6, HEIGHT - 200, 0, "SINGLEPLAYER");
+        al_draw_text(render->font1, white, WIDTH/2 -13 * 6, HEIGHT - 200, 0, "TRAINING MODE");
     else
-        al_draw_text(render->font1, red, WIDTH/2 -13 * 6, HEIGHT - 200, 0, "SINGLEPLAYER");
+        al_draw_text(render->font1, red, WIDTH/2 -13 * 6, HEIGHT - 200, 0, "TRAINING MODE");
 
     if (arrow->op == 1) 
         al_draw_text(render->font1, white, WIDTH/2 -12 * 6, HEIGHT - 150, 0, "MULTIPLAYER");
@@ -469,17 +469,19 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i){
                             al_get_bitmap_height(render->background[*i]),
                             0, 0, WIDTH, HEIGHT, 0);
     //al_draw_filled_rectangle(p2->hurtbox->x - p2->hurtbox->width/2, p2->hurtbox->y - p2->hurtbox->height/2, p2->hurtbox->x + p2->hurtbox->width/2, p2->hurtbox->y + p2->hurtbox->height/2, blue);
+    //al_draw_filled_rectangle(p1->hurtbox->x - p1->hurtbox->width/2, p1->hurtbox->y - p1->hurtbox->height/2, p1->hurtbox->x + p1->hurtbox->width/2, p1->hurtbox->y + p1->hurtbox->height/2, red);
     al_draw_scaled_bitmap(p2->sprites[p2->current_frame], 0, 0, 
                           al_get_bitmap_width(p2->sprites[p2->current_frame]), 
                           al_get_bitmap_height(p2->sprites[p2->current_frame]), x2, y2, 
                           p2->char_render->width, p2->char_render->height, p2->dir);
     //al_draw_filled_rectangle(p2->hitbox->x - p2->hitbox->width/2, p2->hitbox->y - p2->hitbox->height/2, p2->hitbox->x + p2->hitbox->width/2, p2->hitbox->y + p2->hitbox->height/2, red);
-    //al_draw_filled_rectangle(p1->hurtbox->x - p1->hurtbox->width/2, p1->hurtbox->y - p1->hurtbox->height/2, p1->hurtbox->x + p1->hurtbox->width/2, p1->hurtbox->y + p1->hurtbox->height/2, red);
     al_draw_scaled_bitmap(p1->sprites[p1->current_frame], 0, 0, 
                           al_get_bitmap_width(p1->sprites[p1->current_frame]), 
                           al_get_bitmap_height(p1->sprites[p1->current_frame]), x1, y1, 
                           p1->char_render->width, p1->char_render->height, p1->dir);
     //al_draw_filled_rectangle(p1->hitbox->x - p1->hitbox->width/2, p1->hitbox->y - p1->hitbox->height/2, p1->hitbox->x + p1->hitbox->width/2, p1->hitbox->y + p1->hitbox->height/2, blue);
+    al_draw_textf(render->font2, red, 0, 0, 0, "Life: %d", p1->hp);
+    al_draw_textf(render->font2, blue, WIDTH - 120, 0, 0, "Life: %d", p2->hp);
 };
 
 void deleteFigure(Figure *figure) {
