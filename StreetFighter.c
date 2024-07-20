@@ -88,8 +88,8 @@ int main () {
                         selectionM->op = 0;
                         render->currentBackground = i;
                     }
-                    charactersMovement(event, player1, player2);
                     charactersAttack(event, player1, player2);
+                    charactersMovement(event, player1, player2);
                     break;
                 default:
                     break;

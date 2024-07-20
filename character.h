@@ -7,7 +7,7 @@
 #include <allegro5/allegro_image.h>
 #include "joystick.h"
 
-#define NUM_SPRITES 17
+#define NUM_SPRITES 23
 #define ID_RYU 0
 #define ID_KEN 1
 #define ID_SAGAT 2
@@ -21,6 +21,7 @@
 #define FRAME_DELAY 5
 #define AIR_DELAY 9
 #define WALK_DELAY 2
+#define LIGHT_DELAY 3
 #define SPEED 15
 #define JUMP_CONST 1.8
 #define JUMP_SPEED 20
@@ -52,6 +53,12 @@ typedef enum{
     JUMP2,
     JUMP3,
     JUMP4,
+    LIGHT0,
+    LIGHT1,
+    LIGHT2,
+    LIGHT3,
+    LIGHT4,
+    LIGHT5,
 }CharacterFrame;
 
 typedef struct rectangle{

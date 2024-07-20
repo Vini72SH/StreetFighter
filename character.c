@@ -142,10 +142,15 @@ void characterUp(character *chara) {
         chara->state = IDLE;
         chara->current_frame = IDLE0;
     }
-    chara->hurtbox->width = CHAR_WIDTH;
-    chara->hurtbox->height = CHAR_HEIGHT;
-    chara->char_render->width = CHAR_WIDTH;
-    chara->char_render->height = CHAR_HEIGHT;
+
+    if (!(chara->attacking)) {
+        chara->hurtbox->width = CHAR_WIDTH;
+        chara->hurtbox->height = CHAR_HEIGHT;
+        chara->char_render->width = CHAR_WIDTH;
+        chara->char_render->height = CHAR_HEIGHT;
+        chara->char_render->x = chara->x;
+        chara->char_render->y = chara->y;
+    }
 };
 
 void characterDown(character *chara) {
@@ -168,7 +173,7 @@ void characterMove(character *chara, float steps, ushort trajectory, ushort max_
     if (trajectory == LEFT) {
         if ((chara->x - steps*SPEED) - chara->hurtbox->width/2 >= 0) {
             chara->x = chara->x - steps * SPEED;
-            chara->hitbox->y = chara->x;
+            chara->hitbox->x = chara->x;
             chara->hurtbox->x = chara->x;
             chara->char_render->x = chara->x;
         }
@@ -235,6 +240,32 @@ void updateAnimation(character *chara) {
                     break;
                 case IDLE4:
                     chara->current_frame = IDLE0;
+                    break;
+                case LIGHT0:
+                    chara->current_frame = LIGHT1;
+                    break;
+                case LIGHT1:
+                    chara->current_frame = LIGHT2;
+                    break;
+                case LIGHT2:
+                    chara->current_frame = LIGHT3;
+                    break;
+                case LIGHT3:
+                    chara->current_frame = LIGHT4;
+                    break;
+                case LIGHT4:
+                    chara->current_frame = LIGHT5;
+                    break;
+                case LIGHT5:
+                    chara->current_frame = IDLE0;
+                    chara->attacking = false;
+                    if (chara->id == ID_RYU) {
+                        chara->char_render->width -= 90;
+                        if (chara->dir == LEFT_DIR) {
+                            chara->char_render->x += 90;
+                        }
+                    }
+                    chara->frame_delay = FRAME_DELAY;
                     break;
                 default:
                     chara->current_frame = IDLE0;

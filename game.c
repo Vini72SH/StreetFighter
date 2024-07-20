@@ -125,14 +125,14 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_A) {
         joystick_left(player1->control);
-        if ((player1->state != DOWN) && (player1->state != AIR)) {
+        if ((player1->state != DOWN) && (player1->state != AIR) && !(player1->attacking)) {
             player1->state = WALK;
             player1->frame_delay = WALK_DELAY;
         }
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_D) {
         joystick_right(player1->control);
-        if ((player1->state != DOWN) && (player1->state != AIR)) {
+        if ((player1->state != DOWN) && (player1->state != AIR) && !(player1->attacking)) {
             player1->state = WALK;
             player1->frame_delay = WALK_DELAY;
         }
@@ -157,14 +157,14 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_LEFT) {
         joystick_left(player2->control);
-        if ((player2->state != DOWN) && (player2->state != AIR)) {
+        if ((player2->state != DOWN) && (player2->state != AIR) && !(player2->attacking)) {
             player2->state = WALK;
             player2->frame_delay = WALK_DELAY;
         }
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
         joystick_right(player2->control);
-        if ((player2->state != DOWN) && (player2->state != AIR)) {
+        if ((player2->state != DOWN) && (player2->state != AIR) && !(player2->attacking)) {
             player2->state = WALK;
             player2->frame_delay = WALK_DELAY;
         }
@@ -183,32 +183,30 @@ void charactersAttack(ALLEGRO_EVENT event, character *player1, character *player
     if (event.keyboard.keycode == ALLEGRO_KEY_Y) {
         if (player1->state == IDLE) {
             if (!(player1->attacking)) {
+                player1->frame_delay = LIGHT_DELAY;
                 player1->attacking = true;
-            } else {
-                player1->attacking = false;
-            }
-        }
-    }
-    if (event.keyboard.keycode == ALLEGRO_KEY_U) {
-        if (player1->state == IDLE) {
-            if (!(player1->attacking)) {
-                player1->attacking = true;
+                player1->current_frame = LIGHT0;
+                if (player1->id == ID_RYU) {
+                    player1->char_render->width += 90;
+                    if (player1->dir == LEFT_DIR) {
+                        player1->char_render->x -= 90;
+                    }
+                }
             }
         }
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_PAD_4) {
         if (player2->state == IDLE) {
             if (!(player2->attacking)) {
+                player2->frame_delay = LIGHT_DELAY;
                 player2->attacking = true;
-            } else {
-                player2->attacking = false;
-            }
-        }
-    }
-    if (event.keyboard.keycode == ALLEGRO_KEY_PAD_5) {
-        if (player2->state == IDLE) {
-            if (!(player2->attacking)) {
-                player2->attacking = true;
+                player2->current_frame = LIGHT0;
+                if (player2->id == ID_RYU) {
+                    player2->char_render->width += 90;
+                    if (player2->dir == LEFT_DIR) {
+                        player2->char_render->x -= 90;
+                    }
+                }
             }
         }
     }
