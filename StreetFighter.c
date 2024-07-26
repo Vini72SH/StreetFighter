@@ -18,6 +18,9 @@ int main () {
     render = startGame();
 
     int i = 0;
+    int cont = 0;
+    int round = 1;
+    bool charge = false;
     bool game = true;
     bool load = false;
     character *player1 = NULL;
@@ -65,6 +68,8 @@ int main () {
                         player1 = createCharacter(150, MAX_Y - CHAR_HEIGHT/2, WIDTH, MAX_Y, selectionP1->op, RIGHT_DIR);
                         player2 = createCharacter(WIDTH - 150, MAX_Y - CHAR_HEIGHT/2, WIDTH, MAX_Y, selectionP2->op, LEFT_DIR);
                         load = false;
+                        charge = true;
+                        cont = 0;
                     }
                     break;
                 
@@ -118,7 +123,15 @@ int main () {
                     updateAnimation(player2);
                     update_position(player1, player2);
                     update_attack(player1, player2);
-                    drawGame(render, player1, player2, &i);
+                    drawGame(render, player1, player2, &i, round, charge);
+                    if (charge) {
+                        cont++;
+                        if (cont % 10 <= 6) drawRound(render, round);
+                        if (cont == 30) {
+                            charge = false;
+                            cont = 0;
+                        }
+                    }
                     break;
                 default:
                     break;

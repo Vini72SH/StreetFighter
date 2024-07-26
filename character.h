@@ -94,6 +94,7 @@ void resetCounter(int *counter);
 ALLEGRO_BITMAP **loadSprites(short id);
 rectangle *createRectangle(float x, float y, ushort width, ushort height);
 character *createCharacter(ushort x, ushort y, ushort max_x, ushort max_y, short op, short dir);
+void controlON(character *player);
 void characterUp(character *chara);
 void characterDown(character *chara);
 void characterMove(character *chara, float steps, ushort trajectory, ushort max_x, ushort max_y);

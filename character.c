@@ -342,7 +342,7 @@ void updateAnimation(character *chara) {
 };
 
 void invertDirections(character *p1, character *p2) {
-    if (!(p1->attacking)) {
+    if (!(p1->attacking)) { 
         if (p1->x > p2->x) {
             p1->dir = LEFT_DIR;
         }else{

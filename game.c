@@ -109,9 +109,15 @@ void update_position(character *player1, character *player2) {
 
         }
         if ((player1->y + player1->hurtbox->height/2 > MAX_Y) && (player1->state != IDLE)) {
-            player1->state = IDLE;
-            player1->current_frame = IDLE0;
-            player1->frame_delay = FRAME_DELAY;
+            if ((player1->control->left) || (player1->control->right)) {
+                player1->state = WALK;
+                player1->current_frame = WALK0;
+                player1->frame_delay = WALK_DELAY;
+            } else {
+                player1->state = IDLE;
+                player1->current_frame = IDLE0;
+                player1->frame_delay = FRAME_DELAY;
+            }
         }
     }
 
@@ -156,9 +162,15 @@ void update_position(character *player1, character *player2) {
 
         }
         if ((player2->y + player2->hurtbox->height/2 > MAX_Y) && (player2->state != IDLE)) {
-            player2->state = IDLE;
-            player2->current_frame = IDLE0;
-            player2->frame_delay = FRAME_DELAY;
+            if ((player2->control->left) || (player2->control->right)) {
+                player2->state = WALK;
+                player2->current_frame = WALK0;
+                player2->frame_delay = WALK_DELAY;
+            } else {
+                player2->state = IDLE;
+                player2->current_frame = IDLE0;
+                player2->frame_delay = FRAME_DELAY;
+            }
         }
     }
 

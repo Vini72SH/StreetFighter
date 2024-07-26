@@ -40,6 +40,7 @@ typedef struct Screen_Render{
     ALLEGRO_EVENT_QUEUE *queue;
     ALLEGRO_FONT *font1;
     ALLEGRO_FONT *font2;
+    ALLEGRO_FONT *font3;
     ALLEGRO_DISPLAY *display;
     ALLEGRO_BITMAP *icon;
     ALLEGRO_BITMAP *background[IMAGES];
@@ -54,7 +55,8 @@ void drawStart(Screen_Render *render, Figure *arrow);
 void startScreen(Screen_Render *render, Figure *arrow, ALLEGRO_EVENT event, int *i);
 void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, int *i);
 void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, ALLEGRO_EVENT event, int *i, bool *load);
-void drawGame(Screen_Render *render, character *p1, character *p2, int *i);
+void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int round, bool change); 
+void drawRound(Screen_Render *render, int round);
 void deleteFigure(Figure *figure);
 void endGame(Screen_Render *screen);
 

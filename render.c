@@ -86,6 +86,8 @@ Screen_Render *startGame() {
     init(newScreen->font1, "font1");
     newScreen->font2 = al_load_ttf_font("./fonts/alerts.ttf", 32, 0);
     init(newScreen->font2, "font2");
+    newScreen->font3 = al_load_ttf_font("./fonts/game.ttf", 48, 0);
+    init(newScreen->font3, "font3");
 
     newScreen->display = al_create_display(WIDTH, HEIGHT);
     init(newScreen->display, "display");
@@ -209,6 +211,7 @@ void startScreen(Screen_Render *render, Figure *arrow, ALLEGRO_EVENT event, int 
             *i = 2;
         }
         render->currentBackground = *i;
+        al_flush_event_queue(render->queue);
     }
 };
 
@@ -283,14 +286,14 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, in
             al_draw_text(render->font2, white, WIDTH - 130, HEIGHT - 550, 0, "Chun Li");
 
         if (s1->itOk)
-            al_draw_text(render->font2, red, WIDTH - 1200, HEIGHT - 450, 0, "PLAYER 1 SELECTED");
+            al_draw_text(render->font2, red, WIDTH - 1200, HEIGHT - 350, 0, "PLAYER 1 SELECTED");
 
         if (s2->itOk)
-            al_draw_text(render->font2, red, WIDTH - 380, HEIGHT - 450, 0, "PLAYER 2 SELECTED");
+            al_draw_text(render->font2, red, WIDTH - 380, HEIGHT - 350, 0, "PLAYER 2 SELECTED");
 
         /* Check to continue */
         if ((s1->itOk) && (s2->itOk))
-            al_draw_text(render->font1, white, WIDTH/2 - 17*8, HEIGHT - 320, 0, "PRESS Z TO START");
+            al_draw_text(render->font1, white, WIDTH/2 - 17*8, HEIGHT/2, 0, "PRESS Z TO START");
         
     } else if (render->currentBackground == 3) {
         al_draw_scaled_bitmap(render->background[3],
@@ -337,7 +340,7 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, 
                 fade_in(render->display, render->background[3], 0.02);
                 *i = 3;
                 render->currentBackground = 3;
-
+                al_flush_event_queue(render->queue);
                 return; 
             }
         }
@@ -367,7 +370,7 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, 
                 fade_in(render->display, render->background[3], 0.02);
                 *i = 3;
                 render->currentBackground = 3;
-                
+                al_flush_event_queue(render->queue);
                 return;                
             }
         }
@@ -455,9 +458,10 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, 
     }
 };
 
-void drawGame(Screen_Render *render, character *p1, character *p2, int *i){
+void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int round, bool change){
     ALLEGRO_COLOR red = al_map_rgb(255, 0, 0);
     ALLEGRO_COLOR blue = al_map_rgb(0, 0, 255);
+    ALLEGRO_COLOR roundC = al_map_rgb(255, 255, 255);
     short x1, y1;
     short x2, y2;
     x1 = p1->char_render->x - p1->hurtbox->width/2;
@@ -482,6 +486,12 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i){
     al_draw_filled_rectangle(p1->hitbox->x - p1->hitbox->width/2, p1->hitbox->y - p1->hitbox->height/2, p1->hitbox->x + p1->hitbox->width/2, p1->hitbox->y + p1->hitbox->height/2, blue);
     al_draw_textf(render->font2, red, 0, 0, 0, "Life: %d", p1->hp);
     al_draw_textf(render->font2, blue, WIDTH - 120, 0, 0, "Life: %d", p2->hp);
+    if (!(change)) al_draw_textf(render->font3, roundC, WIDTH/2 - 70, 50, 0, "ROUND %d", round);
+};
+
+void drawRound(Screen_Render *render, int round) {
+    ALLEGRO_COLOR roundC = al_map_rgb(255, 255, 255);
+    al_draw_textf(render->font3, roundC, WIDTH/2 - 70, HEIGHT/2, 0, "ROUND %d", round);
 };
 
 void deleteFigure(Figure *figure) {
@@ -503,6 +513,8 @@ void endGame(Screen_Render *screen) {
 
     al_destroy_bitmap(screen->icon);
     al_destroy_display(screen->display);
+    al_destroy_font(screen->font3);
+    al_destroy_font(screen->font2);
     al_destroy_font(screen->font1);
     al_destroy_event_queue(screen->queue);
     al_destroy_timer(screen->timer);
