@@ -439,6 +439,29 @@ void changeHitbox(character *chara, int frame) {
     }
 };
 
+void characterReset(character *chara, int pl) {
+    chara->hp = HP;
+    chara->attacking = false;
+    chara->air_speed = 0;
+    chara->current_frame = IDLE0;
+    chara->state = IDLE;
+    chara->x = (pl == 1)? P1_X : P2_X;
+    chara->y = START_Y;
+    chara->hitbox->x = chara->x;
+    chara->hitbox->y = chara->y;
+    chara->hurtbox->x = chara->x;
+    chara->hurtbox->y = chara->y;
+    chara->char_render->x = chara->x;
+    chara->char_render->y = chara->y;
+    chara->hitbox->width = START_HITBOX;
+    chara->hitbox->height = START_HITBOX;
+    chara->hurtbox->width = CHAR_WIDTH;
+    chara->hurtbox->height = CHAR_HEIGHT;
+    chara->char_render->width = CHAR_WIDTH;
+    chara->char_render->height = CHAR_HEIGHT;
+    chara->dir = (pl == 1)? RIGHT_DIR : LEFT_DIR;
+}
+
 void deleteSprites(character *chara) {
     if (!(chara->sprites)) return;
 

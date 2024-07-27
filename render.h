@@ -21,6 +21,7 @@
 #define MENU 1
 #define SELECTION 2
 #define GAME 3
+#define ENDGAME 4
 
 typedef struct Figure{
     int dx, dy;
@@ -57,6 +58,7 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, in
 void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, ALLEGRO_EVENT event, int *i, bool *load);
 void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int round, bool change); 
 void drawRound(Screen_Render *render, int round);
+void recovery(Screen_Render *render, character *p1, character *p2, int i);
 void deleteFigure(Figure *figure);
 void endGame(Screen_Render *screen);
 

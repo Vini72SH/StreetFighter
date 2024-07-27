@@ -65,8 +65,8 @@ int main () {
                         render->currentBackground = i;
                     }
                     if (load) {
-                        player1 = createCharacter(150, MAX_Y - CHAR_HEIGHT/2, WIDTH, MAX_Y, selectionP1->op, RIGHT_DIR);
-                        player2 = createCharacter(WIDTH - 150, MAX_Y - CHAR_HEIGHT/2, WIDTH, MAX_Y, selectionP2->op, LEFT_DIR);
+                        player1 = createCharacter(P1_X, START_Y, WIDTH, MAX_Y, selectionP1->op, RIGHT_DIR);
+                        player2 = createCharacter(P2_X, START_Y, WIDTH, MAX_Y, selectionP2->op, LEFT_DIR);
                         load = false;
                         charge = true;
                         cont = 0;
@@ -124,6 +124,17 @@ int main () {
                     update_position(player1, player2);
                     update_attack(player1, player2);
                     drawGame(render, player1, player2, &i, round, charge);
+                    if (!(check_game(player1, player2))) {
+                        charge = true;
+                        cont = 0;
+                        round++;
+                        if (round == 4) {
+                            render->gameMode = ENDGAME;
+                            charge = false;
+                        } else {
+                            recovery(render, player1, player2, i);
+                        }
+                    }
                     if (charge) {
                         cont++;
                         if (cont % 10 <= 6) drawRound(render, round);
@@ -132,6 +143,9 @@ int main () {
                             cont = 0;
                         }
                     }
+                    break;
+                case ENDGAME:
+                    al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgb(0,0,0));
                     break;
                 default:
                     break;

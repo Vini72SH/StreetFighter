@@ -108,7 +108,7 @@ void update_position(character *player1, character *player2) {
             characterFlush(player1, player2, WIDTH, MAX_Y);
 
         }
-        if ((player1->y + player1->hurtbox->height/2 > MAX_Y) && (player1->state != IDLE)) {
+        if ((player1->y + player1->hurtbox->height/2 >= MAX_Y) && (player1->state != IDLE)) {
             if ((player1->control->left) || (player1->control->right)) {
                 player1->state = WALK;
                 player1->current_frame = WALK0;
@@ -118,6 +118,7 @@ void update_position(character *player1, character *player2) {
                 player1->current_frame = IDLE0;
                 player1->frame_delay = FRAME_DELAY;
             }
+            player1->air_speed = 0;
         }
     }
 
@@ -161,7 +162,7 @@ void update_position(character *player1, character *player2) {
             characterFlush(player2, player1, WIDTH, MAX_Y);
 
         }
-        if ((player2->y + player2->hurtbox->height/2 > MAX_Y) && (player2->state != IDLE)) {
+        if ((player2->y + player2->hurtbox->height/2 >= MAX_Y) && (player2->state != IDLE)) {
             if ((player2->control->left) || (player2->control->right)) {
                 player2->state = WALK;
                 player2->current_frame = WALK0;
@@ -171,6 +172,7 @@ void update_position(character *player1, character *player2) {
                 player2->current_frame = IDLE0;
                 player2->frame_delay = FRAME_DELAY;
             }
+            player2->air_speed = 0;
         }
     }
 
@@ -269,4 +271,10 @@ void update_attack(character *player1, character *player2) {
             player1->hp -= 10;
         }
     }
+};
+
+int check_game(character *player1, character *player2) {
+    if ((player1->hp > 0) && (player2->hp > 0))
+        return 1;
+    return 0;
 };

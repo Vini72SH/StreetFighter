@@ -7,6 +7,8 @@
 #include <allegro5/allegro_image.h>
 #include "joystick.h"
 
+#define WIDTH 1320
+#define HEIGHT 680
 #define NUM_SPRITES 23
 #define ID_RYU 0
 #define ID_KEN 1
@@ -33,6 +35,10 @@
 #define WALK 1
 #define DOWN 2
 #define AIR 3
+
+#define P1_X 150
+#define P2_X WIDTH - 150
+#define START_Y 620 - CHAR_HEIGHT/2
 
 typedef unsigned int uint;
 typedef unsigned short ushort;
@@ -94,7 +100,6 @@ void resetCounter(int *counter);
 ALLEGRO_BITMAP **loadSprites(short id);
 rectangle *createRectangle(float x, float y, ushort width, ushort height);
 character *createCharacter(ushort x, ushort y, ushort max_x, ushort max_y, short op, short dir);
-void controlON(character *player);
 void characterUp(character *chara);
 void characterDown(character *chara);
 void characterMove(character *chara, float steps, ushort trajectory, ushort max_x, ushort max_y);
@@ -102,6 +107,7 @@ void characterFlush (character *p1, character *p2, ushort max_x, ushort max_y);
 void updateAnimation(character *chara);
 void invertDirections(character *p1, character *p2);
 void changeHitbox(character *chara, int frame);
+void characterReset(character *chara, int pl);
 void deleteSprites(character *chara);
 void destroyRectangle(rectangle *rect);
 void destroyCharacter(character *chara);

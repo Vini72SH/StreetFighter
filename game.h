@@ -12,5 +12,6 @@ void charactersMovement(ALLEGRO_EVENT event, character *player1, character *play
 void update_position(character *player1, character *player2);
 void charactersAttack(ALLEGRO_EVENT event, character *player1, character *player2);
 void update_attack(character *player1, character *player2);
+int check_game(character *player1, character *player2);
 
 #endif
