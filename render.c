@@ -145,32 +145,29 @@ Figure *createFigure(int dx, int dy, int op, int max_op, const char *filename) {
 };
 
 void drawStart(Screen_Render *render, Figure *arrow) {
-    ALLEGRO_COLOR red = al_map_rgb(255, 25, 35);
-    ALLEGRO_COLOR white = al_map_rgb(255, 255, 255);
-
     /* Draw intro screen */
     al_draw_scaled_bitmap(render->background[0],
                             0, 0, al_get_bitmap_width(render->background[0]),
                             al_get_bitmap_height(render->background[0]),
                             0, 0, WIDTH, HEIGHT, 0);
-    al_draw_text(render->font2, white, 0, HEIGHT - 100, 0, "PRESS Z TO SELECT");
-    al_draw_text(render->font2, white, 0, HEIGHT - 50, 0, "PRESS ESC TO EXIT");
+    al_draw_text(render->font2, COLOR_WHITE, 0, HEIGHT - 100, 0, "PRESS Z TO SELECT");
+    al_draw_text(render->font2, COLOR_WHITE, 0, HEIGHT - 50, 0, "PRESS ESC TO EXIT");
     
     /* Update text according to selection */
     if (arrow->op == 0) 
-        al_draw_text(render->font1, white, WIDTH/2 -13 * 6, HEIGHT - 200, 0, "TRAINING MODE");
+        al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 -13 * 6, HEIGHT - 200, 0, "TRAINING MODE");
     else
-        al_draw_text(render->font1, red, WIDTH/2 -13 * 6, HEIGHT - 200, 0, "TRAINING MODE");
+        al_draw_text(render->font1, COLOR_RED, WIDTH/2 -13 * 6, HEIGHT - 200, 0, "TRAINING MODE");
 
     if (arrow->op == 1) 
-        al_draw_text(render->font1, white, WIDTH/2 -12 * 6, HEIGHT - 150, 0, "MULTIPLAYER");
+        al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 -12 * 6, HEIGHT - 150, 0, "MULTIPLAYER");
     else
-        al_draw_text(render->font1, red, WIDTH/2 -12 * 6, HEIGHT - 150, 0, "MULTIPLAYER");
+        al_draw_text(render->font1, COLOR_RED, WIDTH/2 -12 * 6, HEIGHT - 150, 0, "MULTIPLAYER");
 
     if (arrow->op == 2) 
-        al_draw_text(render->font1, white, WIDTH/2 -8 * 6, HEIGHT - 100, 0, "OPTIONS");
+        al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 -8 * 6, HEIGHT - 100, 0, "OPTIONS");
     else
-        al_draw_text(render->font1, red, WIDTH/2 -8 * 6, HEIGHT - 100, 0, "OPTIONS");
+        al_draw_text(render->font1, COLOR_RED, WIDTH/2 -8 * 6, HEIGHT - 100, 0, "OPTIONS");
 
     /* Draw the selection arrow */
     al_draw_scaled_bitmap(arrow->image, 0, 0,
@@ -219,9 +216,6 @@ void startScreen(Screen_Render *render, Figure *arrow, ALLEGRO_EVENT event, int 
 };
 
 void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, int *i) {
-    /* Color Definition */
-    ALLEGRO_COLOR white = al_map_rgb(255, 255, 255);
-    ALLEGRO_COLOR red = al_map_rgb(255, 0, 0);
     if (render->currentBackground == 1) {
         /* Draw the selection screen for vs COM Mode */
         al_draw_scaled_bitmap(render->background[1],
@@ -236,18 +230,18 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, in
 
         /* Shows the name of the respective character */
         if (s1->op == 0) 
-            al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Ryu");
+            al_draw_text(render->font2, COLOR_WHITE, WIDTH - 1250, HEIGHT - 550, 0, "Ryu");
         else if (s1->op == 1)
-            al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Ken");
+            al_draw_text(render->font2, COLOR_WHITE, WIDTH - 1250, HEIGHT - 550, 0, "Ken");
         else if (s1->op == 2)
-            al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Sagat");
+            al_draw_text(render->font2, COLOR_WHITE, WIDTH - 1250, HEIGHT - 550, 0, "Sagat");
         else if (s1->op == 3)
-            al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Chun Li");
+            al_draw_text(render->font2, COLOR_WHITE, WIDTH - 1250, HEIGHT - 550, 0, "Chun Li");
         
         /* Check to continue */
         if (s1->itOk) {
-            al_draw_text(render->font2, red, WIDTH - 1200, HEIGHT - 450, 0, "PLAYER 1 SELECTED");
-            al_draw_text(render->font1, white, WIDTH/2 - 17*8, HEIGHT - 320, 0, "PRESS Z TO START");
+            al_draw_text(render->font2, COLOR_RED, WIDTH - 1200, HEIGHT - 450, 0, "PLAYER 1 SELECTED");
+            al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 17*8, HEIGHT - 320, 0, "PRESS Z TO START");
         }
 
     } else if (render->currentBackground == 2) {
@@ -271,32 +265,32 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, in
 
         /* Shows the name of the respective character */
         if (s1->op == 0) 
-            al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Ryu");
+            al_draw_text(render->font2, COLOR_WHITE, WIDTH - 1250, HEIGHT - 550, 0, "Ryu");
         else if (s1->op == 1)
-            al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Ken");
+            al_draw_text(render->font2, COLOR_WHITE, WIDTH - 1250, HEIGHT - 550, 0, "Ken");
         else if (s1->op == 2)
-            al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Sagat");
+            al_draw_text(render->font2, COLOR_WHITE, WIDTH - 1250, HEIGHT - 550, 0, "Sagat");
         else if (s1->op == 3)
-            al_draw_text(render->font2, white, WIDTH - 1250, HEIGHT - 550, 0, "Chun Li");
+            al_draw_text(render->font2, COLOR_WHITE, WIDTH - 1250, HEIGHT - 550, 0, "Chun Li");
 
         if (s2->op == 0) 
-            al_draw_text(render->font2, white, WIDTH - 130, HEIGHT - 550, 0, "Ryu");
+            al_draw_text(render->font2, COLOR_WHITE, WIDTH - 130, HEIGHT - 550, 0, "Ryu");
         else if (s2->op == 1)
-            al_draw_text(render->font2, white, WIDTH - 130, HEIGHT - 550, 0, "Ken");
+            al_draw_text(render->font2, COLOR_WHITE, WIDTH - 130, HEIGHT - 550, 0, "Ken");
         else if (s2->op == 2)
-            al_draw_text(render->font2, white, WIDTH - 130, HEIGHT - 550, 0, "Sagat");
+            al_draw_text(render->font2, COLOR_WHITE, WIDTH - 130, HEIGHT - 550, 0, "Sagat");
         else if (s2->op == 3)
-            al_draw_text(render->font2, white, WIDTH - 130, HEIGHT - 550, 0, "Chun Li");
+            al_draw_text(render->font2, COLOR_WHITE, WIDTH - 130, HEIGHT - 550, 0, "Chun Li");
 
         if (s1->itOk)
-            al_draw_text(render->font2, red, WIDTH - 1200, HEIGHT - 350, 0, "PLAYER 1 SELECTED");
+            al_draw_text(render->font2, COLOR_RED, WIDTH - 1200, HEIGHT - 350, 0, "PLAYER 1 SELECTED");
 
         if (s2->itOk)
-            al_draw_text(render->font2, red, WIDTH - 380, HEIGHT - 350, 0, "PLAYER 2 SELECTED");
+            al_draw_text(render->font2, COLOR_BLUE, WIDTH - 380, HEIGHT - 350, 0, "PLAYER 2 SELECTED");
 
         /* Check to continue */
         if ((s1->itOk) && (s2->itOk))
-            al_draw_text(render->font1, white, WIDTH/2 - 17*8, HEIGHT/2, 0, "PRESS Z TO START");
+            al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 17*8, HEIGHT/2, 0, "PRESS Z TO START");
         
     } else if (render->currentBackground == 3) {
         al_draw_scaled_bitmap(render->background[3],
@@ -304,32 +298,32 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, in
                                 al_get_bitmap_height(render->background[3]),
                                 0, 0, WIDTH, HEIGHT, 0);
         al_draw_scaled_bitmap(s3->image, 0, 0, s3->w, s3->h, s3->dx, s3->dy, 105, 105, 0);
-        al_draw_text(render->font2, white, 0, HEIGHT - 35, 0, "PRESS R TO CHOOSE A RANDOM MAP");
+        al_draw_text(render->font2, COLOR_WHITE, 0, HEIGHT - 35, 0, "PRESS R TO CHOOSE A RANDOM MAP");
         al_draw_scaled_bitmap(render->background[s3->op + 4], 0, 0,
                               al_get_bitmap_width(render->background[s3->op + 4]), 
                               al_get_bitmap_height(render->background[s3->op + 4]), 382, 63,
                               557, 252, 0);
 
         if (s3->op == 0)
-            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Brazil Stage");
+            al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Brazil Stage");
         if (s3->op == 1)
-            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Cassino Stage");
+            al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Cassino Stage");
         if (s3->op == 2)
-            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Dojo Stage");
+            al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Dojo Stage");
         if (s3->op == 3)
-            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Harbor Stage");
+            al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Harbor Stage");
         if (s3->op == 4)
-            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "India Stage");
+            al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "India Stage");
         if (s3->op == 5)
-            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Japan Stage");
+            al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Japan Stage");
         if (s3->op == 6)
-            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Sewage Stage");
+            al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Sewage Stage");
         if (s3->op == 7)
-            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Street Stage");
+            al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Street Stage");
         if (s3->op == 8)
-            al_draw_text(render->font1, white, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Temple Stage");
+            al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Temple Stage");
         if (s3->op == 9)
-            al_draw_text(render->font1, white, WIDTH/2 - 14 * 10, HEIGHT/2, 0, "Tenkaichi Budokai Stage");
+            al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 14 * 10, HEIGHT/2, 0, "Tenkaichi Budokai Stage");
     }
 };
 
@@ -462,9 +456,6 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, 
 };
 
 void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int round, bool change){
-    ALLEGRO_COLOR red = al_map_rgb(255, 0, 0);
-    ALLEGRO_COLOR blue = al_map_rgb(0, 0, 255);
-    ALLEGRO_COLOR roundC = al_map_rgb(255, 255, 255);
     short x1, y1;
     short x2, y2;
     x1 = p1->char_render->x - p1->hurtbox->width/2;
@@ -475,8 +466,8 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int r
                             0, 0, al_get_bitmap_width(render->background[*i]),
                             al_get_bitmap_height(render->background[*i]),
                             0, 0, WIDTH, HEIGHT, 0);
-    al_draw_filled_rectangle(p2->hurtbox->x - p2->hurtbox->width/2, p2->hurtbox->y - p2->hurtbox->height/2, p2->hurtbox->x + p2->hurtbox->width/2, p2->hurtbox->y + p2->hurtbox->height/2, blue);
-    al_draw_filled_rectangle(p1->hurtbox->x - p1->hurtbox->width/2, p1->hurtbox->y - p1->hurtbox->height/2, p1->hurtbox->x + p1->hurtbox->width/2, p1->hurtbox->y + p1->hurtbox->height/2, red);
+    //al_draw_filled_rectangle(p2->hurtbox->x - p2->hurtbox->width/2, p2->hurtbox->y - p2->hurtbox->height/2, p2->hurtbox->x + p2->hurtbox->width/2, p2->hurtbox->y + p2->hurtbox->height/2, COLOR_BLUE);
+    //al_draw_filled_rectangle(p1->hurtbox->x - p1->hurtbox->width/2, p1->hurtbox->y - p1->hurtbox->height/2, p1->hurtbox->x + p1->hurtbox->width/2, p1->hurtbox->y + p1->hurtbox->height/2, COLOR_RED);
     if ((p2->attacking) && (!(p1->attacking))) {
         al_draw_scaled_bitmap(p1->sprites[p1->current_frame], 0, 0, 
                           al_get_bitmap_width(p1->sprites[p1->current_frame]), 
@@ -497,24 +488,32 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int r
                           p1->char_render->width, p1->char_render->height, p1->dir);
     }
     drawLifebars(render, p1, p2);
-    al_draw_filled_rectangle(p2->hitbox->x - p2->hitbox->width/2, p2->hitbox->y - p2->hitbox->height/2, p2->hitbox->x + p2->hitbox->width/2, p2->hitbox->y + p2->hitbox->height/2, red);
-    al_draw_filled_rectangle(p1->hitbox->x - p1->hitbox->width/2, p1->hitbox->y - p1->hitbox->height/2, p1->hitbox->x + p1->hitbox->width/2, p1->hitbox->y + p1->hitbox->height/2, blue);
-    if (!(change)) al_draw_textf(render->font3, roundC, WIDTH/2 - 70, 50, 0, "ROUND %d", round);
+    //al_draw_filled_rectangle(p2->hitbox->x - p2->hitbox->width/2, p2->hitbox->y - p2->hitbox->height/2, p2->hitbox->x + p2->hitbox->width/2, p2->hitbox->y + p2->hitbox->height/2, COLOR_RED);
+    //al_draw_filled_rectangle(p1->hitbox->x - p1->hitbox->width/2, p1->hitbox->y - p1->hitbox->height/2, p1->hitbox->x + p1->hitbox->width/2, p1->hitbox->y + p1->hitbox->height/2, COLOR_BLUE);
+    if (!(change)) al_draw_textf(render->font3, COLOR_WHITE, WIDTH/2 - 70, 50, 0, "ROUND %d", round);
 };
 
 void drawLifebars(Screen_Render *render, character *p1, character *p2){
     int x1 = (285 * p1->hp) / 100;
     int x2 = (285 * p2->hp) / 100;
-    ALLEGRO_COLOR green = al_map_rgb(0, 255, 0);
-    al_draw_filled_rectangle(145, 70, 145 + x1, 100, green);
-    al_draw_filled_rectangle(WIDTH - 145, 70, WIDTH - (145 + x2), 100, green);
+    al_draw_filled_rectangle(145, 70, 145 + x1, 100, COLOR_GREEN);
+    al_draw_filled_rectangle(WIDTH - 145, 70, WIDTH - (145 + x2), 100, COLOR_GREEN);
     al_draw_bitmap(render->lifebar, 10, 10, 0);
     al_draw_bitmap(render->lifebar, WIDTH - 465, 10, 1);
+    al_draw_filled_rectangle(38, 38, 132, 132, COLOR_RED);
+    al_draw_filled_rectangle(WIDTH - 38, 38, WIDTH - 132, 132, COLOR_BLUE);
+    al_draw_scaled_bitmap(render->chars[p1->id], 0, 0, 
+                          al_get_bitmap_width(render->chars[p1->id]),
+                          al_get_bitmap_height(render->chars[p1->id]),
+                          30, 7, 125, 125, 0);
+    al_draw_scaled_bitmap(render->chars[p2->id], 0, 0, 
+                          al_get_bitmap_width(render->chars[p2->id]),
+                          al_get_bitmap_height(render->chars[p2->id]),
+                          WIDTH - 155, 7, 125, 125, 1);
 };
 
 void drawRound(Screen_Render *render, int round) {
-    ALLEGRO_COLOR roundC = al_map_rgb(255, 255, 255);
-    al_draw_textf(render->font3, roundC, WIDTH/2 - 70, HEIGHT/2, 0, "ROUND %d", round);
+    al_draw_textf(render->font3, COLOR_WHITE, WIDTH/2 - 70, HEIGHT/2, 0, "ROUND %d", round);
 };
 
 void recovery(Screen_Render *render, character *p1, character *p2, int i) {
@@ -530,14 +529,25 @@ void recovery(Screen_Render *render, character *p1, character *p2, int i) {
                             al_get_bitmap_width(render->background[i]),
                             al_get_bitmap_height(render->background[i]),
                             0, 0, WIDTH, HEIGHT, 0);
-        al_draw_scaled_bitmap(p1->sprites[p1->current_frame], 0, 0, 
-                            al_get_bitmap_width(p1->sprites[p1->current_frame]), 
-                            al_get_bitmap_height(p1->sprites[p1->current_frame]), x1, y1, 
-                            p1->char_render->width, p1->char_render->height, p1->dir);
-        al_draw_scaled_bitmap(p2->sprites[p2->current_frame], 0, 0, 
-                            al_get_bitmap_width(p2->sprites[p2->current_frame]), 
-                            al_get_bitmap_height(p2->sprites[p2->current_frame]), x2, y2, 
-                            p2->char_render->width, p2->char_render->height, p2->dir);
+        if ((p2->attacking) && (!(p1->attacking))) {
+            al_draw_scaled_bitmap(p1->sprites[p1->current_frame], 0, 0, 
+                                al_get_bitmap_width(p1->sprites[p1->current_frame]), 
+                                al_get_bitmap_height(p1->sprites[p1->current_frame]), x1, y1, 
+                                p1->char_render->width, p1->char_render->height, p1->dir);
+            al_draw_scaled_bitmap(p2->sprites[p2->current_frame], 0, 0, 
+                                al_get_bitmap_width(p2->sprites[p2->current_frame]), 
+                                al_get_bitmap_height(p2->sprites[p2->current_frame]), x2, y2, 
+                                p2->char_render->width, p2->char_render->height, p2->dir);
+        } else {
+            al_draw_scaled_bitmap(p2->sprites[p2->current_frame], 0, 0, 
+                                al_get_bitmap_width(p2->sprites[p2->current_frame]), 
+                                al_get_bitmap_height(p2->sprites[p2->current_frame]), x2, y2, 
+                                p2->char_render->width, p2->char_render->height, p2->dir);
+            al_draw_scaled_bitmap(p1->sprites[p1->current_frame], 0, 0, 
+                                al_get_bitmap_width(p1->sprites[p1->current_frame]), 
+                                al_get_bitmap_height(p1->sprites[p1->current_frame]), x1, y1, 
+                                p1->char_render->width, p1->char_render->height, p1->dir);
+        }
         drawLifebars(render, p1, p2);
         al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba_f(0, 0, 0, 1 - alpha));
         al_flip_display();
@@ -585,8 +595,6 @@ void deleteFigure(Figure *figure) {
 void endGame(Screen_Render *screen) {
     if(!(screen)) return;
 
-    al_destroy_bitmap(screen->lifebar);
-
     for (int i = 0; i < IMAGES; ++i) {
         al_destroy_bitmap(screen->background[i]);
     }
@@ -595,6 +603,7 @@ void endGame(Screen_Render *screen) {
         al_destroy_bitmap(screen->chars[i]);
     }
 
+    al_destroy_bitmap(screen->lifebar);
     al_destroy_bitmap(screen->icon);
     al_destroy_display(screen->display);
     al_destroy_font(screen->font3);
