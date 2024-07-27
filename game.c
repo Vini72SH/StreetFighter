@@ -126,6 +126,11 @@ void update_position(character *player1, character *player2) {
         if (check_collision(player1, player2)) characterMove(player1, -1, DOWN, WIDTH, MAX_Y);
     }else{
         characterUp(player1);
+        if ((player1->state == IDLE) && ((player1->control->left) || (player1->control->right))) {
+            player1->state = WALK;
+            player1->current_frame = WALK0;
+            player1->frame_delay = WALK_DELAY;
+        }
         if (check_collision(player1, player2) && (player2->state == AIR)) {
             characterDown(player1);
             player1->state = DOWN;
@@ -180,6 +185,11 @@ void update_position(character *player1, character *player2) {
         if (check_collision(player2, player1)) characterMove(player2, -1, DOWN, WIDTH, MAX_Y);
     }else{
         characterUp(player2);
+        if ((player2->state == IDLE) && ((player2->control->left) || (player2->control->right))) {
+            player2->state = WALK;
+            player2->current_frame = WALK0;
+            player2->frame_delay = WALK_DELAY;
+        }
         if (check_collision(player2, player1) && (player1->state == AIR)) {
             characterDown(player2);
             player2->state = DOWN;

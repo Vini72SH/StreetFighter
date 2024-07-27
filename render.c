@@ -104,6 +104,9 @@ Screen_Render *startGame() {
     al_register_event_source(newScreen->queue, al_get_display_event_source(newScreen->display));
     al_register_event_source(newScreen->queue, al_get_timer_event_source(newScreen->timer));
 
+    newScreen->lifebar = al_load_bitmap("./figures/lifebar.bmp");
+    init (newScreen->lifebar, "lifebar");
+
     newScreen->gameMode = START;
     newScreen->currentBackground = 0;
 
@@ -472,8 +475,8 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int r
                             0, 0, al_get_bitmap_width(render->background[*i]),
                             al_get_bitmap_height(render->background[*i]),
                             0, 0, WIDTH, HEIGHT, 0);
-    //al_draw_filled_rectangle(p2->hurtbox->x - p2->hurtbox->width/2, p2->hurtbox->y - p2->hurtbox->height/2, p2->hurtbox->x + p2->hurtbox->width/2, p2->hurtbox->y + p2->hurtbox->height/2, blue);
-    //al_draw_filled_rectangle(p1->hurtbox->x - p1->hurtbox->width/2, p1->hurtbox->y - p1->hurtbox->height/2, p1->hurtbox->x + p1->hurtbox->width/2, p1->hurtbox->y + p1->hurtbox->height/2, red);
+    al_draw_filled_rectangle(p2->hurtbox->x - p2->hurtbox->width/2, p2->hurtbox->y - p2->hurtbox->height/2, p2->hurtbox->x + p2->hurtbox->width/2, p2->hurtbox->y + p2->hurtbox->height/2, blue);
+    al_draw_filled_rectangle(p1->hurtbox->x - p1->hurtbox->width/2, p1->hurtbox->y - p1->hurtbox->height/2, p1->hurtbox->x + p1->hurtbox->width/2, p1->hurtbox->y + p1->hurtbox->height/2, red);
     if ((p2->attacking) && (!(p1->attacking))) {
         al_draw_scaled_bitmap(p1->sprites[p1->current_frame], 0, 0, 
                           al_get_bitmap_width(p1->sprites[p1->current_frame]), 
@@ -493,11 +496,20 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int r
                           al_get_bitmap_height(p1->sprites[p1->current_frame]), x1, y1, 
                           p1->char_render->width, p1->char_render->height, p1->dir);
     }
-    //al_draw_filled_rectangle(p2->hitbox->x - p2->hitbox->width/2, p2->hitbox->y - p2->hitbox->height/2, p2->hitbox->x + p2->hitbox->width/2, p2->hitbox->y + p2->hitbox->height/2, red);
-    //al_draw_filled_rectangle(p1->hitbox->x - p1->hitbox->width/2, p1->hitbox->y - p1->hitbox->height/2, p1->hitbox->x + p1->hitbox->width/2, p1->hitbox->y + p1->hitbox->height/2, blue);
-    al_draw_textf(render->font2, red, 0, 0, 0, "Life: %d", p1->hp);
-    al_draw_textf(render->font2, blue, WIDTH - 120, 0, 0, "Life: %d", p2->hp);
+    drawLifebars(render, p1, p2);
+    al_draw_filled_rectangle(p2->hitbox->x - p2->hitbox->width/2, p2->hitbox->y - p2->hitbox->height/2, p2->hitbox->x + p2->hitbox->width/2, p2->hitbox->y + p2->hitbox->height/2, red);
+    al_draw_filled_rectangle(p1->hitbox->x - p1->hitbox->width/2, p1->hitbox->y - p1->hitbox->height/2, p1->hitbox->x + p1->hitbox->width/2, p1->hitbox->y + p1->hitbox->height/2, blue);
     if (!(change)) al_draw_textf(render->font3, roundC, WIDTH/2 - 70, 50, 0, "ROUND %d", round);
+};
+
+void drawLifebars(Screen_Render *render, character *p1, character *p2){
+    int x1 = (285 * p1->hp) / 100;
+    int x2 = (285 * p2->hp) / 100;
+    ALLEGRO_COLOR green = al_map_rgb(0, 255, 0);
+    al_draw_filled_rectangle(145, 70, 145 + x1, 100, green);
+    al_draw_filled_rectangle(WIDTH - 145, 70, WIDTH - (145 + x2), 100, green);
+    al_draw_bitmap(render->lifebar, 10, 10, 0);
+    al_draw_bitmap(render->lifebar, WIDTH - 465, 10, 1);
 };
 
 void drawRound(Screen_Render *render, int round) {
@@ -526,6 +538,7 @@ void recovery(Screen_Render *render, character *p1, character *p2, int i) {
                             al_get_bitmap_width(p2->sprites[p2->current_frame]), 
                             al_get_bitmap_height(p2->sprites[p2->current_frame]), x2, y2, 
                             p2->char_render->width, p2->char_render->height, p2->dir);
+        drawLifebars(render, p1, p2);
         al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba_f(0, 0, 0, 1 - alpha));
         al_flip_display();
         al_rest(0.001); 
@@ -556,6 +569,7 @@ void recovery(Screen_Render *render, character *p1, character *p2, int i) {
                             al_get_bitmap_width(p2->sprites[p2->current_frame]), 
                             al_get_bitmap_height(p2->sprites[p2->current_frame]), x2, y2, 
                             p2->char_render->width, p2->char_render->height, p2->dir);
+        drawLifebars(render, p1, p2);
         al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba_f(0, 0, 0, 1 - alpha));
         al_flip_display();
         al_rest(0.001); 
@@ -570,6 +584,8 @@ void deleteFigure(Figure *figure) {
 
 void endGame(Screen_Render *screen) {
     if(!(screen)) return;
+
+    al_destroy_bitmap(screen->lifebar);
 
     for (int i = 0; i < IMAGES; ++i) {
         al_destroy_bitmap(screen->background[i]);
