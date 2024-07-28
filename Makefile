@@ -28,11 +28,11 @@ $(OBJDIR):
 
 # Regra para criar o executável
 $(TARGET): $(OBJS)
-	$(CC) -o $@ $^ $(ALLEGRO_FLAGS)
+	@$(CC) -o $@ $^ $(ALLEGRO_FLAGS)
 
 # Regra para criar os arquivos objeto
 $(OBJDIR)/%.o: %.c
-	$(CC) $(CFLAGS) $(ALLEGRO_FLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # Limpeza
 clean:

@@ -87,7 +87,6 @@ typedef struct character{
     int frame_delay;
     int frame_counter;
     bool attacking;
-    bool hit;
     joystick *control;
     rectangle *hitbox;
     rectangle *hurtbox;
@@ -106,8 +105,6 @@ void characterMove(character *chara, float steps, ushort trajectory, ushort max_
 void characterFlush (character *p1, character *p2, ushort max_x, ushort max_y);
 void updateAnimation(character *chara);
 void invertDirections(character *p1, character *p2);
-void changeHitbox(character *chara, int frame);
-void characterReset(character *chara, int pl);
 void deleteSprites(character *chara);
 void destroyRectangle(rectangle *rect);
 void destroyCharacter(character *chara);

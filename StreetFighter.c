@@ -18,7 +18,6 @@ int main () {
     render = startGame();
 
     int i = 0;
-    int cont = 0;
     int round = 1;
     bool charge = false;
     bool game = true;
@@ -69,7 +68,6 @@ int main () {
                         player2 = createCharacter(P2_X, START_Y, WIDTH, MAX_Y, selectionP2->op, LEFT_DIR);
                         load = false;
                         charge = true;
-                        cont = 0;
                     }
                     break;
                 
@@ -94,7 +92,6 @@ int main () {
                         render->currentBackground = i;
                     }
                     charactersMovement(event, player1, player2);
-                    charactersAttack(event, player1, player2);
                     break;
                 default:
                     break;
@@ -122,27 +119,7 @@ int main () {
                     updateAnimation(player1);
                     updateAnimation(player2);
                     update_position(player1, player2);
-                    update_attack(player1, player2);
                     drawGame(render, player1, player2, &i, round, charge);
-                    if (!(check_game(player1, player2))) {
-                        charge = true;
-                        cont = 0;
-                        round++;
-                        if (round == 4) {
-                            render->gameMode = ENDGAME;
-                            charge = false;
-                        } else {
-                            recovery(render, player1, player2, i);
-                        }
-                    }
-                    if (charge) {
-                        cont++;
-                        if (cont % 10 <= 6) drawRound(render, round);
-                        if (cont == 30) {
-                            charge = false;
-                            cont = 0;
-                        }
-                    }
                     break;
                 case ENDGAME:
                     al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgb(0,0,0));

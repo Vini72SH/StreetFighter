@@ -466,31 +466,19 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int r
                             0, 0, al_get_bitmap_width(render->background[*i]),
                             al_get_bitmap_height(render->background[*i]),
                             0, 0, WIDTH, HEIGHT, 0);
-    //al_draw_filled_rectangle(p2->hurtbox->x - p2->hurtbox->width/2, p2->hurtbox->y - p2->hurtbox->height/2, p2->hurtbox->x + p2->hurtbox->width/2, p2->hurtbox->y + p2->hurtbox->height/2, COLOR_BLUE);
-    //al_draw_filled_rectangle(p1->hurtbox->x - p1->hurtbox->width/2, p1->hurtbox->y - p1->hurtbox->height/2, p1->hurtbox->x + p1->hurtbox->width/2, p1->hurtbox->y + p1->hurtbox->height/2, COLOR_RED);
-    if ((p2->attacking) && (!(p1->attacking))) {
-        al_draw_scaled_bitmap(p1->sprites[p1->current_frame], 0, 0, 
-                          al_get_bitmap_width(p1->sprites[p1->current_frame]), 
-                          al_get_bitmap_height(p1->sprites[p1->current_frame]), x1, y1, 
-                          p1->char_render->width, p1->char_render->height, p1->dir);
-        al_draw_scaled_bitmap(p2->sprites[p2->current_frame], 0, 0, 
-                            al_get_bitmap_width(p2->sprites[p2->current_frame]), 
-                            al_get_bitmap_height(p2->sprites[p2->current_frame]), x2, y2, 
-                            p2->char_render->width, p2->char_render->height, p2->dir);
-    } else {
-        al_draw_scaled_bitmap(p2->sprites[p2->current_frame], 0, 0, 
+    al_draw_filled_rectangle(p2->hurtbox->x - p2->hurtbox->width/2, p2->hurtbox->y - p2->hurtbox->height/2, p2->hurtbox->x + p2->hurtbox->width/2, p2->hurtbox->y + p2->hurtbox->height/2, COLOR_BLUE);
+    al_draw_filled_rectangle(p1->hurtbox->x - p1->hurtbox->width/2, p1->hurtbox->y - p1->hurtbox->height/2, p1->hurtbox->x + p1->hurtbox->width/2, p1->hurtbox->y + p1->hurtbox->height/2, COLOR_RED);
+    al_draw_scaled_bitmap(p2->sprites[p2->current_frame], 0, 0, 
                           al_get_bitmap_width(p2->sprites[p2->current_frame]), 
                           al_get_bitmap_height(p2->sprites[p2->current_frame]), x2, y2, 
                           p2->char_render->width, p2->char_render->height, p2->dir);
-        al_draw_scaled_bitmap(p1->sprites[p1->current_frame], 0, 0, 
+    al_draw_scaled_bitmap(p1->sprites[p1->current_frame], 0, 0, 
                           al_get_bitmap_width(p1->sprites[p1->current_frame]), 
                           al_get_bitmap_height(p1->sprites[p1->current_frame]), x1, y1, 
                           p1->char_render->width, p1->char_render->height, p1->dir);
-    }
     drawLifebars(render, p1, p2);
-    //al_draw_filled_rectangle(p2->hitbox->x - p2->hitbox->width/2, p2->hitbox->y - p2->hitbox->height/2, p2->hitbox->x + p2->hitbox->width/2, p2->hitbox->y + p2->hitbox->height/2, COLOR_RED);
-    //al_draw_filled_rectangle(p1->hitbox->x - p1->hitbox->width/2, p1->hitbox->y - p1->hitbox->height/2, p1->hitbox->x + p1->hitbox->width/2, p1->hitbox->y + p1->hitbox->height/2, COLOR_BLUE);
-    if (!(change)) al_draw_textf(render->font3, COLOR_WHITE, WIDTH/2 - 70, 50, 0, "ROUND %d", round);
+    al_draw_filled_rectangle(p2->hitbox->x - p2->hitbox->width/2, p2->hitbox->y - p2->hitbox->height/2, p2->hitbox->x + p2->hitbox->width/2, p2->hitbox->y + p2->hitbox->height/2, COLOR_RED);
+    al_draw_filled_rectangle(p1->hitbox->x - p1->hitbox->width/2, p1->hitbox->y - p1->hitbox->height/2, p1->hitbox->x + p1->hitbox->width/2, p1->hitbox->y + p1->hitbox->height/2, COLOR_BLUE);
 };
 
 void drawLifebars(Screen_Render *render, character *p1, character *p2){
@@ -514,76 +502,6 @@ void drawLifebars(Screen_Render *render, character *p1, character *p2){
 
 void drawRound(Screen_Render *render, int round) {
     al_draw_textf(render->font3, COLOR_WHITE, WIDTH/2 - 70, HEIGHT/2, 0, "ROUND %d", round);
-};
-
-void recovery(Screen_Render *render, character *p1, character *p2, int i) {
-    short x1, y1;
-    short x2, y2;
-    x1 = p1->char_render->x - p1->hurtbox->width/2;
-    y1 = p1->char_render->y - p1->hurtbox->height/2;
-    x2 = p2->char_render->x - p2->hurtbox->width/2;
-    y2 = p2->char_render->y - p2->hurtbox->height/2;
-
-    for (float alpha = 1.0; alpha >= 0.0; alpha -= 0.02) {
-        al_draw_scaled_bitmap(render->background[i], 0, 0,
-                            al_get_bitmap_width(render->background[i]),
-                            al_get_bitmap_height(render->background[i]),
-                            0, 0, WIDTH, HEIGHT, 0);
-        if ((p2->attacking) && (!(p1->attacking))) {
-            al_draw_scaled_bitmap(p1->sprites[p1->current_frame], 0, 0, 
-                                al_get_bitmap_width(p1->sprites[p1->current_frame]), 
-                                al_get_bitmap_height(p1->sprites[p1->current_frame]), x1, y1, 
-                                p1->char_render->width, p1->char_render->height, p1->dir);
-            al_draw_scaled_bitmap(p2->sprites[p2->current_frame], 0, 0, 
-                                al_get_bitmap_width(p2->sprites[p2->current_frame]), 
-                                al_get_bitmap_height(p2->sprites[p2->current_frame]), x2, y2, 
-                                p2->char_render->width, p2->char_render->height, p2->dir);
-        } else {
-            al_draw_scaled_bitmap(p2->sprites[p2->current_frame], 0, 0, 
-                                al_get_bitmap_width(p2->sprites[p2->current_frame]), 
-                                al_get_bitmap_height(p2->sprites[p2->current_frame]), x2, y2, 
-                                p2->char_render->width, p2->char_render->height, p2->dir);
-            al_draw_scaled_bitmap(p1->sprites[p1->current_frame], 0, 0, 
-                                al_get_bitmap_width(p1->sprites[p1->current_frame]), 
-                                al_get_bitmap_height(p1->sprites[p1->current_frame]), x1, y1, 
-                                p1->char_render->width, p1->char_render->height, p1->dir);
-        }
-        drawLifebars(render, p1, p2);
-        al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba_f(0, 0, 0, 1 - alpha));
-        al_flip_display();
-        al_rest(0.001); 
-    }
-
-    characterReset(p1, 1);
-    characterReset(p2, 2);
-    x1 = p1->char_render->x - p1->hurtbox->width/2;
-    y1 = p1->char_render->y - p1->hurtbox->height/2;
-    x2 = p2->char_render->x - p2->hurtbox->width/2;
-    y2 = p2->char_render->y - p2->hurtbox->height/2;
-
-    al_flush_event_queue(render->queue);
-    al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba_f(0, 0, 0, 1));
-    al_flip_display();
-    al_rest(0.01); 
-
-    for (float alpha = 0.0; alpha <= 1.0; alpha += 0.02) {
-        al_draw_scaled_bitmap(render->background[i], 0, 0, 
-                            al_get_bitmap_width(render->background[i]),
-                            al_get_bitmap_height(render->background[i]),
-                            0, 0, WIDTH, HEIGHT, 0);
-        al_draw_scaled_bitmap(p1->sprites[p1->current_frame], 0, 0, 
-                          al_get_bitmap_width(p1->sprites[p1->current_frame]), 
-                          al_get_bitmap_height(p1->sprites[p1->current_frame]), x1, y1, 
-                          p1->char_render->width, p1->char_render->height, p1->dir);
-        al_draw_scaled_bitmap(p2->sprites[p2->current_frame], 0, 0, 
-                            al_get_bitmap_width(p2->sprites[p2->current_frame]), 
-                            al_get_bitmap_height(p2->sprites[p2->current_frame]), x2, y2, 
-                            p2->char_render->width, p2->char_render->height, p2->dir);
-        drawLifebars(render, p1, p2);
-        al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba_f(0, 0, 0, 1 - alpha));
-        al_flip_display();
-        al_rest(0.001); 
-    }
 };
 
 void deleteFigure(Figure *figure) {

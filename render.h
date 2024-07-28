@@ -66,7 +66,6 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, 
 void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int round, bool change);
 void drawLifebars(Screen_Render *render, character *p1, character *p2);
 void drawRound(Screen_Render *render, int round);
-void recovery(Screen_Render *render, character *p1, character *p2, int i);
 void deleteFigure(Figure *figure);
 void endGame(Screen_Render *screen);
 

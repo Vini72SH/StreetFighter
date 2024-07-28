@@ -29,7 +29,7 @@ uchar check_hit (character *p1, character *p2) {
 void charactersMovement (ALLEGRO_EVENT event, character *player1, character *player2) {
     if (event.keyboard.keycode == ALLEGRO_KEY_W) {
         joystick_up(player1->control);
-        if ((event.type == ALLEGRO_EVENT_KEY_DOWN) && (player1->state != DOWN) && (player1->state != AIR) && !(player1->attacking)) {
+        if ((event.type == ALLEGRO_EVENT_KEY_DOWN) && (player1->state != DOWN) && (player1->state != AIR)) {
             player1->state = AIR;
             player1->air_speed = JUMP_SPEED;
             player1->current_frame = JUMP0;
@@ -38,21 +38,21 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_A) {
         joystick_left(player1->control);
-        if ((player1->state != DOWN) && (player1->state != AIR) && !(player1->attacking)) {
+        if ((player1->state != DOWN) && (player1->state != AIR)) {
             player1->state = WALK;
             player1->frame_delay = WALK_DELAY;
         }
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_D) {
         joystick_right(player1->control);
-        if ((player1->state != DOWN) && (player1->state != AIR) && !(player1->attacking)) {
+        if ((player1->state != DOWN) && (player1->state != AIR)) {
             player1->state = WALK;
             player1->frame_delay = WALK_DELAY;
         }
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_S) {
         joystick_down(player1->control);
-        if ((player1->state != AIR) && !(player1->attacking)) {
+        if ((player1->state != AIR)) {
             player1->state = DOWN;
             player1->current_frame = DOWN0;
             characterDown(player1);
@@ -61,7 +61,7 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
 
     if (event.keyboard.keycode == ALLEGRO_KEY_UP) {
         joystick_up(player2->control);
-        if ((event.type == ALLEGRO_EVENT_KEY_DOWN) && (player2->state != DOWN) && (player2->state != AIR) && !(player2->attacking)) {
+        if ((event.type == ALLEGRO_EVENT_KEY_DOWN) && (player2->state != DOWN) && (player2->state != AIR)) {
             player2->state = AIR;
             player2->air_speed = JUMP_SPEED;
             player2->current_frame = JUMP0;
@@ -70,21 +70,21 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_LEFT) {
         joystick_left(player2->control);
-        if ((player2->state != DOWN) && (player2->state != AIR) && !(player2->attacking)) {
+        if ((player2->state != DOWN) && (player2->state != AIR)) {
             player2->state = WALK;
             player2->frame_delay = WALK_DELAY;
         }
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
         joystick_right(player2->control);
-        if ((player2->state != DOWN) && (player2->state != AIR) && !(player2->attacking)) {
+        if ((player2->state != DOWN) && (player2->state != AIR)) {
             player2->state = WALK;
             player2->frame_delay = WALK_DELAY;
         }
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_DOWN) {
         joystick_down(player2->control);
-        if ((player2->state != AIR) && !(player2->attacking)) {
+        if ((player2->state != AIR)) {
             player2->state = DOWN;
             player2->current_frame = DOWN0;
             characterDown(player2);
@@ -106,7 +106,6 @@ void update_position(character *player1, character *player2) {
             player1->air_speed += GRAVITY;
             characterMove(player1, -1, UP, WIDTH, MAX_Y);
             characterFlush(player1, player2, WIDTH, MAX_Y);
-
         }
         if ((player1->y + player1->hurtbox->height/2 >= MAX_Y) && (player1->state != IDLE)) {
             if ((player1->control->left) || (player1->control->right)) {
@@ -137,7 +136,7 @@ void update_position(character *player1, character *player2) {
             player1->current_frame = DOWN0;
         }
     }
-    if ((player1->state != DOWN) && !(player1->attacking)) {
+    if ((player1->state != DOWN)) {
         if (player1->control->left) {
             characterMove(player1, 1, LEFT, WIDTH, MAX_Y);
             if (check_collision(player1, player2)) characterMove(player1, -1, LEFT, WIDTH, MAX_Y);
@@ -196,7 +195,7 @@ void update_position(character *player1, character *player2) {
             player2->current_frame = DOWN0;
         }
     }
-    if ((player2->state != DOWN) && !(player2->attacking)) {
+    if ((player2->state != DOWN)) {
         if (player2->control->left) {
             characterMove(player2, 1, LEFT, WIDTH, MAX_Y);
             if (check_collision(player2, player1)) characterMove(player2, -1, LEFT, WIDTH, MAX_Y);
@@ -213,74 +212,6 @@ void update_position(character *player1, character *player2) {
 
     invertDirections(player1, player2);
     invertDirections(player2, player1);
-};
-
-void charactersAttack(ALLEGRO_EVENT event, character *player1, character *player2) {
-    if (event.keyboard.keycode == ALLEGRO_KEY_Y) {
-        if (player1->state == IDLE) {
-            if (!(player1->attacking)) {
-                player1->frame_delay = LIGHT_DELAY;
-                player1->attacking = true;
-                player1->current_frame = LIGHT0;
-                if (player1->id == ID_RYU) {
-                    player1->char_render->width += 90;
-                    player1->char_render->x -= player1->dir * 90;
-                }
-                if (player1->id == ID_KEN) {
-                    player1->char_render->width += 90;
-                    player1->char_render->x -= player1->dir * 90;
-                }
-                if (player1->id == ID_SAGAT) {
-                    player1->char_render->width += 120;
-                    player1->char_render->x -= player1->dir * 120;
-                }
-                if (player1->id == ID_CHUNLI) {
-                    player1->char_render->width += 90;
-                    player1->char_render->x -= player1->dir * 90;
-                }
-            }
-        }
-    }
-    if (event.keyboard.keycode == ALLEGRO_KEY_PAD_4) {
-        if (player2->state == IDLE) {
-            if (!(player2->attacking)) {
-                player2->frame_delay = LIGHT_DELAY;
-                player2->attacking = true;
-                player2->current_frame = LIGHT0;
-                if (player2->id == ID_RYU) {
-                    player2->char_render->width += 90;
-                    player2->char_render->x -= player2->dir * 90;
-                }
-                if (player2->id == ID_KEN) {
-                    player2->char_render->width += 90;
-                    player2->char_render->x -= player2->dir * 90;
-                }
-                if (player2->id == ID_SAGAT) {
-                    player2->char_render->width += 120;
-                    player2->char_render->x -= player2->dir * 120;
-                }
-                if (player2->id == ID_CHUNLI) {
-                    player2->char_render->width += 90;
-                    player2->char_render->x -= player2->dir * 90;
-                }
-            }
-        }
-    }
-};
-
-void update_attack(character *player1, character *player2) {
-    if ((player1->current_frame == LIGHT2) || (player1->current_frame == LIGHT3)) {
-        if ((check_hit(player1, player2) && !(player1->hit))) {
-            player1->hit = true;
-            player2->hp -= 10;
-        }
-    }
-    if ((player2->current_frame == LIGHT2) || (player2->current_frame == LIGHT3)) {
-        if ((check_hit(player2, player1)) && !(player2->hit)) {
-            player2->hit = true;
-            player1->hp -= 10;
-        }
-    }
 };
 
 int check_game(character *player1, character *player2) {
