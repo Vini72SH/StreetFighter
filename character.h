@@ -86,7 +86,6 @@ typedef struct character{
     int state;
     int frame_delay;
     int frame_counter;
-    bool attacking;
     joystick *control;
     rectangle *hitbox;
     rectangle *hurtbox;

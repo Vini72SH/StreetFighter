@@ -118,7 +118,6 @@ character *createCharacter(ushort x, ushort y, ushort max_x, ushort max_y, short
     newCharacter->current_frame = IDLE0;
     newCharacter->frame_delay = FRAME_DELAY;
     newCharacter->frame_counter = 0;
-    newCharacter->attacking = false;
     newCharacter->hitbox = createRectangle(x, y, START_HITBOX, START_HITBOX);
     newCharacter->hurtbox = createRectangle(x, y, CHAR_WIDTH, CHAR_HEIGHT);
     newCharacter->char_render = createRectangle(x, y, CHAR_WIDTH, CHAR_HEIGHT);
@@ -297,13 +296,11 @@ void updateAnimation(character *chara) {
     }
 };
 
-void invertDirections(character *p1, character *p2) {
-    if (!(p1->attacking)) { 
-        if (p1->x > p2->x) {
-            p1->dir = LEFT_DIR;
-        }else{
-            p1->dir = RIGHT_DIR;
-        }
+void invertDirections(character *p1, character *p2) { 
+    if (p1->x > p2->x) {
+        p1->dir = LEFT_DIR;
+    }else{
+        p1->dir = RIGHT_DIR;
     }
 };
 
