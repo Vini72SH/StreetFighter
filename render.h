@@ -27,6 +27,7 @@
 #define COLOR_BLUE al_map_rgb(0, 0, 255)
 #define COLOR_GREEN al_map_rgb(0, 255, 0)
 #define COLOR_PURPLE al_map_rgb(139, 0, 139)
+#define COLOR_ORANGE al_map_rgb(255, 128, 0)
 #define COLOR_WHITE al_map_rgb(255, 255, 255)
 
 typedef struct Figure{

@@ -34,6 +34,19 @@ void fade_in(ALLEGRO_DISPLAY *display, ALLEGRO_BITMAP *next_bitmap, float speed)
     }
 };
 
+int attackOffset(character *player) {
+    if ((player->current_frame == LIGHT2) || (player->current_frame == LIGHT3)) {
+        return (al_get_bitmap_width(player->sprites[player->current_frame]) / 2.5);
+    }
+    if (player->id == ID_CHUNLI) {
+        if ((player->current_frame >= LIGHT0) && (player->current_frame <= LIGHT5)) {
+            return (al_get_bitmap_width(player->sprites[player->current_frame]) / 3);
+        }
+    }
+
+    return 0;
+}
+
 Screen_Render *startGame() {
     Screen_Render *newScreen;
 
@@ -465,18 +478,19 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int r
     x2 = p2->char_render->x - p2->char_render->width/2;
     y2 = p2->char_render->y - p2->char_render->height/2;
 
-    if ((p1->current_frame == LIGHT2) || (p1->current_frame == LIGHT3)) {
-        x1 -= p1->dir * (al_get_bitmap_width(p1->sprites[p1->current_frame]) / 2.5);
+    if ((p1->state == ATTACK)) {
+        x1 -= p1->dir * attackOffset(p1);
     }
-    if ((p2->current_frame == LIGHT2) || (p2->current_frame == LIGHT3)) {
-        x2 -= p2->dir * (al_get_bitmap_width(p2->sprites[p2->current_frame]) / 2.5);
+    if (p2->state == ATTACK) {
+        x2 -= p2->dir * attackOffset(p2);
     }
+
     al_draw_scaled_bitmap(render->background[*i],
                             0, 0, al_get_bitmap_width(render->background[*i]),
                             al_get_bitmap_height(render->background[*i]),
                             0, 0, WIDTH, HEIGHT, 0);
-    //al_draw_filled_rectangle(p2->hurtbox->x - p2->hurtbox->width/2, p2->hurtbox->y - p2->hurtbox->height/2, p2->hurtbox->x + p2->hurtbox->width/2, p2->hurtbox->y + p2->hurtbox->height/2, COLOR_BLUE);
-    //al_draw_filled_rectangle(p1->hurtbox->x - p1->hurtbox->width/2, p1->hurtbox->y - p1->hurtbox->height/2, p1->hurtbox->x + p1->hurtbox->width/2, p1->hurtbox->y + p1->hurtbox->height/2, COLOR_RED);
+    al_draw_filled_rectangle(p2->hurtbox->x - p2->hurtbox->width/2, p2->hurtbox->y - p2->hurtbox->height/2, p2->hurtbox->x + p2->hurtbox->width/2, p2->hurtbox->y + p2->hurtbox->height/2, COLOR_BLUE);
+    al_draw_filled_rectangle(p1->hurtbox->x - p1->hurtbox->width/2, p1->hurtbox->y - p1->hurtbox->height/2, p1->hurtbox->x + p1->hurtbox->width/2, p1->hurtbox->y + p1->hurtbox->height/2, COLOR_RED);
     if ((p2->state == ATTACK) && (p1->state != ATTACK)) {
         al_draw_scaled_bitmap(p1->sprites[p1->current_frame], 0, 0, 
                             al_get_bitmap_width(p1->sprites[p1->current_frame]), 
@@ -497,8 +511,8 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int r
                             al_get_bitmap_width(p1->sprites[p1->current_frame]), al_get_bitmap_height(p1->sprites[p1->current_frame]), p1->dir);
     }
     drawLifebars(render, p1, p2);
-    //al_draw_filled_rectangle(p2->hitbox->x - p2->hitbox->width/2, p2->hitbox->y - p2->hitbox->height/2, p2->hitbox->x + p2->hitbox->width/2, p2->hitbox->y + p2->hitbox->height/2, COLOR_RED);
-    //al_draw_filled_rectangle(p1->hitbox->x - p1->hitbox->width/2, p1->hitbox->y - p1->hitbox->height/2, p1->hitbox->x + p1->hitbox->width/2, p1->hitbox->y + p1->hitbox->height/2, COLOR_BLUE);
+    al_draw_filled_rectangle(p2->hitbox->x - p2->hitbox->width/2, p2->hitbox->y - p2->hitbox->height/2, p2->hitbox->x + p2->hitbox->width/2, p2->hitbox->y + p2->hitbox->height/2, COLOR_RED);
+    al_draw_filled_rectangle(p1->hitbox->x - p1->hitbox->width/2, p1->hitbox->y - p1->hitbox->height/2, p1->hitbox->x + p1->hitbox->width/2, p1->hitbox->y + p1->hitbox->height/2, COLOR_BLUE);
 };
 
 void drawLifebars(Screen_Render *render, character *p1, character *p2){
@@ -518,6 +532,25 @@ void drawLifebars(Screen_Render *render, character *p1, character *p2){
                           al_get_bitmap_width(render->chars[p2->id]),
                           al_get_bitmap_height(render->chars[p2->id]),
                           WIDTH - 155, 7, 125, 125, 1);
+    if (p1->id == ID_RYU) {
+        al_draw_text(render->font2, COLOR_ORANGE, 175, 35, 0, "Ryu");
+    } else if (p1->id == ID_KEN) {
+        al_draw_text(render->font2, COLOR_ORANGE, 175, 35, 0, "Ken");
+    } else if (p1->id == ID_SAGAT) {
+        al_draw_text(render->font2, COLOR_ORANGE, 175, 35, 0, "Sagat");
+    } else {
+        al_draw_text(render->font2, COLOR_ORANGE, 175, 35, 0, "Chun Li");
+    }
+
+    if (p2->id == ID_RYU) {
+        al_draw_text(render->font2, COLOR_ORANGE, WIDTH - 220, 35, 0, "Ryu");
+    } else if (p2->id == ID_KEN) {
+        al_draw_text(render->font2, COLOR_ORANGE, WIDTH - 220, 35, 0, "Ken");
+    } else if (p2->id == ID_SAGAT) {
+        al_draw_text(render->font2, COLOR_ORANGE, WIDTH - 250, 35, 0, "Sagat");
+    } else {
+        al_draw_text(render->font2, COLOR_ORANGE, WIDTH - 275, 35, 0, "Chun Li");
+    }
 };
 
 void drawRound(Screen_Render *render, int round) {
