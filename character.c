@@ -293,14 +293,42 @@ void updateAnimation(character *chara) {
                 break;
             }
         }
+        if (chara->state == ATTACK) {
+            switch (chara->current_frame) {
+            case LIGHT0:
+                chara->current_frame = LIGHT1;
+                break;
+            case LIGHT1:
+                chara->current_frame = LIGHT2;
+                break;
+            case LIGHT2:
+                chara->current_frame = LIGHT3;
+                break;
+            case LIGHT3:
+                chara->current_frame = LIGHT4;
+                break;
+            case LIGHT4:
+                chara->current_frame = LIGHT5;
+                break;
+            case LIGHT5:
+                chara->current_frame = IDLE0;
+                chara->state = IDLE;
+                chara->frame_delay = FRAME_DELAY;
+                break;
+            default:
+                break;
+            }
+        }
     }
 };
 
 void invertDirections(character *p1, character *p2) { 
-    if (p1->x > p2->x) {
-        p1->dir = LEFT_DIR;
-    }else{
-        p1->dir = RIGHT_DIR;
+    if (p1->state != ATTACK) {
+        if (p1->x > p2->x) {
+            p1->dir = LEFT_DIR;
+        }else{
+            p1->dir = RIGHT_DIR;
+        }
     }
 };
 

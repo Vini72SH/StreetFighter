@@ -35,6 +35,7 @@
 #define WALK 1
 #define DOWN 2
 #define AIR 3
+#define ATTACK 4
 
 #define P1_X 150
 #define P2_X WIDTH - 150
