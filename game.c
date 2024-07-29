@@ -4,10 +4,10 @@
 
 uchar check_collision (character *p1, character *p2) {
 
-    if ((((p1->hurtbox->y + p1->hurtbox->height/2 - CONST_HHURT >= p2->hurtbox->y - p2->hurtbox->height/2 + CONST_HHURT) && (p2->hurtbox->y - p2->hurtbox->height/2 + CONST_HHURT >= p1->hurtbox->y - p1->hurtbox->height/2 + CONST_HHURT)) ||
-		 ((p2->hurtbox->y + p2->hurtbox->height/2 - CONST_HHURT >= p1->hurtbox->y - p1->hurtbox->height/2 + CONST_HHURT) && (p1->hurtbox->y - p1->hurtbox->height/2 + CONST_HHURT >= p2->hurtbox->y - p2->hurtbox->height/2 + CONST_HHURT))) &&
-		(((p1->hurtbox->x + p1->hurtbox->width/2 - CONST_WHURT >= p2->hurtbox->x - p2->hurtbox->width/2 + CONST_WHURT) && (p2->hurtbox->x - p2->hurtbox->width/2 + CONST_WHURT >= p1->hurtbox->x - p1->hurtbox->width/2 + CONST_WHURT)) || 	
-		 ((p2->hurtbox->x + p2->hurtbox->width/2 - CONST_WHURT >= p1->hurtbox->x - p1->hurtbox->width/2 + CONST_WHURT) && (p1->hurtbox->x - p1->hurtbox->width/2 + CONST_WHURT >= p2->hurtbox->x - p2->hurtbox->width/2 + CONST_WHURT)))) {
+    if ((((p1->hurtbox->y + p1->hurtbox->height/2 >= p2->hurtbox->y - p2->hurtbox->height/2) && (p2->hurtbox->y - p2->hurtbox->height/2 >= p1->hurtbox->y - p1->hurtbox->height/2)) ||
+		 ((p2->hurtbox->y + p2->hurtbox->height/2 >= p1->hurtbox->y - p1->hurtbox->height/2) && (p1->hurtbox->y - p1->hurtbox->height/2 >= p2->hurtbox->y - p2->hurtbox->height/2))) &&
+		(((p1->hurtbox->x + p1->hurtbox->width/2 >= p2->hurtbox->x - p2->hurtbox->width/2) && (p2->hurtbox->x - p2->hurtbox->width/2 >= p1->hurtbox->x - p1->hurtbox->width/2)) || 	
+		 ((p2->hurtbox->x + p2->hurtbox->width/2 >= p1->hurtbox->x - p1->hurtbox->width/2) && (p1->hurtbox->x - p1->hurtbox->width/2 >= p2->hurtbox->x - p2->hurtbox->width/2)))) {
         return 1;
     }
 
