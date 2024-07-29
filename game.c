@@ -63,14 +63,6 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
         }
     }
     
-    if (event.keyboard.keycode == ALLEGRO_KEY_R) {
-        if (player1->state == IDLE) {
-            player1->state = ATTACK;
-            player1->current_frame = LIGHT0;
-            player1->frame_delay = LIGHT_DELAY;
-        } 
-    }
-
     if (event.keyboard.keycode == ALLEGRO_KEY_UP) {
         joystick_up(player2->control);
         if ((event.type == ALLEGRO_EVENT_KEY_DOWN) && (player2->state != DOWN) && (player2->state != AIR) && (player2->state != ATTACK)) {
@@ -101,13 +93,6 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
             player2->current_frame = DOWN0;
             characterDown(player2);
         }
-    }
-    if (event.keyboard.keycode == ALLEGRO_KEY_PAD_4) {
-        if (player2->state == IDLE) {
-            player2->state = ATTACK;
-            player2->current_frame = LIGHT0;
-            player2->frame_delay = LIGHT_DELAY;
-        } 
     }
 };
 
@@ -155,7 +140,7 @@ void update_position(character *player1, character *player2) {
             player1->current_frame = DOWN0;
         }
     }
-    /* Adicionar para o player 2. */
+
     if ((player1->state != DOWN) && (player1->state != ATTACK)) {
         if (player1->control->left) {
             characterMove(player1, 1, LEFT, WIDTH, MAX_Y);
@@ -232,6 +217,42 @@ void update_position(character *player1, character *player2) {
 
     invertDirections(player1, player2);
     invertDirections(player2, player1);
+};
+
+void charactersAttack(ALLEGRO_EVENT event, character *player1, character *player2) {
+    if (event.keyboard.keycode == ALLEGRO_KEY_R) {
+        if (player1->state == IDLE) {
+            player1->state = ATTACK;
+            player1->current_frame = LIGHT0;
+            player1->frame_delay = LIGHT_DELAY;
+        } 
+    }
+    if (event.keyboard.keycode == ALLEGRO_KEY_PAD_4) {
+        if (player2->state == IDLE) {
+            player2->state = ATTACK;
+            player2->current_frame = LIGHT0;
+            player2->frame_delay = LIGHT_DELAY;
+        } 
+    }
+};
+
+void checkAttack(character *player1, character *player2) {
+    if (player1->state == ATTACK) {
+        if (((player1->current_frame == LIGHT2) || (player1->current_frame == LIGHT3)) && check_hit(player1, player2)) {
+            if (!(player1->hit)) {
+                player1->hit = true;
+                player2->hp -= 10;
+            }
+        }
+    }
+    if (player2->state == ATTACK) {
+        if (((player2->current_frame == LIGHT2) || (player2->current_frame == LIGHT3)) && check_hit(player2, player1)) {
+            if (!(player2->hit)) {
+                player2->hit = true;
+                player1->hp -= 10;
+            }
+        }
+    }
 };
 
 int check_game(character *player1, character *player2) {

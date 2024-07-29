@@ -21,6 +21,7 @@
 #define CONST_WHURT 15
 #define CONST_HHURT 20
 #define START_HITBOX 10
+#define LIGHT_HITBOX 30
 #define HP 100
 #define FRAME_DELAY 5
 #define AIR_DELAY 9
@@ -84,6 +85,7 @@ typedef struct character{
     float y;
     float air_speed;
     short dir;
+    bool hit;
     int state;
     int frame_delay;
     int frame_counter;
@@ -105,6 +107,7 @@ void characterMove(character *chara, float steps, ushort trajectory, ushort max_
 void characterFlush (character *p1, character *p2, ushort max_x, ushort max_y);
 void updateAnimation(character *chara);
 void invertDirections(character *p1, character *p2);
+void changeHitbox(character *player);
 void deleteSprites(character *chara);
 void destroyRectangle(rectangle *rect);
 void destroyCharacter(character *chara);

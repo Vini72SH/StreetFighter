@@ -114,6 +114,7 @@ character *createCharacter(ushort x, ushort y, ushort max_x, ushort max_y, short
     newCharacter->y = y;
     newCharacter->air_speed = 0;
     newCharacter->dir = dir;
+    newCharacter->hit = false;
     newCharacter->state = IDLE;
     newCharacter->current_frame = IDLE0;
     newCharacter->frame_delay = FRAME_DELAY;
@@ -297,18 +298,23 @@ void updateAnimation(character *chara) {
             switch (chara->current_frame) {
             case LIGHT0:
                 chara->current_frame = LIGHT1;
+                changeHitbox(chara);
                 break;
             case LIGHT1:
                 chara->current_frame = LIGHT2;
+                changeHitbox(chara);
                 break;
             case LIGHT2:
                 chara->current_frame = LIGHT3;
+                changeHitbox(chara);
                 break;
             case LIGHT3:
                 chara->current_frame = LIGHT4;
+                changeHitbox(chara);
                 break;
             case LIGHT4:
                 chara->current_frame = LIGHT5;
+                changeHitbox(chara);
                 break;
             case LIGHT5:
                 chara->current_frame = IDLE0;
@@ -328,6 +334,65 @@ void invertDirections(character *p1, character *p2) {
             p1->dir = LEFT_DIR;
         }else{
             p1->dir = RIGHT_DIR;
+        }
+    }
+};
+
+void changeHitbox(character *player) {
+    if (player->id == ID_RYU) {
+        if ((player->current_frame == LIGHT1) || (player->current_frame == LIGHT4)) {
+            player->hit = false;
+            player->hitbox->x = player->x;
+            player->hitbox->y = player->y - al_get_bitmap_height(player->sprites[player->current_frame])/3.5;
+            player->hitbox->width = START_HITBOX;
+            player->hitbox->height = START_HITBOX;
+        }
+        if ((player->current_frame == LIGHT2) || (player->current_frame == LIGHT3)) {
+            player->hitbox->width = LIGHT_HITBOX;
+            player->hitbox->height = LIGHT_HITBOX;
+            player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.5) + (1 - player->dir % 2) * 25;
+        }
+    }
+    if (player->id == ID_KEN) {
+        if ((player->current_frame == LIGHT1) || (player->current_frame == LIGHT4)) {
+            player->hit = false;
+            player->hitbox->x = player->x;
+            player->hitbox->y = player->y - al_get_bitmap_height(player->sprites[player->current_frame])/3.7;
+            player->hitbox->width = START_HITBOX;
+            player->hitbox->height = START_HITBOX;
+        }
+        if ((player->current_frame == LIGHT2) || (player->current_frame == LIGHT3)) {
+            player->hitbox->width = LIGHT_HITBOX;
+            player->hitbox->height = LIGHT_HITBOX;
+            player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.5) + (1 - player->dir % 2) * 25;
+        }
+    }
+    if (player->id == ID_SAGAT) {
+        if ((player->current_frame == LIGHT1) || (player->current_frame == LIGHT4)) {
+            player->hit = false;
+            player->hitbox->x = player->x;
+            player->hitbox->y = player->y - al_get_bitmap_height(player->sprites[player->current_frame])/3.7;
+            player->hitbox->width = START_HITBOX;
+            player->hitbox->height = START_HITBOX;
+        }
+        if ((player->current_frame == LIGHT2) || (player->current_frame == LIGHT3)) {
+            player->hitbox->width = LIGHT_HITBOX;
+            player->hitbox->height = LIGHT_HITBOX;
+            player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.5) + (1 - player->dir % 2) * 35;
+        }
+    }
+    if (player->id == ID_CHUNLI) {
+        if ((player->current_frame == LIGHT1) || (player->current_frame == LIGHT4)) {
+            player->hit = false;
+            player->hitbox->x = player->x;
+            player->hitbox->y = player->y - al_get_bitmap_height(player->sprites[player->current_frame])/4.6;
+            player->hitbox->width = START_HITBOX;
+            player->hitbox->height = START_HITBOX;
+        }
+        if ((player->current_frame == LIGHT2) || (player->current_frame == LIGHT3)) {
+            player->hitbox->width = LIGHT_HITBOX;
+            player->hitbox->height = LIGHT_HITBOX;
+            player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.45) + (1 - player->dir % 2) * 40;
         }
     }
 };
