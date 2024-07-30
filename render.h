@@ -15,6 +15,7 @@
 #define IMAGES 14
 #define WIDTH 1320
 #define HEIGHT 680
+#define MAX_Y 620
 #define FRAMERATE 30
 
 #define START 0
@@ -23,6 +24,7 @@
 #define GAME 3
 #define ENDGAME 4
 
+#define COLOR_BLACK al_map_rgb(0, 0, 0)
 #define COLOR_RED al_map_rgb(255, 0, 0)
 #define COLOR_BLUE al_map_rgb(0, 0, 255)
 #define COLOR_GREEN al_map_rgb(0, 255, 0)
@@ -67,6 +69,8 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, 
 void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int round, bool change);
 void drawLifebars(Screen_Render *render, character *p1, character *p2);
 void drawRound(Screen_Render *render, int round);
+void countRound(Screen_Render *render, bool *change, int *cont, int round);
+void endRound(Screen_Render *render, int *winP1, int *winP2, character *player1, character *player2, bool *change, int *round, int *cont);
 void deleteFigure(Figure *figure);
 void endGame(Screen_Render *screen);
 

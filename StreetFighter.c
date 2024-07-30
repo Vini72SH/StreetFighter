@@ -18,8 +18,11 @@ int main () {
     render = startGame();
 
     int i = 0;
+    int winP1 = 0;
+    int winP2 = 0;
+    int cont = 0;
     int round = 1;
-    bool charge = false;
+    bool change = false;
     bool game = true;
     bool load = false;
     character *player1 = NULL;
@@ -67,7 +70,9 @@ int main () {
                         player1 = createCharacter(P1_X, START_Y, WIDTH, MAX_Y, selectionP1->op, RIGHT_DIR);
                         player2 = createCharacter(P2_X, START_Y, WIDTH, MAX_Y, selectionP2->op, LEFT_DIR);
                         load = false;
-                        charge = true;
+                        change = true;
+                        cont = 0;
+                        round = 1;
                     }
                     break;
                 
@@ -121,7 +126,9 @@ int main () {
                     updateAnimation(player2);
                     update_position(player1, player2);
                     checkAttack(player1, player2);
-                    drawGame(render, player1, player2, &i, round, charge);
+                    drawGame(render, player1, player2, &i, round, change);
+                    countRound(render, &change, &cont, round);
+                    if (!(check_game(player1, player2))) endRound(render, &winP1, &winP2, player1, player2, &change, &round, &cont); 
                     break;
                 case ENDGAME:
                     al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgb(0,0,0));

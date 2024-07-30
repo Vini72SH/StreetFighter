@@ -47,6 +47,10 @@ int attackOffset(character *player) {
     return 0;
 }
 
+void drawRound(Screen_Render *render, int round) {
+    al_draw_textf(render->font3, COLOR_WHITE, WIDTH/2 - 70, HEIGHT/2, 0, "ROUND %d", round);
+};
+
 Screen_Render *startGame() {
     Screen_Render *newScreen;
 
@@ -465,7 +469,6 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, 
             fade_in(render->display, render->background[*i], 0.05);
             render->currentBackground = *i;
             *load = true;
-            al_flush_event_queue(render->queue);
         }
     }
 };
@@ -512,6 +515,7 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int r
         }
         drawLifebars(render, p1, p2);
     }
+    if (!(change)) al_draw_textf(render->font3, COLOR_WHITE, WIDTH/2 - 70, 50, 0, "ROUND %d", round);
     //al_draw_filled_rectangle(p2->hitbox->x - p2->hitbox->width/2, p2->hitbox->y - p2->hitbox->height/2, p2->hitbox->x + p2->hitbox->width/2, p2->hitbox->y + p2->hitbox->height/2, COLOR_RED);
     //al_draw_filled_rectangle(p1->hitbox->x - p1->hitbox->width/2, p1->hitbox->y - p1->hitbox->height/2, p1->hitbox->x + p1->hitbox->width/2, p1->hitbox->y + p1->hitbox->height/2, COLOR_BLUE);
 };
@@ -554,8 +558,108 @@ void drawLifebars(Screen_Render *render, character *p1, character *p2){
     }
 };
 
-void drawRound(Screen_Render *render, int round) {
-    al_draw_textf(render->font3, COLOR_WHITE, WIDTH/2 - 70, HEIGHT/2, 0, "ROUND %d", round);
+void countRound(Screen_Render *render, bool *change, int *cont, int round) {
+    if (*change) {
+        if (*cont == 30) {
+            (*change) = false;
+        }
+        if (*cont % 10 <= 6) {
+            drawRound(render, round);
+        }
+        (*cont)++;
+    };
+};
+
+void endRound(Screen_Render *render, int *winP1, int *winP2, character *player1, character *player2, bool *change, int *round, int *cont) {
+    short x1, y1;
+    short x2, y2;
+    x1 = player1->char_render->x - player2->char_render->width/2;
+    y1 = player1->char_render->y - player2->char_render->height/2;
+    x2 = player2->char_render->x - player2->char_render->width/2;
+    y2 = player2->char_render->y - player2->char_render->height/2;
+
+    if (player1->state == ATTACK) {
+        x1 -= player1->dir * attackOffset(player1);
+    }
+    if (player2->state == ATTACK) {
+        x2 -= player2->dir * attackOffset(player2);
+    }
+
+    if (player1->hp <= 0) {
+        (*winP2)++;
+    }
+    if (player2->hp <= 0) {
+        (*winP1)++;
+    }
+
+    for (float alpha = 1.0; alpha >= 0.0; alpha -= 0.05) {
+        al_draw_scaled_bitmap(render->background[render->currentBackground], 0, 0,
+                                al_get_bitmap_width(render->background[render->currentBackground]),
+                                al_get_bitmap_height(render->background[render->currentBackground]),
+                                0, 0, WIDTH, HEIGHT, 0);
+        if ((player2->state == ATTACK) && (player1->state != ATTACK)) {
+            al_draw_scaled_bitmap(player1->sprites[player1->current_frame], 0, 0, 
+                                al_get_bitmap_width(player1->sprites[player1->current_frame]), 
+                                al_get_bitmap_height(player1->sprites[player1->current_frame]), x1, y1, 
+                                al_get_bitmap_width(player1->sprites[player1->current_frame]), al_get_bitmap_height(player1->sprites[player1->current_frame]), player1->dir);
+            al_draw_scaled_bitmap(player2->sprites[player2->current_frame], 0, 0, 
+                                al_get_bitmap_width(player2->sprites[player2->current_frame]), 
+                                al_get_bitmap_height(player2->sprites[player2->current_frame]), x2, y2, 
+                                al_get_bitmap_width(player2->sprites[player2->current_frame]), al_get_bitmap_height(player2->sprites[player2->current_frame]), player2->dir);
+        } else {
+            al_draw_scaled_bitmap(player2->sprites[player2->current_frame], 0, 0, 
+                                al_get_bitmap_width(player2->sprites[player2->current_frame]), 
+                                al_get_bitmap_height(player2->sprites[player2->current_frame]), x2, y2, 
+                                al_get_bitmap_width(player2->sprites[player2->current_frame]), al_get_bitmap_height(player2->sprites[player2->current_frame]), player2->dir);
+            al_draw_scaled_bitmap(player1->sprites[player1->current_frame], 0, 0, 
+                                al_get_bitmap_width(player1->sprites[player1->current_frame]), 
+                                al_get_bitmap_height(player1->sprites[player1->current_frame]), x1, y1, 
+                                al_get_bitmap_width(player1->sprites[player1->current_frame]), al_get_bitmap_height(player1->sprites[player1->current_frame]), player1->dir);
+        }
+        drawLifebars(render, player1, player2);
+        al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba_f(0, 0, 0, 1 - alpha));
+        al_flip_display();
+        al_rest(0.001); 
+    }
+
+    if (((*winP1) == 2) || ((*winP2) == 2)) {
+        render->gameMode = ENDGAME;
+        return;
+    }
+
+    (*round)++;
+    (*cont) = 0;
+    (*change) = true;
+    characterRestart(player1, 1);
+    characterRestart(player2, 2);
+    x1 = player1->char_render->x - player2->char_render->width/2;
+    y1 = player1->char_render->y - player2->char_render->height/2;
+    x2 = player2->char_render->x - player2->char_render->width/2;
+    y2 = player2->char_render->y - player2->char_render->height/2;
+
+    al_flush_event_queue(render->queue);
+    al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba_f(0, 0, 0, 1));
+    al_flip_display();
+    al_rest(0.01); 
+
+    for (float alpha = 0.0; alpha <= 1.0; alpha += 0.05) {
+        al_draw_scaled_bitmap(render->background[render->currentBackground], 0, 0, 
+                              al_get_bitmap_width(render->background[render->currentBackground]),
+                              al_get_bitmap_height(render->background[render->currentBackground]),
+                              0, 0, WIDTH, HEIGHT, 0);
+        al_draw_scaled_bitmap(player2->sprites[player2->current_frame], 0, 0, 
+                            al_get_bitmap_width(player2->sprites[player2->current_frame]), 
+                            al_get_bitmap_height(player2->sprites[player2->current_frame]), x2, y2, 
+                            al_get_bitmap_width(player2->sprites[player2->current_frame]), al_get_bitmap_height(player2->sprites[player2->current_frame]), player2->dir);
+        al_draw_scaled_bitmap(player1->sprites[player1->current_frame], 0, 0, 
+                            al_get_bitmap_width(player1->sprites[player1->current_frame]), 
+                            al_get_bitmap_height(player1->sprites[player1->current_frame]), x1, y1, 
+                            al_get_bitmap_width(player1->sprites[player1->current_frame]), al_get_bitmap_height(player1->sprites[player1->current_frame]), player1->dir);
+        drawLifebars(render, player1, player2);
+        al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba_f(0, 0, 0, 1 - alpha));
+        al_flip_display();
+        al_rest(0.001); 
+    }
 };
 
 void deleteFigure(Figure *figure) {

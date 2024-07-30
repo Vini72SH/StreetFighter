@@ -118,6 +118,7 @@ void updateAnimation(character *chara);
 void invertDirections(character *p1, character *p2);
 void changeHitbox(character *player);
 void resetChar(character *player);
+void characterRestart(character *player, int pl);
 void deleteSprites(character *chara);
 void destroyRectangle(rectangle *rect);
 void destroyCharacter(character *chara);
