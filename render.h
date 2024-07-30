@@ -71,6 +71,8 @@ void drawLifebars(Screen_Render *render, character *p1, character *p2);
 void drawRound(Screen_Render *render, int round);
 void countRound(Screen_Render *render, bool *change, int *cont, int round);
 void endRound(Screen_Render *render, int *winP1, int *winP2, character *player1, character *player2, bool *change, int *round, int *cont);
+void drawEndScreen(Screen_Render *render, int winP1, int winP2, int op);
+void endScreen(Screen_Render *render, ALLEGRO_EVENT event, int *op);
 void deleteFigure(Figure *figure);
 void endGame(Screen_Render *screen);
 

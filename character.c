@@ -332,6 +332,23 @@ void updateAnimation(character *chara) {
                 chara->state = IDLE;
                 chara->frame_delay = FRAME_DELAY;
                 break;
+            case SLIGHT0:
+                chara->current_frame = SLIGHT1;
+                changeHitbox(chara);
+                break;
+            case SLIGHT1:
+                chara->current_frame = SLIGHT2;
+                changeHitbox(chara);
+                break;
+            case SLIGHT2:
+                chara->current_frame = SLIGHT3;
+                changeHitbox(chara);
+                break;
+            case SLIGHT3:
+                chara->current_frame = IDLE0;
+                chara->state = IDLE;
+                chara->frame_delay = FRAME_DELAY;
+                break;
             default:
                 break;
             }
@@ -359,7 +376,7 @@ void invertDirections(character *p1, character *p2) {
 /* Altera a Hitbox baseado no ataque. */
 void changeHitbox(character *player) {
     if (player->id == ID_RYU) {
-        if ((player->current_frame == LIGHT1) || (player->current_frame == LIGHT4)) {
+        if ((player->current_frame == LIGHT1) || (player->current_frame == LIGHT4) || (player->current_frame == SLIGHT0) || (player->current_frame == SLIGHT3)) {
             player->hit = false;
             player->hitbox->x = player->x;
             player->hitbox->y = player->y - al_get_bitmap_height(player->sprites[player->current_frame])/3.5;
@@ -371,9 +388,15 @@ void changeHitbox(character *player) {
             player->hitbox->height = LIGHT_HITBOX;
             player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.5) + (1 - player->dir % 2) * 25;
         }
+        if ((player->current_frame == SLIGHT1) || (player->current_frame == SLIGHT2)) {
+            player->hitbox->width = LIGHT_HITBOX;
+            player->hitbox->height = LIGHT_HITBOX;
+            player->hitbox->y = player->y - al_get_bitmap_height(player->sprites[player->current_frame])/3.5;
+            player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.65) + (1 - player->dir % 2) * 1;
+        }
     }
     if (player->id == ID_KEN) {
-        if ((player->current_frame == LIGHT1) || (player->current_frame == LIGHT4)) {
+        if ((player->current_frame == LIGHT1) || (player->current_frame == LIGHT4) || (player->current_frame == SLIGHT0) || (player->current_frame == SLIGHT3)) {
             player->hit = false;
             player->hitbox->x = player->x;
             player->hitbox->y = player->y - al_get_bitmap_height(player->sprites[player->current_frame])/3.7;
@@ -385,9 +408,15 @@ void changeHitbox(character *player) {
             player->hitbox->height = LIGHT_HITBOX;
             player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.5) + (1 - player->dir % 2) * 25;
         }
+        if ((player->current_frame == SLIGHT1) || (player->current_frame == SLIGHT2)) {
+            player->hitbox->width = LIGHT_HITBOX;
+            player->hitbox->height = LIGHT_HITBOX;
+            player->hitbox->y = player->y - al_get_bitmap_height(player->sprites[player->current_frame])/3.5;
+            player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.65) + (1 - player->dir % 2) * 1;
+        }
     }
     if (player->id == ID_SAGAT) {
-        if ((player->current_frame == LIGHT1) || (player->current_frame == LIGHT4)) {
+        if ((player->current_frame == LIGHT1) || (player->current_frame == LIGHT4) || (player->current_frame == SLIGHT0) || (player->current_frame == SLIGHT3)) {
             player->hit = false;
             player->hitbox->x = player->x;
             player->hitbox->y = player->y - al_get_bitmap_height(player->sprites[player->current_frame])/3.7;
@@ -399,9 +428,15 @@ void changeHitbox(character *player) {
             player->hitbox->height = LIGHT_HITBOX;
             player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.5) + (1 - player->dir % 2) * 35;
         }
+        if ((player->current_frame == SLIGHT1) || (player->current_frame == SLIGHT2)) {
+            player->hitbox->width = LIGHT_HITBOX;
+            player->hitbox->height = LIGHT_HITBOX;
+            player->hitbox->y = player->y - al_get_bitmap_height(player->sprites[player->current_frame])/3.5;
+            player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.65) + (1 - player->dir % 2) * 1;
+        }
     }
     if (player->id == ID_CHUNLI) {
-        if ((player->current_frame == LIGHT1) || (player->current_frame == LIGHT4)) {
+        if ((player->current_frame == LIGHT1) || (player->current_frame == LIGHT4) || (player->current_frame == SLIGHT0) || (player->current_frame == SLIGHT3)) {
             player->hit = false;
             player->hitbox->x = player->x;
             player->hitbox->y = player->y - al_get_bitmap_height(player->sprites[player->current_frame])/4.6;
@@ -412,6 +447,12 @@ void changeHitbox(character *player) {
             player->hitbox->width = LIGHT_HITBOX;
             player->hitbox->height = LIGHT_HITBOX;
             player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.45) + (1 - player->dir % 2) * 40;
+        }
+        if ((player->current_frame == SLIGHT1) || (player->current_frame == SLIGHT2)) {
+            player->hitbox->width = LIGHT_HITBOX;
+            player->hitbox->height = LIGHT_HITBOX;
+            player->hitbox->y = player->y - al_get_bitmap_height(player->sprites[player->current_frame])/3.5;
+            player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.65) + (1 - player->dir % 2) * 1;
         }
     }
 };
@@ -427,7 +468,6 @@ void resetChar(character *player) {
 };
 
 void characterRestart(character *chara, int pl) {
-    chara->hp = HP;
     chara->block = false;
     chara->air_speed = 0;
     chara->current_frame = IDLE0;
@@ -447,6 +487,10 @@ void characterRestart(character *chara, int pl) {
     chara->char_render->width = CHAR_WIDTH;
     chara->char_render->height = CHAR_HEIGHT;
     chara->dir = (pl == 1)? RIGHT_DIR : LEFT_DIR;
+    chara->control->up = 0;
+    chara->control->left = 0;
+    chara->control->right = 0;
+    chara->control->down = 0;
 };
 
 /* Funções de liberação de memória. */

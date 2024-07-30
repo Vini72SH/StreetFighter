@@ -18,6 +18,7 @@ int main () {
     render = startGame();
 
     int i = 0;
+    int op = 0;
     int winP1 = 0;
     int winP2 = 0;
     int cont = 0;
@@ -96,9 +97,37 @@ int main () {
                         selectionM->op = 0;
                         render->currentBackground = i;
                     }
+                    if (event.keyboard.keycode == ALLEGRO_KEY_LSHIFT) {
+                        characterRestart(player1, 1);
+                    }
+                    if (event.keyboard.keycode == ALLEGRO_KEY_NUMLOCK) {
+                        characterRestart(player2, 2);
+                    }
                     charactersMovement(event, player1, player2);
                     charactersAttack(event, player1, player2);
                     break;
+                case ENDGAME:
+                    endScreen(render, event, &op);
+                    if (op == 2) {
+                        op = 0;
+                        render->gameMode = START;
+                        destroyCharacter(player1);
+                        destroyCharacter(player2);
+                        player1 = NULL;
+                        player2 = NULL;
+                        selectionP1->itOk = false;
+                        selectionP2->itOk = false;
+                        selectionM->itOk = false;
+                        selectionM->op = 0;
+                        selectionM->dx = 362;
+                        selectionM->dy = 405;
+                        winP1 = 0;
+                        winP2 = 0;
+                        i = 0;
+                        render->currentBackground = i;
+                    } if (op == 3) {
+                        game = false;
+                    }
                 default:
                     break;
             }
@@ -131,7 +160,7 @@ int main () {
                     if (!(check_game(player1, player2))) endRound(render, &winP1, &winP2, player1, player2, &change, &round, &cont); 
                     break;
                 case ENDGAME:
-                    al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgb(0,0,0));
+                    drawEndScreen(render, winP1, winP2, op);
                     break;
                 default:
                     break;

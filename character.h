@@ -9,7 +9,7 @@
 
 #define WIDTH 1320
 #define HEIGHT 680
-#define NUM_SPRITES 26
+#define NUM_SPRITES 30
 #define ID_RYU 0
 #define ID_KEN 1
 #define ID_SAGAT 2
@@ -27,7 +27,7 @@
 #define AIR_DELAY 9
 #define WALK_DELAY 2
 #define LIGHT_DELAY 3
-#define HURT_DELAY 10
+#define HURT_DELAY 8
 #define SPEED 15
 #define JUMP_CONST 1.8
 #define JUMP_SPEED 20
@@ -66,15 +66,19 @@ typedef enum{
     JUMP2,
     JUMP3,
     JUMP4,
+    STANDHURT0,
+    STANDBLOCK,
+    DOWNBLOCK,
     LIGHT0,
     LIGHT1,
     LIGHT2,
     LIGHT3,
     LIGHT4,
     LIGHT5,
-    STANDHURT0,
-    STANDBLOCK,
-    DOWNBLOCK,
+    SLIGHT0,
+    SLIGHT1,
+    SLIGHT2,
+    SLIGHT3,
 }CharacterFrame;
 
 typedef struct rectangle{

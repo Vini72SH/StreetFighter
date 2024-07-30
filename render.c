@@ -45,6 +45,9 @@ int attackOffset(character *player) {
             return (al_get_bitmap_width(player->sprites[player->current_frame]) / 3);
         }
     }
+    if ((player->current_frame == SLIGHT1) || (player->current_frame == SLIGHT2)) {
+        return (al_get_bitmap_width(player->sprites[player->current_frame]) / 2.5);
+    }
 
     return 0;
 }
@@ -169,7 +172,7 @@ void drawStart(Screen_Render *render, Figure *arrow) {
                             0, 0, al_get_bitmap_width(render->background[0]),
                             al_get_bitmap_height(render->background[0]),
                             0, 0, WIDTH, HEIGHT, 0);
-    al_draw_text(render->font2, COLOR_WHITE, 0, HEIGHT - 100, 0, "PRESS Z TO SELECT");
+    al_draw_text(render->font2, COLOR_WHITE, 0, HEIGHT - 100, 0, "PRESS ENTER TO SELECT");
     al_draw_text(render->font2, COLOR_WHITE, 0, HEIGHT - 50, 0, "PRESS ESC TO EXIT");
     
     /* Update text according to selection */
@@ -201,32 +204,32 @@ void drawStart(Screen_Render *render, Figure *arrow) {
 
 void startScreen(Screen_Render *render, Figure *arrow, ALLEGRO_EVENT event, int *i) {
     /* Arrow Controls */
-    if (event.keyboard.keycode == ALLEGRO_KEY_W) 
+    if (event.keyboard.keycode == ALLEGRO_KEY_UP) 
         if (arrow->op > 0) {
                 arrow->op--;
                 arrow->dy -= 50;
             }
 
-    if (event.keyboard.keycode == ALLEGRO_KEY_S)
+    if (event.keyboard.keycode == ALLEGRO_KEY_DOWN)
         if (arrow->op < arrow->max_op) {
                 arrow->op++;
                 arrow->dy += 50;
             }
 
     /* Update the screen */
-    if (event.keyboard.keycode == ALLEGRO_KEY_Z) {
+    if (event.keyboard.keycode == ALLEGRO_KEY_ENTER) {
         render->gameMode = SELECTION;
         if (arrow->op == 0) {
             fade_out(render->display, render->background[0],
-                    0.02);
+                    0.05);
             fade_in(render->display, render->background[1], 
-                    0.02);   
+                    0.05);   
             *i = 1;
         } else if (arrow->op == 1) {
             fade_out(render->display, render->background[0],
-                    0.02);
+                    0.05);
             fade_in(render->display, render->background[2], 
-                    0.02);
+                    0.05);
             *i = 2;
         }
         render->currentBackground = *i;
@@ -260,7 +263,7 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, in
         /* Check to continue */
         if (s1->itOk) {
             al_draw_text(render->font2, COLOR_RED, WIDTH - 1200, HEIGHT - 450, 0, "PLAYER 1 SELECTED");
-            al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 17*8, HEIGHT - 320, 0, "PRESS Z TO START");
+            al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 17*8, HEIGHT - 320, 0, "PRESS ENTER TO START");
         }
 
     } else if (render->currentBackground == 2) {
@@ -309,7 +312,7 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, in
 
         /* Check to continue */
         if ((s1->itOk) && (s2->itOk))
-            al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 17*8, HEIGHT/2, 0, "PRESS Z TO START");
+            al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 17*10, HEIGHT/2, 0, "PRESS ENTER TO START");
         
     } else if (render->currentBackground == 3) {
         al_draw_scaled_bitmap(render->background[3],
@@ -351,9 +354,9 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, 
     if (render->currentBackground == 1) {
         /* Update the Screen */
         if (s1->itOk) {
-            if (event.keyboard.keycode == ALLEGRO_KEY_Z) {
-                fade_out(render->display, render->background[1], 0.02);
-                fade_in(render->display, render->background[3], 0.02);
+            if (event.keyboard.keycode == ALLEGRO_KEY_ENTER) {
+                fade_out(render->display, render->background[1], 0.05);
+                fade_in(render->display, render->background[3], 0.05);
                 *i = 3;
                 render->currentBackground = 3;
                 al_flush_event_queue(render->queue);
@@ -373,17 +376,17 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, 
                 s1->op--;
             }
         }
-        if (event.keyboard.keycode == ALLEGRO_KEY_Z)
+        if (event.keyboard.keycode == ALLEGRO_KEY_T)
             s1->itOk = true;
-        if (event.keyboard.keycode == ALLEGRO_KEY_X)
+        if (event.keyboard.keycode == ALLEGRO_KEY_R)
             s1->itOk = false;
 
     } else if (render->currentBackground == 2) {
         /* Update the Screen */
         if ((s1->itOk) && (s2->itOk)) {
-            if (event.keyboard.keycode == ALLEGRO_KEY_Z) {
-                fade_out(render->display, render->background[2], 0.02);
-                fade_in(render->display, render->background[3], 0.02);
+            if (event.keyboard.keycode == ALLEGRO_KEY_ENTER) {
+                fade_out(render->display, render->background[2], 0.05);
+                fade_in(render->display, render->background[3], 0.05);
                 *i = 3;
                 render->currentBackground = 3;
                 al_flush_event_queue(render->queue);
@@ -416,13 +419,13 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, 
                 s2->op--;
             }
         }
-        if (event.keyboard.keycode == ALLEGRO_KEY_Z)
+        if (event.keyboard.keycode == ALLEGRO_KEY_T)
             s1->itOk = true;
-        if (event.keyboard.keycode == ALLEGRO_KEY_X)
+        if (event.keyboard.keycode == ALLEGRO_KEY_R)
             s1->itOk = false;
-        if (event.keyboard.keycode == ALLEGRO_KEY_PAD_1)
+        if (event.keyboard.keycode == ALLEGRO_KEY_PAD_5)
             s2->itOk = true;
-        if (event.keyboard.keycode == ALLEGRO_KEY_PAD_2)
+        if (event.keyboard.keycode == ALLEGRO_KEY_PAD_4)
             s2->itOk = false;
 
     } else if (render->currentBackground == 3) {
@@ -451,7 +454,7 @@ void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, 
             }
         }
 
-        if (event.keyboard.keycode == ALLEGRO_KEY_Z) {
+        if (event.keyboard.keycode == ALLEGRO_KEY_ENTER) {
             s3->itOk = true;
             render->gameMode = GAME;
             *i = s3->op + 4;
@@ -480,8 +483,8 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int r
                             0, 0, al_get_bitmap_width(render->background[*i]),
                             al_get_bitmap_height(render->background[*i]),
                             0, 0, WIDTH, HEIGHT, 0);
-    //al_draw_filled_rectangle(p2->hurtbox->x - p2->hurtbox->width/2, p2->hurtbox->y - p2->hurtbox->height/2, p2->hurtbox->x + p2->hurtbox->width/2, p2->hurtbox->y + p2->hurtbox->height/2, COLOR_BLUE);
-    //al_draw_filled_rectangle(p1->hurtbox->x - p1->hurtbox->width/2, p1->hurtbox->y - p1->hurtbox->height/2, p1->hurtbox->x + p1->hurtbox->width/2, p1->hurtbox->y + p1->hurtbox->height/2, COLOR_RED);
+    al_draw_filled_rectangle(p2->hurtbox->x - p2->hurtbox->width/2, p2->hurtbox->y - p2->hurtbox->height/2, p2->hurtbox->x + p2->hurtbox->width/2, p2->hurtbox->y + p2->hurtbox->height/2, COLOR_BLUE);
+    al_draw_filled_rectangle(p1->hurtbox->x - p1->hurtbox->width/2, p1->hurtbox->y - p1->hurtbox->height/2, p1->hurtbox->x + p1->hurtbox->width/2, p1->hurtbox->y + p1->hurtbox->height/2, COLOR_RED);
     if ((p1 != NULL) && (p2 != NULL)) {
         short x1, y1;
         short x2, y2;
@@ -518,8 +521,8 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int r
         drawLifebars(render, p1, p2);
     }
     if (!(change)) al_draw_textf(render->font3, COLOR_WHITE, WIDTH/2 - 70, 50, 0, "ROUND %d", round);
-    //al_draw_filled_rectangle(p2->hitbox->x - p2->hitbox->width/2, p2->hitbox->y - p2->hitbox->height/2, p2->hitbox->x + p2->hitbox->width/2, p2->hitbox->y + p2->hitbox->height/2, COLOR_RED);
-    //al_draw_filled_rectangle(p1->hitbox->x - p1->hitbox->width/2, p1->hitbox->y - p1->hitbox->height/2, p1->hitbox->x + p1->hitbox->width/2, p1->hitbox->y + p1->hitbox->height/2, COLOR_BLUE);
+    al_draw_filled_rectangle(p2->hitbox->x - p2->hitbox->width/2, p2->hitbox->y - p2->hitbox->height/2, p2->hitbox->x + p2->hitbox->width/2, p2->hitbox->y + p2->hitbox->height/2, COLOR_RED);
+    al_draw_filled_rectangle(p1->hitbox->x - p1->hitbox->width/2, p1->hitbox->y - p1->hitbox->height/2, p1->hitbox->x + p1->hitbox->width/2, p1->hitbox->y + p1->hitbox->height/2, COLOR_BLUE);
 };
 
 void drawLifebars(Screen_Render *render, character *p1, character *p2){
@@ -632,6 +635,8 @@ void endRound(Screen_Render *render, int *winP1, int *winP2, character *player1,
     (*round)++;
     (*cont) = 0;
     (*change) = true;
+    player1->hp = HP;
+    player2->hp = HP;
     characterRestart(player1, 1);
     characterRestart(player2, 2);
     x1 = player1->char_render->x - player2->char_render->width/2;
@@ -664,6 +669,37 @@ void endRound(Screen_Render *render, int *winP1, int *winP2, character *player1,
     }
 };
 
+void drawEndScreen(Screen_Render *render, int winP1, int winP2, int op) {
+    al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgb(0,0,0));
+    if (winP1 > winP2) {
+        al_draw_text(render->font3, COLOR_WHITE, (float)WIDTH/2 - 170, (float)HEIGHT/2, 0, "PLAYER 1 WON!!!");
+    } else {
+        al_draw_text(render->font3, COLOR_WHITE, (float)WIDTH/2 - 170, (float)HEIGHT/2, 0, "PLAYER 2 WON!!!");
+    }
+
+    if (!(op)) {
+        al_draw_text(render->font3, COLOR_RED, (float)WIDTH/2 - 130, (float)HEIGHT/1.5, 0, "PLAY AGAIN");
+        al_draw_text(render->font3, COLOR_WHITE, (float)WIDTH/2 - 125, (float)HEIGHT/1.3, 0, "EXIT GAME");
+    } else {
+        al_draw_text(render->font3, COLOR_WHITE, (float)WIDTH/2 - 130, (float)HEIGHT/1.5, 0, "PLAY AGAIN");
+        al_draw_text(render->font3, COLOR_RED, (float)WIDTH/2 - 125, (float)HEIGHT/1.3, 0, "EXIT GAME");
+    }
+};
+
+void endScreen(Screen_Render *render, ALLEGRO_EVENT event, int *op) {
+    if (event.keyboard.keycode == ALLEGRO_KEY_UP) {
+        if ((*op) > 0) (*op)--;
+    }
+    if (event.keyboard.keycode == ALLEGRO_KEY_DOWN) {
+        if ((*op) < 1) (*op)++;
+    }
+
+    if (event.keyboard.keycode == ALLEGRO_KEY_ENTER) {
+        (*op) += 2;
+    }
+
+};
+
 void deleteFigure(Figure *figure) {
     al_destroy_bitmap(figure->image);
     
@@ -671,12 +707,6 @@ void deleteFigure(Figure *figure) {
 };
 
 void endGame(Screen_Render *screen) {
-    ALLEGRO_KEYBOARD_STATE infoKbd;
-
-    al_get_keyboard_state(&infoKbd);
-
-    if (al_key_down(&infoKbd, ALLEGRO_KEY_A)) joystick_left(joystick *control)
-
     if(!(screen)) return;
 
     for (int i = 0; i < IMAGES; ++i) {
