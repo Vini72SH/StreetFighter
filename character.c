@@ -1,12 +1,10 @@
 #include "character.h"
 
-void resetCounter(int *counter) {
-    (*counter) = 0;
-};
-
+/* Carrega os vetores de sprites. */
 ALLEGRO_BITMAP **loadSprites(short id){
     ALLEGRO_BITMAP **sprites;
 
+    /* Alocação de Memória. */
     sprites = malloc(NUM_SPRITES * sizeof(ALLEGRO_BITMAP *));
     if (!(sprites)) {
         fprintf(stderr, "Falha ao alocar memória para os bitmaps.\n");
@@ -86,6 +84,7 @@ ALLEGRO_BITMAP **loadSprites(short id){
     return NULL;
 };
 
+/* Cria e retorna um retângulo. */
 rectangle *createRectangle(float x, float y, ushort width, ushort height) {
     rectangle *newRec;
 
@@ -100,6 +99,7 @@ rectangle *createRectangle(float x, float y, ushort width, ushort height) {
     return newRec;
 };
 
+/* Cria o personagem dentro da área de jogo. */
 character *createCharacter(ushort x, ushort y, ushort max_x, ushort max_y, short op, short dir) {
     character *newCharacter;
     
@@ -116,9 +116,13 @@ character *createCharacter(ushort x, ushort y, ushort max_x, ushort max_y, short
     newCharacter->dir = dir;
     newCharacter->hit = false;
     newCharacter->state = IDLE;
+    newCharacter->block = 0;
     newCharacter->current_frame = IDLE0;
     newCharacter->frame_delay = FRAME_DELAY;
     newCharacter->frame_counter = 0;
+    newCharacter->previous_state = IDLE;
+    newCharacter->previous_frame = IDLE0;
+    newCharacter->previous_delay = FRAME_DELAY;
     newCharacter->hitbox = createRectangle(x, y, START_HITBOX, START_HITBOX);
     newCharacter->hurtbox = createRectangle(x, y, CHAR_WIDTH, CHAR_HEIGHT);
     newCharacter->char_render = createRectangle(x, y, CHAR_WIDTH, CHAR_HEIGHT);
@@ -128,9 +132,11 @@ character *createCharacter(ushort x, ushort y, ushort max_x, ushort max_y, short
     return newCharacter;
 };
 
+/* Levanta o personagem, redefinindo suas dimensões. */
 void characterUp(character *chara) {
     if (!(chara)) return;
 
+    /* Ajuste no Y. */
     if (chara->char_render->height != CHAR_HEIGHT) {
         chara->y = chara->y - (CHAR_HEIGHT/2 - CHAR_DOWN_HEIGHT/2);
         chara->hitbox->y = chara->y;
@@ -151,9 +157,11 @@ void characterUp(character *chara) {
     chara->char_render->y = chara->y;
 };
 
+/* Abaixa o personagem, redefinindo suas dimensões. */
 void characterDown(character *chara) {
     if (!(chara)) return;
 
+    /* Ajuste no Y. */
     if (chara->char_render->height != CHAR_DOWN_HEIGHT) {
         chara->y = chara->y + (CHAR_HEIGHT/2 - CHAR_DOWN_HEIGHT/2);
         chara->hitbox->y = chara->y;
@@ -167,6 +175,7 @@ void characterDown(character *chara) {
     chara->char_render->height = CHAR_DOWN_HEIGHT;
 };
 
+/* Movimentação do personagem. */
 void characterMove(character *chara, float steps, ushort trajectory, ushort max_x, ushort max_y) {
     if (trajectory == LEFT) {
         if ((chara->x - steps*SPEED) - chara->char_render->width/2 >= 0) {
@@ -203,6 +212,7 @@ void characterMove(character *chara, float steps, ushort trajectory, ushort max_
     }
 };
 
+/* Empurra o personagem para evitar colisões por cima. */
 void characterFlush(character *p1, character *p2, ushort max_x, ushort max_y) {
     if (p1->x <= p2->x) {
         characterMove(p1, 1.5, LEFT, max_x, max_y);
@@ -213,6 +223,7 @@ void characterFlush(character *p1, character *p2, ushort max_x, ushort max_y) {
     }
 };
 
+/* Atualiza a animação, indo para o próximo sprite. */
 void updateAnimation(character *chara) {
     bool change = false;
     chara->frame_counter++;
@@ -325,9 +336,16 @@ void updateAnimation(character *chara) {
                 break;
             }
         }
+        /* Retorno ao estado anterior. */
+        if (chara->state == HURT) {
+            chara->state = chara->previous_state;
+            chara->current_frame = chara->previous_frame;
+            chara->frame_delay = chara->previous_delay;
+        }
     }
 };
 
+/* Altera o sentido do personagem. */
 void invertDirections(character *p1, character *p2) { 
     if (p1->state != ATTACK) {
         if (p1->x > p2->x) {
@@ -338,6 +356,7 @@ void invertDirections(character *p1, character *p2) {
     }
 };
 
+/* Altera a Hitbox baseado no ataque. */
 void changeHitbox(character *player) {
     if (player->id == ID_RYU) {
         if ((player->current_frame == LIGHT1) || (player->current_frame == LIGHT4)) {
@@ -397,6 +416,17 @@ void changeHitbox(character *player) {
     }
 };
 
+/* Reseta os estados e propriedades do personagem. */
+void resetChar(character *player) {
+    player->frame_counter = 0;
+    player->hit = false;
+    player->hitbox->width = START_HITBOX;
+    player->hitbox->height = START_HITBOX;
+    player->hitbox->x = player->x;
+    player->hitbox->y = player->y;
+};
+
+/* Funções de liberação de memória. */
 void deleteSprites(character *chara) {
     if (!(chara->sprites)) return;
 

@@ -9,7 +9,7 @@
 
 #define WIDTH 1320
 #define HEIGHT 680
-#define NUM_SPRITES 23
+#define NUM_SPRITES 26
 #define ID_RYU 0
 #define ID_KEN 1
 #define ID_SAGAT 2
@@ -27,6 +27,7 @@
 #define AIR_DELAY 9
 #define WALK_DELAY 2
 #define LIGHT_DELAY 3
+#define HURT_DELAY 10
 #define SPEED 15
 #define JUMP_CONST 1.8
 #define JUMP_SPEED 20
@@ -37,6 +38,8 @@
 #define DOWN 2
 #define AIR 3
 #define ATTACK 4
+#define HURT 5
+#define BLOCK 6
 
 #define P1_X 150
 #define P2_X WIDTH - 150
@@ -69,6 +72,9 @@ typedef enum{
     LIGHT3,
     LIGHT4,
     LIGHT5,
+    STANDHURT0,
+    STANDBLOCK,
+    DOWNBLOCK,
 }CharacterFrame;
 
 typedef struct rectangle{
@@ -87,8 +93,12 @@ typedef struct character{
     short dir;
     bool hit;
     int state;
+    uchar block;
     int frame_delay;
     int frame_counter;
+    int previous_state;
+    int previous_frame;
+    int previous_delay;
     joystick *control;
     rectangle *hitbox;
     rectangle *hurtbox;
@@ -97,7 +107,6 @@ typedef struct character{
     ALLEGRO_BITMAP **sprites;
 }character;
 
-void resetCounter(int *counter);
 ALLEGRO_BITMAP **loadSprites(short id);
 rectangle *createRectangle(float x, float y, ushort width, ushort height);
 character *createCharacter(ushort x, ushort y, ushort max_x, ushort max_y, short op, short dir);
@@ -108,6 +117,7 @@ void characterFlush (character *p1, character *p2, ushort max_x, ushort max_y);
 void updateAnimation(character *chara);
 void invertDirections(character *p1, character *p2);
 void changeHitbox(character *player);
+void resetChar(character *player);
 void deleteSprites(character *chara);
 void destroyRectangle(rectangle *rect);
 void destroyCharacter(character *chara);
