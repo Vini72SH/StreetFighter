@@ -1,4 +1,6 @@
 #include "render.h"
+#include "joystick.h"
+#include <allegro5/keyboard.h>
 
 /* Init Function */
 void init(bool test, const char *description) {
@@ -669,6 +671,12 @@ void deleteFigure(Figure *figure) {
 };
 
 void endGame(Screen_Render *screen) {
+    ALLEGRO_KEYBOARD_STATE infoKbd;
+
+    al_get_keyboard_state(&infoKbd);
+
+    if (al_key_down(&infoKbd, ALLEGRO_KEY_A)) joystick_left(joystick *control)
+
     if(!(screen)) return;
 
     for (int i = 0; i < IMAGES; ++i) {

@@ -267,14 +267,14 @@ void update_position(character *player1, character *player2) {
 /* Atualizações de estado para ataque. */
 void charactersAttack(ALLEGRO_EVENT event, character *player1, character *player2) {
     if (event.keyboard.keycode == ALLEGRO_KEY_T) {
-        if (player1->state == IDLE) {
+        if ((player1->state == IDLE) || (player1->state == WALK)) {
             player1->state = ATTACK;
             player1->current_frame = LIGHT0;
             player1->frame_delay = LIGHT_DELAY;
         } 
     }
     if (event.keyboard.keycode == ALLEGRO_KEY_PAD_5) {
-        if (player2->state == IDLE) {
+        if ((player2->state == IDLE) || (player2->state == WALK)) {
             player2->state = ATTACK;
             player2->current_frame = LIGHT0;
             player2->frame_delay = LIGHT_DELAY;
