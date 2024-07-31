@@ -147,7 +147,10 @@ Screen_Render *startGame() {
     newScreen->lifebar = al_load_bitmap("./figures/lifebar.bmp");
     init (newScreen->lifebar, "lifebar");
 
+    newScreen->pauseBitmap = NULL;
+
     newScreen->gameMode = START;
+    newScreen->mult = NONE;
     newScreen->currentBackground = 0;
 
     for (int i = 0; i < IMAGES; ++i) {
@@ -205,9 +208,9 @@ void drawStart(Screen_Render *render, Figure *arrow) {
         al_draw_text(render->font1, COLOR_RED, WIDTH/2 -12 * 6, HEIGHT - 150, 0, "MULTIPLAYER");
 
     if (arrow->op == 2) 
-        al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 -8 * 6, HEIGHT - 100, 0, "OPTIONS");
+        al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 -8 * 6, HEIGHT - 100, 0, "CREDITS");
     else
-        al_draw_text(render->font1, COLOR_RED, WIDTH/2 -8 * 6, HEIGHT - 100, 0, "OPTIONS");
+        al_draw_text(render->font1, COLOR_RED, WIDTH/2 -8 * 6, HEIGHT - 100, 0, "CREDITS");
 
     /* Draw the selection arrow */
     al_draw_scaled_bitmap(arrow->image, 0, 0,
@@ -241,14 +244,22 @@ void startScreen(Screen_Render *render, Figure *arrow, ALLEGRO_EVENT event, int 
             fade_out(render->display, render->background[0],
                     0.05);
             fade_in(render->display, render->background[1], 
-                    0.05);   
+                    0.05);
+            render->mult = TRAINING;
             *i = 1;
         } else if (arrow->op == 1) {
             fade_out(render->display, render->background[0],
                     0.05);
             fade_in(render->display, render->background[2], 
                     0.05);
+            render->mult = MULTIPLAYER;
             *i = 2;
+        } else if (arrow->op == 2){
+            fade_out(render->display, render->background[0], 
+                    0.05);
+            fade_in(render->display, render->background[13],
+                    0.05);
+            *i = 13;
         }
         render->currentBackground = *i;
         al_flush_event_queue(render->queue);
@@ -364,6 +375,15 @@ void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, in
             al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 14 * 5, HEIGHT/2, 0, "Temple Stage");
         if (s3->op == 9)
             al_draw_text(render->font1, COLOR_WHITE, WIDTH/2 - 14 * 10, HEIGHT/2, 0, "Tenkaichi Budokai Stage");
+    } else if (render->currentBackground == 13) {
+        al_draw_scaled_bitmap(render->background[13],
+                                0, 0, al_get_bitmap_width(render->background[13]),
+                                al_get_bitmap_height(render->background[13]),
+                                0, 0, WIDTH, HEIGHT, 0);
+        al_draw_text(render->font3, COLOR_BLACK, WIDTH/2 - 250, HEIGHT/2 - 250, 0, "Tenkaichi Budokai Stage");
+        al_draw_text(render->font3, COLOR_BLACK, WIDTH/2 - 350, HEIGHT/2 - 200, 0, "Creator: the2dstagesfg on Tumblr");
+        al_draw_text(render->font3, COLOR_BLACK, WIDTH/2 - 150, HEIGHT/2 + 200, 0, "STREET FIGHTER");
+        al_draw_text(render->font3, COLOR_BLACK, WIDTH/2 - 150, HEIGHT/2 + 250, 0, "Creator: Vinícius");
     }
 };
 
@@ -539,6 +559,47 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int r
     if (!(change)) al_draw_textf(render->font3, COLOR_WHITE, WIDTH/2 - 70, 50, 0, "ROUND %d", round);
 };
 
+void drawPause(Screen_Render *render, int op) {
+    al_draw_scaled_bitmap(render->pauseBitmap, 0, 0,
+                            al_get_bitmap_width(render->pauseBitmap),
+                            al_get_bitmap_height(render->pauseBitmap),
+                            0, 0, WIDTH, HEIGHT, 0);
+    al_draw_filled_rectangle(0, 0, WIDTH, HEIGHT, al_map_rgba(0, 0, 0, 150));
+
+    if (op == 0) {
+        al_draw_text(render->font2, COLOR_RED, WIDTH/2 - 100, HEIGHT/2, 0, "RESUME GAME");
+        al_draw_text(render->font2, COLOR_WHITE, WIDTH/2 - 80, HEIGHT/2 + 50, 0, "EXIT GAME");
+    } else {
+        al_draw_text(render->font2, COLOR_WHITE, WIDTH/2 - 100, HEIGHT/2, 0, "RESUME GAME");
+        al_draw_text(render->font2, COLOR_RED, WIDTH/2 - 80, HEIGHT/2 + 50, 0, "EXIT GAME");
+    }
+};
+
+void pauseScreen(Screen_Render *render, ALLEGRO_EVENT event, int *op, bool *game) {
+    if (render->gameMode != PAUSE) {
+        if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+            render->gameMode = PAUSE;
+            render->pauseBitmap = al_clone_bitmap(al_get_backbuffer(render->display));
+        }
+    } else {
+        if ((event.keyboard.keycode == ALLEGRO_KEY_UP) || (event.keyboard.keycode == ALLEGRO_KEY_W)) {
+            if ((*op) > 0) (*op)--;
+        }
+        if ((event.keyboard.keycode == ALLEGRO_KEY_DOWN) || (event.keyboard.keycode == ALLEGRO_KEY_S)) {
+            if ((*op) < 1) (*op)++;
+        }
+        if (event.keyboard.keycode == ALLEGRO_KEY_ENTER) {
+            if ((*op) == 0) {
+                render->gameMode = GAME;
+                al_destroy_bitmap(render->pauseBitmap);
+            } else {
+                (*game) = false;
+                al_destroy_bitmap(render->pauseBitmap);
+            }
+        }
+    }
+};
+
 void drawLifebars(Screen_Render *render, character *p1, character *p2){
     int x1 = (285 * p1->hp) / HP;
     int x2 = (285 * p2->hp) / HP;
@@ -641,7 +702,7 @@ void endRound(Screen_Render *render, int *winP1, int *winP2, character *player1,
         al_rest(0.001); 
     }
 
-    if (((*winP1) == 2) || ((*winP2) == 2)) {
+    if ((((*winP1) == 2) || ((*winP2) == 2)) && (render->mult == MULTIPLAYER)) {
         render->gameMode = ENDGAME;
         return;
     }
@@ -701,10 +762,10 @@ void drawEndScreen(Screen_Render *render, int winP1, int winP2, int op) {
 };
 
 void endScreen(Screen_Render *render, ALLEGRO_EVENT event, int *op) {
-    if (event.keyboard.keycode == ALLEGRO_KEY_UP) {
+    if ((event.keyboard.keycode == ALLEGRO_KEY_UP) || (event.keyboard.keycode == ALLEGRO_KEY_W)) {
         if ((*op) > 0) (*op)--;
     }
-    if (event.keyboard.keycode == ALLEGRO_KEY_DOWN) {
+    if ((event.keyboard.keycode == ALLEGRO_KEY_DOWN) || (event.keyboard.keycode == ALLEGRO_KEY_S)) {
         if ((*op) < 1) (*op)++;
     }
 

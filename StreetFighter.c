@@ -19,6 +19,7 @@ int main () {
 
     int i = 0;
     int op = 0;
+    int op_pause = 0;
     int winP1 = 0;
     int winP2 = 0;
     int cont = 0;
@@ -58,9 +59,9 @@ int main () {
                     if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
                         render->gameMode = START;
                             fade_out(render->display, render->background[i],
-                                    0.02);
+                                    0.05);
                             fade_in(render->display, render->background[0], 
-                                    0.02);
+                                    0.05);
                         i = 0;
                         selectionP1->itOk = false;
                         selectionP2->itOk = false;
@@ -78,27 +79,17 @@ int main () {
                     break;
                 
                 case GAME:
-                    if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-                        render->gameMode = SELECTION;
-                            fade_out(render->display, render->background[i],
-                                    0.02);
-                            fade_in(render->display, render->background[3],
-                                    0.02);
-                        i = 3;
-                        selectionP1->itOk = false;
-                        selectionP2->itOk = false;
-                        selectionM->itOk = false;
-                        selectionM->dx = 362;
-                        selectionM->dy = 405;
-                        destroyCharacter(player1);
-                        destroyCharacter(player2);
-                        player1 = NULL;
-                        player2 = NULL;
-                        selectionM->op = 0;
-                        render->currentBackground = i;
+                    if (render->mult == MULTIPLAYER) {
+                        charactersMovement(event, player1, player2);
+                        charactersAttack(event, player1, player2);
+                    } else {
+                        charactersMovement(event, player1, NULL);
+                        charactersAttack(event, player1, NULL);
                     }
-                    charactersMovement(event, player1, player2);
-                    charactersAttack(event, player1, player2);
+                    pauseScreen(render, event, &op_pause, &game);
+                    break;
+                case PAUSE:
+                    pauseScreen(render, event, &op_pause, &game);
                     break;
                 case ENDGAME:
                     endScreen(render, event, &op);
@@ -152,6 +143,9 @@ int main () {
                     drawGame(render, player1, player2, &i, round, change);
                     countRound(render, &change, &cont, round);
                     if (!(check_game(player1, player2))) endRound(render, &winP1, &winP2, player1, player2, &change, &round, &cont); 
+                    break;
+                case PAUSE:
+                    drawPause(render, op_pause);
                     break;
                 case ENDGAME:
                     drawEndScreen(render, winP1, winP2, op);

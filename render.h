@@ -22,7 +22,12 @@
 #define MENU 1
 #define SELECTION 2
 #define GAME 3
-#define ENDGAME 4
+#define PAUSE 4
+#define ENDGAME 5
+
+#define NONE 0
+#define TRAINING 1
+#define MULTIPLAYER 2
 
 #define COLOR_BLACK al_map_rgb(0, 0, 0)
 #define COLOR_RED al_map_rgb(255, 0, 0)
@@ -45,7 +50,8 @@ typedef struct Figure{
 
 typedef struct Screen_Render{
     int currentBackground;
-    int gameMode;
+    short gameMode;
+    int mult;
     ALLEGRO_TIMER *timer;
     ALLEGRO_EVENT_QUEUE *queue;
     ALLEGRO_FONT *font1;
@@ -54,6 +60,7 @@ typedef struct Screen_Render{
     ALLEGRO_DISPLAY *display;
     ALLEGRO_BITMAP *icon;
     ALLEGRO_BITMAP *lifebar;
+    ALLEGRO_BITMAP *pauseBitmap;
     ALLEGRO_BITMAP *background[IMAGES];
     ALLEGRO_BITMAP *chars[CHARACTERS];
 }Screen_Render;
@@ -67,6 +74,8 @@ void startScreen(Screen_Render *render, Figure *arrow, ALLEGRO_EVENT event, int 
 void drawSelection(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, int *i);
 void selectionScreen(Screen_Render *render, Figure *s1, Figure *s2, Figure *s3, ALLEGRO_EVENT event, int *i, bool *load);
 void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int round, bool change);
+void drawPause(Screen_Render *render, int op);
+void pauseScreen(Screen_Render *render, ALLEGRO_EVENT event, int *op, bool *game);
 void drawLifebars(Screen_Render *render, character *p1, character *p2);
 void drawRound(Screen_Render *render, int round);
 void countRound(Screen_Render *render, bool *change, int *cont, int round);

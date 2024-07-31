@@ -78,6 +78,10 @@ void charactersMovement (ALLEGRO_EVENT event, character *player1, character *pla
         }
     }
     
+    if (player2 == NULL) {
+        return;
+    }
+
     if (event.keyboard.keycode == ALLEGRO_KEY_UP) {
         joystick_up(player2->control);
         if ((event.type == ALLEGRO_EVENT_KEY_DOWN) && (player2->state != DOWN) && (player2->state != AIR) && (player2->state != ATTACK) && (player2->state != HURT) && (player2->state != BLOCK)) {
@@ -322,8 +326,12 @@ void charactersAttack(ALLEGRO_EVENT event, character *player1, character *player
         if ((player1->state == IDLE) || (player1->state == WALK)) {
             player1->state = ATTACK;
             player1->current_frame = SHEAVY0;
-            player1->frame_delay = HEAVY_DELAY;
+            player1->frame_delay = LIGHT_DELAY;
         }
+    }
+
+    if (player2 == NULL) {
+        return;
     }
 
     if (event.keyboard.keycode == ALLEGRO_KEY_PAD_6) {
@@ -361,7 +369,7 @@ void charactersAttack(ALLEGRO_EVENT event, character *player1, character *player
         if ((player2->state == IDLE) || (player2->state == WALK)) {
             player2->state = ATTACK;
             player2->current_frame = SHEAVY0;
-            player2->frame_delay = HEAVY_DELAY;
+            player2->frame_delay = LIGHT_DELAY;
         }
     }
 };
