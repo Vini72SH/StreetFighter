@@ -373,7 +373,7 @@ void charactersAttack(ALLEGRO_EVENT event, character *player1, character *player
         }
     }
 };
-
+ 
 /* Verificação se o ataque acertou. */
 /* Definição de estados para o personagem atingido. */
 void checkAttack(character *player1, character *player2) {

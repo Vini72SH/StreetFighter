@@ -10,7 +10,7 @@ void must_init(bool test, const char *description) {
     printf("Não foi possível inicializar %s\n", description);
     exit(1);
 }
-
+ 
 int main () {
     Screen_Render *render;
     must_init(al_init(), "allegro");

@@ -1,7 +1,7 @@
 #include "render.h"
 #include "joystick.h"
 #include <allegro5/keyboard.h>
-
+ 
 /* Init Function */
 void init(bool test, const char *description) {
     if(test) return;

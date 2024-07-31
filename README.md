@@ -8,15 +8,34 @@ Using the Allegro library in C and developed for the "Programming 2" subject, I 
 # CONTROLS 
 
 * Menu
--> WS / Z
+-> Keyboard Arrows
 
 * Selection
 * -> Player 1: AS /
-   Z - Confirm
-   X - Cancel
+   T - Confirm
+   R - Cancel
 
 * -> Player 2: ↑↓ /
-   NUMPAD 1 - Confirm
-   NUMPAD 2 - Cancel
+   NUMPAD 5 - Confirm
+   NUMPAD 4 - Cancel
+
+* GAME
+* -> Player 1:
+   WASD - Moves
+   R - Block
+   T - Light Attack 1
+   Y - Light Attack 2
+   G - Heavy Attack 1
+   H - Heavy Attack 2
+
+* -> Player 2:
+   ARROWS - Moves
+   NUM_PAD 4 - Block
+   NUM_PAD 5 - Light Attack 1
+   NUM_PAD 6 - Light Attack 2
+   NUM_PAD 2 - Heavy Attack 1
+   NUM_PAD 3 - Heavy Attack 2
+
+ESC - Game Menu
 
 Let's go!

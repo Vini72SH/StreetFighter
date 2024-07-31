@@ -771,7 +771,7 @@ void changeHitbox(character *player) {
         }
     }
 };
-
+ 
 /* Reseta os estados e propriedades do personagem. */
 void resetChar(character *player) {
     player->frame_counter = 0;

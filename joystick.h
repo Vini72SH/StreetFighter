@@ -1,6 +1,6 @@
 #ifndef __JOYSTICK__
 #define __JOYSTICK__
-
+ 
 typedef unsigned char uchar;
 #define UP 1
 #define DOWN 2

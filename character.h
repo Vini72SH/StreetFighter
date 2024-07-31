@@ -106,7 +106,7 @@ typedef enum{
     DSLIGHT4,
     DSLIGHT5,
 }CharacterFrame;
-
+ 
 typedef struct rectangle{
     float x;
     float y;

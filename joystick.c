@@ -14,7 +14,7 @@ joystick *createJoy() {
 
     return newControl;
 };
-
+ 
 void joystick_up(joystick *control) {
     control->up = control->up ^ 1;
 };

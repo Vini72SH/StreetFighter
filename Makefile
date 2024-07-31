@@ -6,7 +6,7 @@ CC = gcc
 
 # Flags do compilador
 CFLAGS = -Wall -g
-
+ 
 # Flags para a biblioteca Allegro
 ALLEGRO_FLAGS = $(shell pkg-config --cflags --libs allegro-5 allegro_image-5 allegro_font-5 allegro_ttf-5 allegro_primitives-5)
 
