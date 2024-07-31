@@ -9,7 +9,7 @@
 
 #define WIDTH 1320
 #define HEIGHT 680
-#define NUM_SPRITES 30
+#define NUM_SPRITES 37
 #define ID_RYU 0
 #define ID_KEN 1
 #define ID_SAGAT 2
@@ -27,6 +27,7 @@
 #define AIR_DELAY 9
 #define WALK_DELAY 2
 #define LIGHT_DELAY 3
+#define HEAVY_DELAY 4
 #define HURT_DELAY 8
 #define SPEED 15
 #define JUMP_CONST 1.8
@@ -66,8 +67,9 @@ typedef enum{
     JUMP2,
     JUMP3,
     JUMP4,
-    STANDHURT0,
+    STANDHURT,
     STANDBLOCK,
+    DOWNHURT,
     DOWNBLOCK,
     LIGHT0,
     LIGHT1,
@@ -79,6 +81,12 @@ typedef enum{
     SLIGHT1,
     SLIGHT2,
     SLIGHT3,
+    HEAVY0,
+    HEAVY1,
+    HEAVY2,
+    HEAVY3,
+    HEAVY4,
+    HEAVY5,
 }CharacterFrame;
 
 typedef struct rectangle{
@@ -90,7 +98,7 @@ typedef struct rectangle{
 
 typedef struct character{
     ushort id;
-    uint hp;
+    int hp;
     float x;
     float y;
     float air_speed;
@@ -123,6 +131,7 @@ void invertDirections(character *p1, character *p2);
 void changeHitbox(character *player);
 void resetChar(character *player);
 void characterRestart(character *player, int pl);
+void storageState(character *player);
 void deleteSprites(character *chara);
 void destroyRectangle(rectangle *rect);
 void destroyCharacter(character *chara);

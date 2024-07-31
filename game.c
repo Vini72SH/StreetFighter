@@ -280,6 +280,13 @@ void charactersAttack(ALLEGRO_EVENT event, character *player1, character *player
             player1->frame_delay = LIGHT_DELAY;
         }
     }
+    if (event.keyboard.keycode == ALLEGRO_KEY_G) {
+        if ((player1->state == IDLE) || (player1->state == WALK)) {
+            player1->state = ATTACK;
+            player1->current_frame = HEAVY0;
+            player1->frame_delay = HEAVY_DELAY;
+        }
+    }
 
     if (event.keyboard.keycode == ALLEGRO_KEY_PAD_6) {
         if ((player2->state == IDLE) || (player2->state == WALK)) {
@@ -295,6 +302,13 @@ void charactersAttack(ALLEGRO_EVENT event, character *player1, character *player
             player2->frame_delay = LIGHT_DELAY;
         }
     }
+    if (event.keyboard.keycode == ALLEGRO_KEY_PAD_2) {
+        if ((player2->state == IDLE) || (player2->state == WALK)) {
+            player2->state = ATTACK;
+            player2->current_frame = HEAVY0;
+            player2->frame_delay = HEAVY_DELAY;
+        }
+    }
 };
 
 /* Verificação se o ataque acertou. */
@@ -305,14 +319,12 @@ void checkAttack(character *player1, character *player2) {
             if (!(player1->hit) && (player2->state != HURT)) {
                 player1->hit = true;
                 if (player2->current_frame != STANDBLOCK) {
-                    player2->hp -= 10;
-                    player2->previous_state = player2->state;
-                    player2->previous_frame = player2->current_frame;
-                    player2->previous_delay = player2->frame_delay;
+                    player2->hp -= 7;
+                    storageState(player2);
                     player2->state = HURT;
                     player2->frame_delay = HURT_DELAY;
                     if (player2->previous_state != DOWN) {
-                        player2->current_frame = STANDHURT0;
+                        player2->current_frame = STANDHURT;
                     }
                     resetChar(player2);
                 }
@@ -323,32 +335,46 @@ void checkAttack(character *player1, character *player2) {
                 player1->hit = true;
                 if (player2->current_frame != STANDBLOCK) {
                     player2->hp -= 5;
-                    player2->previous_state = player2->state;
-                    player2->previous_frame = player2->current_frame;
-                    player2->previous_delay = player2->frame_delay;
+                    storageState(player2);
                     player2->state = HURT;
                     player2->frame_delay = HURT_DELAY;
                     if (player2->previous_state != DOWN) {
-                        player2->current_frame = STANDHURT0;
+                        player2->current_frame = STANDHURT;
+                    }
+                    resetChar(player2);
+                }
+            }
+        }
+        if (((player1->current_frame == HEAVY2) || (player1->current_frame == HEAVY3)) && check_hit(player1, player2)) {
+            if (!(player1->hit) && (player2->state != HURT)) {
+                player1->hit = true;
+                if (player2->current_frame != DOWNBLOCK) {
+                    player2->hp -= 10;
+                    storageState(player2);
+                    player2->state = HURT;
+                    player2->frame_delay = HURT_DELAY;
+                    if (player2->previous_state != DOWN) {
+                        player2->current_frame = STANDHURT;
+                    } else {
+                        player2->current_frame = DOWNHURT;
                     }
                     resetChar(player2);
                 }
             }
         }
     }
+
     if (player2->state == ATTACK) {
         if (((player2->current_frame == LIGHT2) || (player2->current_frame == LIGHT3)) && check_hit(player2, player1)) {
             if (!(player2->hit) && (player1->state != HURT)) {
                 player2->hit = true;
                 if (player1->current_frame != STANDBLOCK) {
-                    player1->hp -= 10;
-                    player1->previous_state = player1->state;
-                    player1->previous_frame = player1->current_frame;
-                    player1->previous_delay = player1->frame_delay;
+                    player1->hp -= 7;
+                    storageState(player1); 
                     player1->state = HURT;
                     player1->frame_delay = HURT_DELAY;
                     if (player1->previous_state != DOWN) {
-                        player1->current_frame = STANDHURT0;
+                        player1->current_frame = STANDHURT;
                     }
                     resetChar(player1);
                 }
@@ -359,13 +385,28 @@ void checkAttack(character *player1, character *player2) {
                 player2->hit = true;
                 if (player1->current_frame != STANDBLOCK) {
                     player1->hp -= 5;
-                    player1->previous_state = player1->state;
-                    player1->previous_frame = player1->current_frame;
-                    player1->previous_delay = player1->frame_delay;
+                    storageState(player1);
                     player1->state = HURT;
                     player1->frame_delay = HURT_DELAY;
                     if (player1->previous_state != DOWN) {
-                        player1->current_frame = STANDHURT0;
+                        player1->current_frame = STANDHURT;
+                    }
+                    resetChar(player1);
+                }
+            }
+        }
+        if (((player2->current_frame == HEAVY2) || (player2->current_frame == HEAVY3)) && check_hit(player2, player1)) {
+            if (!(player2->hit) && (player1->state != HURT)) {
+                player2->hit = true;
+                if (player1->current_frame != DOWNBLOCK) {
+                    player1->hp -= 10;
+                    storageState(player1);
+                    player1->state = HURT;
+                    player1->frame_delay = HURT_DELAY;
+                    if (player1->previous_state != DOWN) {
+                        player1->current_frame = STANDHURT;
+                    } else {
+                        player1->current_frame = DOWNHURT;
                     }
                     resetChar(player1);
                 }
