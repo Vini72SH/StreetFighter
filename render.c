@@ -51,6 +51,9 @@ int attackOffset(character *player) {
     if ((player->current_frame == HEAVY2) || (player->current_frame == HEAVY3)) {
         return (al_get_bitmap_width(player->sprites[player->current_frame]) / 2.5);
     }
+    if ((player->current_frame == SHEAVY3) || (player->current_frame == SHEAVY4)) {
+        return (al_get_bitmap_width(player->sprites[player->current_frame]) / 2.5);
+    }
 
     return 0;
 }

@@ -129,12 +129,17 @@ void update_position(character *player1, character *player2) {
     if((player1 == NULL)  || (player2 == NULL)) {
         return;
     }
+    ALLEGRO_KEYBOARD_STATE infoKbd;
+    al_get_keyboard_state(&infoKbd);
+
     /* Se o personagem não está no ar, atacando, sofrendo dano e nenhum botão está pressionado, então ele está parado. */
-    if ((player1->state != AIR) && !((player1->control->up) || (player1->control->down) || (player1->control->left) || 
-        (player1->control->right)) && (player1->state != IDLE) && (player1->state != ATTACK) && (player1->state != HURT) && (player1->state != BLOCK)) {
+    if ((player1->state != AIR) && !((al_key_down(&infoKbd, ALLEGRO_KEY_W)) || (al_key_down(&infoKbd, ALLEGRO_KEY_S)) || (al_key_down(&infoKbd, ALLEGRO_KEY_A)) ||  (al_key_down(&infoKbd, ALLEGRO_KEY_D)) || 
+        (al_key_down(&infoKbd, ALLEGRO_KEY_R))) && (player1->state != IDLE) && (player1->state != ATTACK) && (player1->state != HURT) && (player1->state != BLOCK)) {
+        player1->block = 0;
         player1->state = IDLE;
         player1->current_frame = IDLE0;
         player1->frame_delay = FRAME_DELAY;
+        resetJoy(player1->control);
     }
     
     if (player1->state == AIR){
@@ -163,8 +168,13 @@ void update_position(character *player1, character *player2) {
 
     if (player1->control->down) {
         if (check_collision(player1, player2)) characterMove(player1, -1, DOWN, WIDTH, MAX_Y);
-    } else if (player1->state != BLOCK) {
+    } else {
         /* Levanta o personagem e verifica colisões. */
+        if ((player1->block) && (player1->current_frame == DOWNBLOCK)) {
+            player1->block = 0;
+            player1->current_frame = IDLE0;
+            player1->state = IDLE;
+        }
         characterUp(player1);
         if ((player1->state == IDLE) && ((player1->control->left) || (player1->control->right))) {
             player1->state = WALK;
@@ -196,11 +206,13 @@ void update_position(character *player1, character *player2) {
     }
     
     /* Se o personagem não está no ar, atacando, sofrendo dano e nenhum botão está pressionado, então ele está parado. */
-    if ((player2->state != AIR) && !((player2->control->up) || (player2->control->down) || (player2->control->left) || 
-        (player2->control->right)) && (player2->state != IDLE) && (player2->state != ATTACK) && (player2->state != HURT) && (player2->state != BLOCK)) {
+    if ((player2->state != AIR) && !((al_key_down(&infoKbd, ALLEGRO_KEY_UP)) || (al_key_down(&infoKbd, ALLEGRO_KEY_DOWN)) || (al_key_down(&infoKbd, ALLEGRO_KEY_LEFT)) ||  (al_key_down(&infoKbd, ALLEGRO_KEY_RIGHT)) || 
+        (al_key_down(&infoKbd, ALLEGRO_KEY_PAD_4))) && (player2->state != IDLE) && (player2->state != ATTACK) && (player2->state != HURT) && (player2->state != BLOCK)) {
+        player2->block = 0;
         player2->state = IDLE;
         player2->current_frame = IDLE0;
         player2->frame_delay = FRAME_DELAY;
+        resetJoy(player2->control);
     }
     if (player2->state == AIR){
         characterMove(player2, 1, UP, WIDTH, MAX_Y);
@@ -228,7 +240,12 @@ void update_position(character *player1, character *player2) {
 
     if (player2->control->down) {
         if (check_collision(player2, player1)) characterMove(player2, -1, DOWN, WIDTH, MAX_Y);
-    } else if (player2->state != BLOCK) {
+    } else {
+        if ((player2->block) && (player2->current_frame == DOWNBLOCK)) {
+            player2->block = 0;
+            player2->current_frame = IDLE0;
+            player2->state = IDLE;
+        }
         /* Levanta o personagem e verifica colisões. */
         characterUp(player2);
         if ((player2->state == IDLE) && ((player2->control->left) || (player2->control->right))) {
@@ -287,6 +304,13 @@ void charactersAttack(ALLEGRO_EVENT event, character *player1, character *player
             player1->frame_delay = HEAVY_DELAY;
         }
     }
+    if (event.keyboard.keycode == ALLEGRO_KEY_H) {
+        if ((player1->state == IDLE) || (player1->state == WALK)) {
+            player1->state = ATTACK;
+            player1->current_frame = SHEAVY0;
+            player1->frame_delay = HEAVY_DELAY;
+        }
+    }
 
     if (event.keyboard.keycode == ALLEGRO_KEY_PAD_6) {
         if ((player2->state == IDLE) || (player2->state == WALK)) {
@@ -306,6 +330,13 @@ void charactersAttack(ALLEGRO_EVENT event, character *player1, character *player
         if ((player2->state == IDLE) || (player2->state == WALK)) {
             player2->state = ATTACK;
             player2->current_frame = HEAVY0;
+            player2->frame_delay = HEAVY_DELAY;
+        }
+    }
+    if (event.keyboard.keycode == ALLEGRO_KEY_PAD_3) {
+        if ((player2->state == IDLE) || (player2->state == WALK)) {
+            player2->state = ATTACK;
+            player2->current_frame = SHEAVY0;
             player2->frame_delay = HEAVY_DELAY;
         }
     }
@@ -362,6 +393,19 @@ void checkAttack(character *player1, character *player2) {
                 }
             }
         }
+        if (((player1->current_frame == SHEAVY3) || (player1->current_frame == SHEAVY4)) && (check_hit(player1, player2))) {
+            if (!(player1->hit) && (player2->state != HURT)) {
+                player1->hit = true;
+                player2->hp -= 12;
+                storageState(player2);
+                player2->state = HURT;
+                player2->frame_delay = HURT_DELAY;
+                if (player2->previous_state != DOWN) {
+                    player2->current_frame = STANDHURT;
+                }
+                resetChar(player2);
+            }
+        }
     }
 
     if (player2->state == ATTACK) {
@@ -410,6 +454,19 @@ void checkAttack(character *player1, character *player2) {
                     }
                     resetChar(player1);
                 }
+            }
+        }
+        if (((player2->current_frame == SHEAVY3) || (player2->current_frame == SHEAVY4)) && (check_hit(player2, player1))) {
+            if (!(player2->hit) && (player1->state != HURT)) {
+                player2->hit = true;
+                player1->hp -= 12;
+                storageState(player1);
+                player1->state = HURT;
+                player1->frame_delay = HURT_DELAY;
+                if (player1->previous_state != DOWN) {
+                    player1->current_frame = STANDHURT;
+                }
+                resetChar(player1);
             }
         }
     }

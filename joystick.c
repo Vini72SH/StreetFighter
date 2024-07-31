@@ -31,6 +31,13 @@ void joystick_right(joystick *control) {
     control->right = control->right ^ 1;
 };
 
+void resetJoy(joystick *control) {
+    control->up = 0;
+    control->down = 0;
+    control->left = 0;
+    control->right = 0;
+};
+
 void destroyJoy(joystick *control) {
     free(control);
 };

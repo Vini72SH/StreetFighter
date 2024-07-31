@@ -19,6 +19,7 @@ void joystick_up(joystick *control);
 void joystick_down(joystick *control);
 void joystick_left(joystick *control);
 void joystick_right(joystick *control);
+void resetJoy(joystick *control);
 void destroyJoy(joystick *control);
 
 #endif

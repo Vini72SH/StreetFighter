@@ -97,12 +97,6 @@ int main () {
                         selectionM->op = 0;
                         render->currentBackground = i;
                     }
-                    if (event.keyboard.keycode == ALLEGRO_KEY_LSHIFT) {
-                        characterRestart(player1, 1);
-                    }
-                    if (event.keyboard.keycode == ALLEGRO_KEY_NUMLOCK) {
-                        characterRestart(player2, 2);
-                    }
                     charactersMovement(event, player1, player2);
                     charactersAttack(event, player1, player2);
                     break;

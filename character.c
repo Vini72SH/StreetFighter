@@ -155,6 +155,11 @@ void characterUp(character *chara) {
     chara->char_render->height = CHAR_HEIGHT;
     chara->char_render->x = chara->x;
     chara->char_render->y = chara->y;
+
+    if ((chara->current_frame == DOWNHURT)) {
+        chara->current_frame = STANDHURT;
+    }
+
 };
 
 /* Abaixa o personagem, redefinindo suas dimensões. */
@@ -374,6 +379,39 @@ void updateAnimation(character *chara) {
                 chara->state = IDLE;
                 chara->frame_delay = FRAME_DELAY;
                 break;
+            case SHEAVY0:
+                chara->current_frame = SHEAVY1;
+                changeHitbox(chara);
+                break;
+            case SHEAVY1:
+                chara->current_frame = SHEAVY2;
+                changeHitbox(chara);
+                break;
+            case SHEAVY2:
+                chara->current_frame = SHEAVY3;
+                changeHitbox(chara);
+                break;
+            case SHEAVY3:
+                chara->current_frame = SHEAVY4;
+                changeHitbox(chara);
+                break;
+            case SHEAVY4:
+                chara->current_frame = SHEAVY5;
+                changeHitbox(chara);
+                break;
+            case SHEAVY5:
+                chara->current_frame = SHEAVY6;
+                changeHitbox(chara);
+                break;
+           case SHEAVY6:
+                chara->current_frame = SHEAVY7;
+                changeHitbox(chara);
+                break;
+            case SHEAVY7:
+                chara->current_frame = IDLE0;
+                chara->state = IDLE;
+                chara->frame_delay = FRAME_DELAY;
+                break;
             default:
                 break;
             }
@@ -440,7 +478,35 @@ void changeHitbox(character *player) {
         if ((player->current_frame == HEAVY2) || (player->current_frame == HEAVY3)) {
             player->hitbox->width = LIGHT_HITBOX;
             player->hitbox->height = LIGHT_HITBOX;
-            player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.8) + (1 - player->dir % 2) * (-24);
+            player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/2) + (1 - player->dir % 2) * (-24);
+        }
+        if((player->current_frame == SHEAVY1) || (player->current_frame == SHEAVY6)) {
+            player->x = player->char_render->x;
+            player->hitbox->x = player->x;
+            player->hurtbox->x = player->x;
+        }
+        if (player->current_frame == SHEAVY2) {
+            player->hit = false;
+            player->hitbox->width = START_HITBOX;
+            player->hitbox->height = START_HITBOX;
+            player->x -= ((1 - 2*player->dir)) * (al_get_bitmap_height(player->sprites[player->current_frame])/6);
+            player->hitbox->x = player->x;
+            player->hurtbox->x = player->x - (1 - 1*player->dir) * 25;
+            player->hitbox->y = player->y - (al_get_bitmap_height(player->sprites[player->current_frame])/2.3);
+        }
+        if (player->current_frame == SHEAVY5) {
+            player->hit = false;
+            player->hitbox->width = START_HITBOX;
+            player->hitbox->height = START_HITBOX;
+            player->x += ((1 - 2*player->dir)) * (al_get_bitmap_height(player->sprites[player->current_frame])/6);
+            player->hitbox->x = player->x;
+            player->hurtbox->x = player->x + (1 - 1*player->dir) * 25;
+            player->hitbox->y = player->y - (al_get_bitmap_height(player->sprites[player->current_frame])/2.3);
+        }
+        if ((player->current_frame == SHEAVY3) || (player->current_frame == SHEAVY4)) {
+            player->hitbox->width = LIGHT_HITBOX;
+            player->hitbox->height = LIGHT_HITBOX;
+            player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.5) + (1 - player->dir % 2) * (37);
         }
     }
     if (player->id == ID_KEN) {
@@ -472,7 +538,35 @@ void changeHitbox(character *player) {
         if ((player->current_frame == HEAVY2) || (player->current_frame == HEAVY3)) {
             player->hitbox->width = LIGHT_HITBOX;
             player->hitbox->height = LIGHT_HITBOX;
-            player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.8) + (1 - player->dir % 2) * (-24);
+            player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/2) + (1 - player->dir % 2) * (-24);
+        }
+        if((player->current_frame == SHEAVY1) || (player->current_frame == SHEAVY6)) {
+            player->x = player->char_render->x;
+            player->hitbox->x = player->x;
+            player->hurtbox->x = player->x;
+        }
+        if (player->current_frame == SHEAVY2) {
+            player->hit = false;
+            player->hitbox->width = START_HITBOX;
+            player->hitbox->height = START_HITBOX;
+            player->x -= ((1 - 2*player->dir)) * (al_get_bitmap_height(player->sprites[player->current_frame])/6);
+            player->hitbox->x = player->x;
+            player->hurtbox->x = player->x - (1 - 1*player->dir) * 25;
+            player->hitbox->y = player->y - (al_get_bitmap_height(player->sprites[player->current_frame])/2.2);
+        }
+        if (player->current_frame == SHEAVY5) {
+            player->hit = false;
+            player->hitbox->width = START_HITBOX;
+            player->hitbox->height = START_HITBOX;
+            player->x += ((1 - 2*player->dir)) * (al_get_bitmap_height(player->sprites[player->current_frame])/6);
+            player->hitbox->x = player->x;
+            player->hurtbox->x = player->x + (1 - 1*player->dir) * 25;
+            player->hitbox->y = player->y - (al_get_bitmap_height(player->sprites[player->current_frame])/2.2);
+        }
+        if ((player->current_frame == SHEAVY3) || (player->current_frame == SHEAVY4)) {
+            player->hitbox->width = LIGHT_HITBOX;
+            player->hitbox->height = LIGHT_HITBOX;
+            player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.5) + (1 - player->dir % 2) * (37);
         }
     }
     if (player->id == ID_SAGAT) {
@@ -506,6 +600,18 @@ void changeHitbox(character *player) {
             player->hitbox->height = LIGHT_HITBOX;
             player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.5) + (1 - player->dir % 2) * (27);
         }
+        if ((player->current_frame == SHEAVY2) || (player->current_frame == SHEAVY5)) {
+            player->hit = false;
+            player->hitbox->x = player->x;
+            player->hitbox->y = player->y - al_get_bitmap_height(player->sprites[player->current_frame])/3.8;
+            player->hitbox->width = START_HITBOX;
+            player->hitbox->height = START_HITBOX;
+        }
+        if ((player->current_frame == SHEAVY3) || (player->current_frame == SHEAVY4)) {
+            player->hitbox->width = LIGHT_HITBOX;
+            player->hitbox->height = LIGHT_HITBOX;
+            player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.5) + (1 - player->dir % 2) * (35);
+        } 
     }
     if (player->id == ID_CHUNLI) {
         if ((player->current_frame == LIGHT1) || (player->current_frame == LIGHT4) || (player->current_frame == SLIGHT0) || (player->current_frame == SLIGHT3)) {
@@ -538,6 +644,18 @@ void changeHitbox(character *player) {
             player->hitbox->height = LIGHT_HITBOX;
             player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.5) + (1 - player->dir % 2) * (15);
         }
+        if ((player->current_frame == SHEAVY2) || (player->current_frame == SHEAVY5)) {
+            player->hit = false;
+            player->hitbox->x = player->x;
+            player->hitbox->y = player->y - al_get_bitmap_height(player->sprites[player->current_frame])/3;
+            player->hitbox->width = START_HITBOX;
+            player->hitbox->height = START_HITBOX;
+        }
+        if ((player->current_frame == SHEAVY3) || (player->current_frame == SHEAVY4)) {
+            player->hitbox->width = LIGHT_HITBOX;
+            player->hitbox->height = LIGHT_HITBOX;
+            player->hitbox->x = player->x + ((1 - 2*player->dir) * al_get_bitmap_height(player->sprites[player->current_frame])/1.5) + (1 - player->dir % 2) * (35);
+        }
     }
 };
 
@@ -550,6 +668,10 @@ void resetChar(character *player) {
     player->hitbox->height = START_HITBOX;
     player->hitbox->x = player->x;
     player->hitbox->y = player->y;
+    player->hurtbox->x = player->x;
+    player->hurtbox->y = player->y;
+    player->char_render->x = player->x;
+    player->char_render->y = player->y;
 };
 
 void characterRestart(character *chara, int pl) {
