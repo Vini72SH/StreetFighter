@@ -54,6 +54,18 @@ int attackOffset(character *player) {
     if ((player->current_frame == SHEAVY3) || (player->current_frame == SHEAVY4)) {
         return (al_get_bitmap_width(player->sprites[player->current_frame]) / 2.5);
     }
+    if ((player->current_frame == DLIGHT0) || (player->current_frame == DLIGHT3)) {
+        return (al_get_bitmap_width(player->sprites[player->current_frame]) / 10);
+    }
+    if ((player->current_frame == DLIGHT1) || (player->current_frame == DLIGHT2)) {
+        return (al_get_bitmap_width(player->sprites[player->current_frame]) / 3.2);
+    }
+    if ((player->current_frame == DSLIGHT1) || (player->current_frame == DSLIGHT4)) {
+        return (al_get_bitmap_width(player->sprites[player->current_frame]) / 10);
+    }
+    if ((player->current_frame == DSLIGHT2) || (player->current_frame == DSLIGHT3)) {
+        return (al_get_bitmap_width(player->sprites[player->current_frame]) / 3.2);
+    }
 
     return 0;
 }
@@ -489,8 +501,6 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int r
                             0, 0, al_get_bitmap_width(render->background[*i]),
                             al_get_bitmap_height(render->background[*i]),
                             0, 0, WIDTH, HEIGHT, 0);
-    al_draw_filled_rectangle(p2->hurtbox->x - p2->hurtbox->width/2, p2->hurtbox->y - p2->hurtbox->height/2, p2->hurtbox->x + p2->hurtbox->width/2, p2->hurtbox->y + p2->hurtbox->height/2, COLOR_BLUE);
-    al_draw_filled_rectangle(p1->hurtbox->x - p1->hurtbox->width/2, p1->hurtbox->y - p1->hurtbox->height/2, p1->hurtbox->x + p1->hurtbox->width/2, p1->hurtbox->y + p1->hurtbox->height/2, COLOR_RED);
     if ((p1 != NULL) && (p2 != NULL)) {
         short x1, y1;
         short x2, y2;
@@ -527,8 +537,6 @@ void drawGame(Screen_Render *render, character *p1, character *p2, int *i, int r
         drawLifebars(render, p1, p2);
     }
     if (!(change)) al_draw_textf(render->font3, COLOR_WHITE, WIDTH/2 - 70, 50, 0, "ROUND %d", round);
-    al_draw_filled_rectangle(p2->hitbox->x - p2->hitbox->width/2, p2->hitbox->y - p2->hitbox->height/2, p2->hitbox->x + p2->hitbox->width/2, p2->hitbox->y + p2->hitbox->height/2, COLOR_RED);
-    al_draw_filled_rectangle(p1->hitbox->x - p1->hitbox->width/2, p1->hitbox->y - p1->hitbox->height/2, p1->hitbox->x + p1->hitbox->width/2, p1->hitbox->y + p1->hitbox->height/2, COLOR_BLUE);
 };
 
 void drawLifebars(Screen_Render *render, character *p1, character *p2){

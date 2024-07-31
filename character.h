@@ -9,7 +9,7 @@
 
 #define WIDTH 1320
 #define HEIGHT 680
-#define NUM_SPRITES 45
+#define NUM_SPRITES 55
 #define ID_RYU 0
 #define ID_KEN 1
 #define ID_SAGAT 2
@@ -95,6 +95,16 @@ typedef enum{
     SHEAVY5,
     SHEAVY6,
     SHEAVY7,
+    DLIGHT0,
+    DLIGHT1,
+    DLIGHT2,
+    DLIGHT3,
+    DSLIGHT0,
+    DSLIGHT1,
+    DSLIGHT2,
+    DSLIGHT3,
+    DSLIGHT4,
+    DSLIGHT5,
 }CharacterFrame;
 
 typedef struct rectangle{
